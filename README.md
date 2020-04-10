@@ -16,3 +16,7 @@ npm start
 npm ci
 npm run dev:server & npm run dev:client
 ```
+
+## Deploy
+
+Push to `deploy/heroku`.
