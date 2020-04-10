@@ -5,7 +5,7 @@
 ```bash
 npm ci
 npm run build
-npm run serve
+npm start
 ```
 
 ## Development run
