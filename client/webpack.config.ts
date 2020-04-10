@@ -8,7 +8,25 @@ const htmlCommonConfig = {
 }
 
 module.exports = {
-	entry: path.resolve(__dirname, './src/index.ts'),
+	module: {
+		rules: [
+			{
+				test: /\.ts(x?)$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'ts-loader',
+					},
+				],
+			},
+			{
+				enforce: 'pre',
+				test: /\.js$/,
+				loader: 'source-map-loader',
+			},
+		],
+	},
+	entry: path.resolve(__dirname, './src/index.tsx'),
 	output: {
 		filename: 'main.js',
 		path: path.resolve(__dirname, '../dist/public'),

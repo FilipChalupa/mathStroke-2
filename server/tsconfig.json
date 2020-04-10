@@ -9,5 +9,5 @@
 		"sourceMap": true,
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"exclude": ["../dist", "../node_modules"]
+	"exclude": ["../dist", "../client", "../node_modules"]
 }
