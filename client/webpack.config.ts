@@ -9,5 +9,10 @@ module.exports = {
 		filename: 'main.js',
 		path: path.resolve(__dirname, '../dist/public'),
 	},
-	plugins: [new HtmlWebpackPlugin()],
+	plugins: [
+		new HtmlWebpackPlugin({
+			title: 'mathStroke 2',
+			scriptLoading: 'defer',
+		}),
+	],
 }
