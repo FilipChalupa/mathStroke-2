@@ -2,25 +2,37 @@
 	"name": "mathstroke2",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"private": true,
+	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "npm run build && npm run serve",
-		"dev": "npm run watch & nodemon dist/server/index.js",
-		"watch": "tsc -w",
-		"build": "tsc",
-		"serve": "node dist/server/index.js"
+		"build": "npm run build:server && npm run build:client",
+		"serve": "node dist/server/index.js",
+		"dev:server": "npm run watch:server & nodemon dist/server/index.js",
+		"build:server": "tsc --project server",
+		"watch:server": "tsc --project server -w",
+		"dev:client": "npm run watch:client",
+		"build:client": "webpack --config client/webpack.config.ts",
+		"watch:client": "nodemon --watch client/webpack.config.ts --exec \"webpack --config client/webpack.config.ts --watch\""
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"express": "^4.17.1",
-		"ws": "^7.2.3"
+		"express": "^4.17.1"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.6",
+		"@types/html-webpack-plugin": "^3.2.2",
+		"@types/node": "^13.11.1",
+		"@types/webpack": "^4.41.10",
+		"html-webpack-plugin": "^4.2.0",
 		"nodemon": "^2.0.3",
-		"typescript": "^3.8.3"
+		"ts-node": "^8.8.2",
+		"typescript": "^3.8.3",
+		"webpack": "^4.42.1",
+		"webpack-cli": "^3.3.11",
+		"ws": "^7.2.3"
 	}
 }
