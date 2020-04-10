@@ -1,5 +1,7 @@
 # mathStroke2
 
+Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](https://github.com/FilipChalupa/mathStroke).
+
 ## Production run
 
 ```bash
