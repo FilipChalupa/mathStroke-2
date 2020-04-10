@@ -13,8 +13,8 @@
 		"build:server": "tsc --project server",
 		"watch:server": "tsc --project server -w",
 		"dev:client": "npm run watch:client",
-		"build:client": "webpack --config client/webpack.config.ts",
-		"watch:client": "nodemon --watch client/webpack.config.ts --exec \"webpack --config client/webpack.config.ts --watch\""
+		"build:client": "webpack --mode production --config client/webpack.config.ts",
+		"watch:client": "nodemon --watch client/webpack.config.ts --exec \"webpack --mode development --config client/webpack.config.ts --watch\""
 	},
 	"keywords": [],
 	"author": "",
