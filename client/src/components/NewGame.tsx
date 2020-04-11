@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Typography } from '@material-ui/core'
-import { routes } from '../routes.ts'
+import { routes } from '../routes'
 import { Link } from 'react-router-dom'
-import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount.ts'
+import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 
 export const NewGame: React.SFC = () => {
 	useUpdateTitleOnMount('New game')

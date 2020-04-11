@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Typography, Button, Grid } from '@material-ui/core'
-import { routes } from '../routes.ts'
+import { routes } from '../routes'
 import { Link } from 'react-router-dom'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount.ts'
 

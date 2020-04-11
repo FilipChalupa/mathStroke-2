@@ -16,6 +16,9 @@ const htmls = ['.', 'new-game', 'join-game', 'game'].map(
 )
 
 module.exports = {
+	resolve: {
+		extensions: ['.js', '.tsx', '.ts'],
+	},
 	module: {
 		rules: [
 			{

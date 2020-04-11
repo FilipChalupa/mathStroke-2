@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import 'typeface-roboto'
 import './index.css'
-import { App } from './components/App.tsx'
+import { App } from './components/App'
 
 const app = document.createElement('div')
 document.querySelector('body').appendChild(app)
