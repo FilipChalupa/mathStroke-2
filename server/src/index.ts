@@ -22,15 +22,6 @@ app.get('/public-games.json', (request, response) =>
 	}),
 )
 
-const genericWsServer = new WebSocket.Server({ noServer: true })
-genericWsServer.on('connection', (ws: WebSocket) => {
-	console.log('New connection')
-	ws.send('Hello from server')
-	ws.on('message', (message) => {
-		console.log('New message', message)
-	})
-})
-
 app.post('/create-game.json', (request, response) => {
 	// @TODO: reuse api parser from client
 	const data = request.body
@@ -49,11 +40,10 @@ server.on('upgrade', (request, socket, head) => {
 
 	const match = pathname?.match(/\/game\/(.*)\.ws/)
 	const gameId = match ? match[1] : null
+	const game = gameId ? gamesManager.getGameById(gameId) : undefined
 
-	if (gameId && gamesManager.getGameById(gameId)) {
-		genericWsServer.handleUpgrade(request, socket, head, (ws) => {
-			genericWsServer.emit('connection', ws, request)
-		})
+	if (game) {
+		game.handleIncomingConnection(request, socket, head)
 	} else {
 		socket.destroy()
 	}
