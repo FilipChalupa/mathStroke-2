@@ -18,6 +18,7 @@ app.get('/public-games.json', (request, response) =>
 		games: gamesManager.getPublicGames().map((game) => ({
 			id: game.id,
 			name: game.name,
+			playersCount: game.getPlayersCount(),
 		})),
 	}),
 )

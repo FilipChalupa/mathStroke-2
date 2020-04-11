@@ -1,10 +1,17 @@
-import { parseApi, parseArray, parseObject, parseString } from './parseApi'
+import {
+	parseApi,
+	parseArray,
+	parseObject,
+	parseString,
+	parseNumber,
+} from './parseApi'
 
 export const getPublicGamesRequestParser = parseApi({
 	games: parseArray(
 		parseObject({
 			name: parseString(),
 			id: parseString(),
+			playersCount: parseNumber(),
 		}),
 	),
 })

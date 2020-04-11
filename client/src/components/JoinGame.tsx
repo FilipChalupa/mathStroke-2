@@ -23,9 +23,11 @@ export const JoinGame: React.SFC = () => {
 				<Link to={routes.homepage}>Join game</Link>
 			</Typography>
 			<ul>
-				{games.map((game: any /* @TODO: remove any */) => (
+				{games.map((game) => (
 					<li key={game.id}>
-						<Link to={createGameUrl(game.id)}>{game.name}</Link>
+						<Link to={createGameUrl(game.id)}>
+							{game.name} ({game.playersCount})
+						</Link>
 					</li>
 				))}
 			</ul>
