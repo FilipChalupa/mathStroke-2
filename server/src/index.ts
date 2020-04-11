@@ -30,9 +30,9 @@ app.get('/public-games.json', (request, response) =>
 const genericWsServer = new WebSocket.Server({ noServer: true })
 genericWsServer.on('connection', (ws: WebSocket) => {
 	console.log('New connection')
+	ws.send('Hello from server')
 	ws.on('message', (message) => {
 		console.log('New message', message)
-		ws.send('Hello from server')
 	})
 })
 
@@ -65,7 +65,7 @@ server.on('upgrade', (request, socket, head) => {
 
 	if (gameId && gameExists(gameId)) {
 		genericWsServer.handleUpgrade(request, socket, head, (ws) => {
-			ws.emit('connection', ws, request)
+			genericWsServer.emit('connection', ws, request)
 		})
 	} else {
 		socket.destroy()
