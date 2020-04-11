@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { routes } from '../routes'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { getPublicGames, getPublicGamesRequestParser } from '../getPublicGames'
+import { createGameUrl } from '../createGameUrl'
 
 type GamesType = ReturnType<typeof getPublicGamesRequestParser>['games']
 
@@ -24,7 +25,7 @@ export const JoinGame: React.SFC = () => {
 			<ul>
 				{games.map((game: any /* @TODO: remove any */) => (
 					<li key={game.id}>
-						<Link to={`${routes.game}#${game.id}`}>{game.name}</Link>
+						<Link to={createGameUrl(game.id)}>{game.name}</Link>
 					</li>
 				))}
 			</ul>
