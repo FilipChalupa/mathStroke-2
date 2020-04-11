@@ -7,6 +7,14 @@ const htmlCommonConfig = {
 	scriptLoading: 'defer',
 }
 
+const htmls = ['.', 'new-game', 'join-game'].map(
+	(path) =>
+		new HtmlWebpackPlugin({
+			...htmlCommonConfig,
+			filename: `${path}/index.html`,
+		}),
+)
+
 module.exports = {
 	module: {
 		rules: [
@@ -48,19 +56,5 @@ module.exports = {
 		path: path.resolve(__dirname, '../dist/public'),
 		publicPath: '/',
 	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			...htmlCommonConfig,
-		}),
-		new HtmlWebpackPlugin({
-			...htmlCommonConfig,
-			title: `New game | ${htmlCommonConfig.title}`,
-			filename: 'new-game/index.html',
-		}),
-		new HtmlWebpackPlugin({
-			...htmlCommonConfig,
-			title: `Join game | ${htmlCommonConfig.title}`,
-			filename: 'join-game/index.html',
-		}),
-	],
+	plugins: [...htmls],
 }
