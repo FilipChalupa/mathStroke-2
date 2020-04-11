@@ -2,15 +2,12 @@ import express from 'express'
 import http from 'http'
 import url from 'url'
 import WebSocket from 'ws'
+import { GamesManager } from './GamesManager.js'
 
 const app = express()
 const port = parseInt(process.env.PORT || '', 10) || 8080
 
-const games: {
-	id: string
-	name: string
-	isPublic: string
-}[] = []
+const gamesManager = new GamesManager()
 
 app.use(express.json())
 
@@ -18,12 +15,10 @@ app.use(express.static('dist/public'))
 
 app.get('/public-games.json', (request, response) =>
 	response.send({
-		games: games
-			.filter((game) => game.isPublic)
-			.map((game) => ({
-				id: game.id,
-				name: game.name,
-			})),
+		games: gamesManager.getPublicGames().map((game) => ({
+			id: game.id,
+			name: game.name,
+		})),
 	}),
 )
 
@@ -36,22 +31,14 @@ genericWsServer.on('connection', (ws: WebSocket) => {
 	})
 })
 
-function gameExists(gameId: string) {
-	return games.some((game) => game.id === gameId)
-}
-
 app.post('/create-game.json', (request, response) => {
-	const data = request.body
-	const gameId = `game-${Math.round(Math.random() * 9999 + 1000)}`
-
 	// @TODO: reuse api parser from client
-	games.push({
-		id: gameId,
-		name: data.gameName,
-		isPublic: data.isPublic,
-	})
+	const data = request.body
+
+	const game = gamesManager.createGame(data.gameName, data.isPublic)
+
 	response.send({
-		gameId,
+		gameId: game.id,
 	})
 })
 
@@ -63,7 +50,7 @@ server.on('upgrade', (request, socket, head) => {
 	const match = pathname?.match(/\/game\/(.*)\.ws/)
 	const gameId = match ? match[1] : null
 
-	if (gameId && gameExists(gameId)) {
+	if (gameId && gamesManager.getGameById(gameId)) {
 		genericWsServer.handleUpgrade(request, socket, head, (ws) => {
 			genericWsServer.emit('connection', ws, request)
 		})
