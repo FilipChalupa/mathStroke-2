@@ -5,6 +5,7 @@ import { routes } from '../routes.ts'
 import { Homepage } from './Homepage.tsx'
 import { NewGame } from './NewGame.tsx'
 import { JoinGame } from './JoinGame.tsx'
+import { Game } from './Game.tsx'
 
 export const App: React.SFC = () => (
 	<ThemeProvider>
@@ -16,9 +17,11 @@ export const App: React.SFC = () => (
 							<Homepage />
 						) : name === 'newGame' ? (
 							<NewGame />
-						) : (
-							name === 'joinGame' && <JoinGame />
-						)}
+						) : name === 'joinGame' ? (
+							<JoinGame />
+						) : name === 'game' ? (
+							<Game />
+						) : null}
 					</Route>
 				))}
 			</Switch>

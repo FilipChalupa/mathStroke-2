@@ -7,7 +7,7 @@ const htmlCommonConfig = {
 	scriptLoading: 'defer',
 }
 
-const htmls = ['.', 'new-game', 'join-game'].map(
+const htmls = ['.', 'new-game', 'join-game', 'game'].map(
 	(path) =>
 		new HtmlWebpackPlugin({
 			...htmlCommonConfig,
