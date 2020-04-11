@@ -1,13 +1,14 @@
 import express from 'express'
 import http from 'http'
 import url from 'url'
-import WebSocket from 'ws'
 import { GamesManager } from './GamesManager.js'
 
 const app = express()
 const port = parseInt(process.env.PORT || '', 10) || 8080
 
 const gamesManager = new GamesManager()
+
+gamesManager.createGame('Initial test room', true)
 
 app.use(express.json())
 
