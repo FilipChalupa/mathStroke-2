@@ -14,7 +14,6 @@ let playersWorkaround: Player[] = []
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
 
-	const history = useHistory()
 	const [isConnected, setIsConnected] = React.useState(false)
 	const [state, setState] = React.useState('loading')
 	const [players, setPlayers] = React.useState<Player[]>([])
@@ -66,8 +65,6 @@ export const Game: React.SFC = () => {
 		})
 		socket.addEventListener('close', () => {
 			setIsConnected(false)
-			alert('Connection closed')
-			history.push(routes.joinGame)
 		})
 		return () => {
 			socket.close()
