@@ -52,6 +52,9 @@ function subscribeToGameSocket(socket: WebSocket) {
 				emit(
 					playersAddAction({
 						id: data.connected.id,
+						isSpectating: data.connected.isSpectating,
+						isReady: data.connected.isReady,
+						name: data.connected.name,
 					}),
 				)
 			}

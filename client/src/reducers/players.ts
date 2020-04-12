@@ -2,6 +2,9 @@ import { BaseAction, actionIds } from '../common'
 
 export interface Player {
 	id: string
+	isSpectating: boolean
+	isReady: boolean
+	name: string
 }
 
 export interface PlayersState {

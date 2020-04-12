@@ -12,6 +12,9 @@ export namespace Payload {
 	export const connectedPlayer = (player: Player) => ({
 		connected: {
 			id: player.id,
+			isSpectating: player.getIsSpectating(),
+			isReady: player.getIsReady(),
+			name: player.getName(),
 		},
 	})
 

@@ -5,6 +5,8 @@ import { Payload } from './Payload.js'
 export class Player {
 	readonly id = generateId()
 	protected isSpectating = true
+	protected isReady = true
+	protected name = `John ${Math.round(10 + Math.random() * 89)}`
 
 	constructor(
 		readonly socket: WebSocket,
@@ -18,6 +20,18 @@ export class Player {
 
 	public send(data: Payload) {
 		this.socket.send(JSON.stringify(data))
+	}
+
+	public getIsSpectating() {
+		return this.isSpectating
+	}
+
+	public getIsReady() {
+		return this.isReady
+	}
+
+	public getName() {
+		return this.name
 	}
 
 	protected onMessage = (message: WebSocket.Data) => {

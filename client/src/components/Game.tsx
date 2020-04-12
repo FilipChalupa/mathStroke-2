@@ -9,6 +9,7 @@ import { State } from '../reducers'
 import { routes } from '../routes'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { useLocationHash } from '../useLocationHash'
+import { Lobby } from './Lobby'
 
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
@@ -31,16 +32,17 @@ export const Game: React.SFC = () => {
 	return (
 		<>
 			<Link to={routes.homepage}>Game</Link>
-			<div>{isConnected ? 'connected' : 'connecting'}</div>
-			<div>{isLoading ? 'loading' : 'loaded'}</div>
+			<div>
+				{isConnected ? 'connected' : 'connecting'}{' '}
+				{isLoading ? 'loading' : 'loaded'}
+			</div>
 			{gameInfo && (
 				<>
 					<div>Name: {gameInfo.name}</div>
 					<div>State: {gameInfo.state}</div>
 				</>
 			)}
-			<div>Players:</div>
-			<pre>{JSON.stringify(players, null, 2)}</pre>
+			{gameInfo && gameInfo.state === 'lobby' && <Lobby />}
 		</>
 	)
 }
