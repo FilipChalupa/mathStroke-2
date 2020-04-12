@@ -1,4 +1,5 @@
 import { BaseAction, actionIds } from '../common'
+export * from './players'
 export * from './publicGames'
 
 export const numberRequestStartAction = (): BaseAction => ({

@@ -17,7 +17,7 @@ const initialState: PublicGamesState = {
 export const publicGamesReducer = (
 	state: PublicGamesState = initialState,
 	action: BaseAction,
-) => {
+): PublicGamesState => {
 	switch (action.type) {
 		case actionIds.PUBLIC_GAMES_REQUEST_START: {
 			return { ...state, loading: true }

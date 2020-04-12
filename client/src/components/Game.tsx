@@ -3,44 +3,28 @@ import { routes } from '../routes'
 import { Link, useLocation } from 'react-router-dom'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { getGameSocket } from '../getGameSocket'
-
-interface Player {
-	id: string
-}
-
-let playersWorkaround: Player[] = []
+import { useSelector, useDispatch } from 'react-redux'
+import { State } from '../reducers'
+import {
+	playersAddAction,
+	playersRemoveAction,
+	playersClearAction,
+} from '../actions'
 
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
 
 	const [isConnected, setIsConnected] = React.useState(false)
 	const [state, setState] = React.useState('loading')
-	const [players, setPlayers] = React.useState<Player[]>([])
 	const [gameName, setGameName] = React.useState('Unnamed')
 
-	const addPlayer = React.useCallback(
-		(player: Player) => {
-			playersWorkaround = playersWorkaround.concat(player)
-			setPlayers(players.concat(player))
-		},
-		[players],
-	)
-
-	const removePlayer = React.useCallback(
-		(playerId: Player['id']) => {
-			playersWorkaround = playersWorkaround.filter(
-				(player) => player.id !== playerId,
-			)
-			setPlayers(players.filter((player) => player.id !== playerId))
-		},
-		[players],
-	)
+	const nextPlayers = useSelector((state: State) => state.players.players)
+	const dispatch = useDispatch()
 
 	const location = useLocation()
 	const gameId = location.hash.substr(1) || 'unknown'
 
 	React.useEffect(() => {
-		playersWorkaround = []
 		const socket = getGameSocket(gameId)
 		socket.addEventListener('message', (message) => {
 			//console.log('New message', message)
@@ -48,12 +32,14 @@ export const Game: React.SFC = () => {
 			console.log(data)
 
 			if (data.connected) {
-				addPlayer({
-					id: data.connected.id,
-				})
+				dispatch(
+					playersAddAction({
+						id: data.connected.id,
+					}),
+				)
 			}
 			if (data.disconnected) {
-				removePlayer(data.disconnected.id)
+				dispatch(playersRemoveAction(data.disconnected.id))
 			}
 			if (data.gameState) {
 				setState(data.gameState)
@@ -71,6 +57,7 @@ export const Game: React.SFC = () => {
 		})
 		return () => {
 			socket.close()
+			dispatch(playersClearAction())
 		}
 	}, [])
 	return (
@@ -80,7 +67,7 @@ export const Game: React.SFC = () => {
 			<div>Name: {gameName}</div>
 			<div>State: {state}</div>
 			<div>Players:</div>
-			<pre>{JSON.stringify(playersWorkaround, null, 2)}</pre>
+			<pre>{JSON.stringify(nextPlayers, null, 2)}</pre>
 		</>
 	)
 }
