@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { Typography } from '@material-ui/core'
 import { routes } from '../routes'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { getGameSocket } from '../getGameSocket'
 

@@ -90,6 +90,7 @@ export class Game {
 
 	protected onClose = () => {
 		console.log('On close')
+		this.stopCloseEmptyCountdown()
 		this.onCloseCallback()
 	}
 }
