@@ -1,20 +1,21 @@
 import * as React from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography, LinearProgress, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { routes } from '../routes'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
-import { getPublicGames, getPublicGamesRequestParser } from '../getPublicGames'
 import { createGameUrl } from '../createGameUrl'
-
-type GamesType = ReturnType<typeof getPublicGamesRequestParser>['games']
+import { useSelector, useDispatch } from 'react-redux'
+import { State } from '../reducers'
+import { publicGamesRequestStartAction } from '../actions'
 
 export const JoinGame: React.SFC = () => {
 	useUpdateTitleOnMount('Join game')
 
-	const [games, setGames] = React.useState<GamesType>([])
+	const { games, loading } = useSelector((state: State) => state.publicGames)
+	const dispatch = useDispatch()
 
 	React.useEffect(() => {
-		;(async () => setGames(await getPublicGames()))()
+		dispatch(publicGamesRequestStartAction())
 	}, [])
 
 	return (
@@ -22,6 +23,13 @@ export const JoinGame: React.SFC = () => {
 			<Typography variant="h4" align="center">
 				<Link to={routes.homepage}>Join game</Link>
 			</Typography>
+			<Button
+				disabled={loading}
+				variant="contained"
+				onClick={() => dispatch(publicGamesRequestStartAction())}
+			>
+				Refresh
+			</Button>
 			<ul>
 				{games.map((game) => (
 					<li key={game.id}>
@@ -31,6 +39,7 @@ export const JoinGame: React.SFC = () => {
 					</li>
 				))}
 			</ul>
+			{loading && <LinearProgress />}
 		</>
 	)
 }
