@@ -42,7 +42,8 @@ export class Game {
 	}
 
 	protected sendCatchUpData(player: Player) {
-		this.sendToPlayer(player, Payload.state(this.state))
+		this.sendToPlayer(player, Payload.gameState(this.state))
+		this.sendToPlayer(player, Payload.gameName(this.name))
 
 		this.players.forEach((otherPlayer) => {
 			this.sendToPlayer(player, Payload.connectedPlayer(otherPlayer))

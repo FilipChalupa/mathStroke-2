@@ -17,6 +17,7 @@ export const Game: React.SFC = () => {
 	const [isConnected, setIsConnected] = React.useState(false)
 	const [state, setState] = React.useState('loading')
 	const [players, setPlayers] = React.useState<Player[]>([])
+	const [gameName, setGameName] = React.useState('Unnamed')
 
 	const addPlayer = React.useCallback(
 		(player: Player) => {
@@ -55,8 +56,11 @@ export const Game: React.SFC = () => {
 			if (data.disconnected) {
 				removePlayer(data.disconnected.id)
 			}
-			if (data.state) {
-				setState(data.state)
+			if (data.gameState) {
+				setState(data.gameState)
+			}
+			if (data.gameName) {
+				setGameName(data.gameName)
 			}
 		})
 		socket.addEventListener('open', () => {
@@ -74,6 +78,7 @@ export const Game: React.SFC = () => {
 		<>
 			<Link to={routes.homepage}>Game</Link>
 			<div>{isConnected ? 'connected' : 'connecting'}</div>
+			<div>Name: {gameName}</div>
 			<div>State: {state}</div>
 			<div>Players:</div>
 			<pre>{JSON.stringify(playersWorkaround, null, 2)}</pre>

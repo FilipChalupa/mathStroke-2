@@ -5,7 +5,9 @@ export type Payload = {
 }
 
 export namespace Payload {
-	export const state = (state: string) => ({ state })
+	export const gameState = (gameState: string) => ({ gameState })
+
+	export const gameName = (gameName: string) => ({ gameName })
 
 	export const connectedPlayer = (player: Player) => ({
 		connected: {
