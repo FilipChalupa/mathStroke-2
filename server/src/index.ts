@@ -8,7 +8,7 @@ const port = parseInt(process.env.PORT || '', 10) || 8080
 
 const gamesManager = new GamesManager()
 
-gamesManager.createGame('Initial test room', true)
+gamesManager.createGame('Initial test room', true, false)
 
 app.use(express.json())
 
@@ -28,7 +28,7 @@ app.post('/create-game.json', (request, response) => {
 	// @TODO: reuse api parser from client
 	const data = request.body
 
-	const game = gamesManager.createGame(data.gameName, data.isPublic)
+	const game = gamesManager.createGame(data.gameName, data.isPublic, true)
 
 	response.send({
 		gameId: game.id,

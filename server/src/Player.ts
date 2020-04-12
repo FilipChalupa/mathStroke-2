@@ -6,7 +6,10 @@ export class Player {
 	readonly id = generateId()
 	protected isSpectating = true
 
-	constructor(readonly socket: WebSocket, protected onDisconnect: () => void) {
+	constructor(
+		readonly socket: WebSocket,
+		protected onDisconnectCallback: () => void,
+	) {
 		console.log('Player created')
 
 		this.socket.on('message', this.onMessage)
@@ -23,6 +26,6 @@ export class Player {
 
 	protected onClose = () => {
 		console.log('Connection to player lost')
-		this.onDisconnect()
+		this.onDisconnectCallback()
 	}
 }
