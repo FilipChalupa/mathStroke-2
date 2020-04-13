@@ -1,5 +1,4 @@
 import { State } from './State.js'
-import { Player } from '../Player.js'
 import { Payload } from '../Payload.js'
 
 const READY_PLAYERS_TO_START_COUNTDOWN_RATIO = 0.7
@@ -13,6 +12,10 @@ export class Lobby extends State {
 
 	protected countdownTimer: null | NodeJS.Timeout = null
 	protected countdownFinishTime = Number.MAX_SAFE_INTEGER
+
+	public initialize() {
+		this.checkReadiness()
+	}
 
 	public onPlayerConnect() {
 		this.checkReadiness()
