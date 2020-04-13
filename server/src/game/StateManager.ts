@@ -14,9 +14,15 @@ export class StateManager {
 	}
 
 	public startLevel() {
-		console.log('start new level')
+		console.log('Start new level')
 		const nextLevel = this.createLevel()
 		this.changeState(nextLevel)
+	}
+
+	public goToLobby() {
+		console.log('Go to lobby')
+		const lobby = this.createLobby()
+		this.changeState(lobby)
 	}
 
 	protected createLobby() {

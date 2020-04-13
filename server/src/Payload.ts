@@ -42,6 +42,10 @@ export namespace Payload {
 		},
 	})
 
+	export const clearIsReady = () => ({
+		clearIsReady: true,
+	})
+
 	export const lobbyCountdown = (duration: number | null) => ({
 		lobbyCountdown: { duration },
 	})

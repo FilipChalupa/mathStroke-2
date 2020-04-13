@@ -14,7 +14,8 @@ export class Lobby extends State {
 	protected countdownFinishTime = Number.MAX_SAFE_INTEGER
 
 	public initialize() {
-		this.checkReadiness()
+		this.game.sendToAllPlayers(Payload.clearIsReady())
+		this.game.sendToAllPlayers(Payload.lobbyCountdown(null))
 	}
 
 	public onPlayerConnect() {

@@ -22,6 +22,7 @@ import {
 	playersSetIsReady,
 	lobbyCountdownStopCountdownAction,
 	lobbyCountdownStartCountdownAction,
+	playersClearIsReady,
 } from '../actions'
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
@@ -102,6 +103,9 @@ function subscribeToGameSocket(socket: WebSocket) {
 						? lobbyCountdownStopCountdownAction()
 						: lobbyCountdownStartCountdownAction(data.lobbyCountdown.duration),
 				)
+			}
+			if (typeof data.clearIsReady !== 'undefined') {
+				emit(playersClearIsReady())
 			}
 		}
 
