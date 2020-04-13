@@ -67,6 +67,11 @@ export class Game {
 		})
 	}
 
+	public clearIsReady() {
+		this.players.forEach((player) => player.forceNotReadyLocally())
+		this.sendToAllPlayers(Payload.clearIsReady())
+	}
+
 	protected sendCatchUpData(player: Player) {
 		this.sendToPlayer(
 			player,

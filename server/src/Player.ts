@@ -38,6 +38,10 @@ export class Player {
 		return this.name
 	}
 
+	public forceNotReadyLocally() {
+		this.isReady = false
+	}
+
 	protected setIsSpectating(isSpectating: boolean) {
 		this.isSpectating = Boolean(isSpectating)
 		this.callbacks.onIsSpectatingChange()
