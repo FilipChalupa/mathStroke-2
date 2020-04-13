@@ -1,10 +1,11 @@
 import { Game } from '../Game.js'
 import { Player } from '../Player.js'
+import { StateManager } from './StateManager.js'
 
 export abstract class State {
 	abstract readonly name: string
 
-	constructor(readonly game: Game) {
+	constructor(readonly game: Game, readonly stateManager: StateManager) {
 		this.initialize()
 	}
 

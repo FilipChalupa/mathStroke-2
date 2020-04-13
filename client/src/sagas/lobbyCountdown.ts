@@ -18,9 +18,8 @@ function* countdown(action: BaseAction) {
 		new Promise((resolve) => setTimeout(resolve, duration))
 	while (true) {
 		const currentTime = new Date().getTime()
-		const remainingSeconds = Math.ceil(
-			Math.max(0, finishTime - currentTime) / 1000,
-		)
+		const remainingSeconds =
+			Math.ceil(Math.max(0, finishTime - currentTime) / 1000) - 1
 		yield put(
 			lobbyCountdownSetRemainingSecondsCountdownAction(remainingSeconds),
 		)
@@ -28,7 +27,7 @@ function* countdown(action: BaseAction) {
 			break
 		}
 		const nextSecondInTimeDuration =
-			finishTime - currentTime - (remainingSeconds - 1) * 1000
+			finishTime - currentTime - remainingSeconds * 1000
 		const result = yield race({
 			timer: call(wait, nextSecondInTimeDuration),
 			stop: take(actionIds.LOBBY_COUNTDOWN_STOP_COUNTDOWN),

@@ -4,8 +4,8 @@ import { Payload } from '../Payload.js'
 const READY_PLAYERS_TO_START_COUNTDOWN_RATIO = 0.7
 const READY_PLAYERS_TO_START_IMMEDIATELY_RATIO = 0.9
 
-const COUNTDOWN_DURATION = 30000 // 30 seconds
-const IMMEDIATE_COUNTDOWN_DURATION = 3000 // 3 seconds
+const COUNTDOWN_DURATION = 31000 // 31 seconds
+const IMMEDIATE_COUNTDOWN_DURATION = 4000 // 4 seconds
 
 export class Lobby extends State {
 	readonly name = 'lobby'
@@ -60,7 +60,7 @@ export class Lobby extends State {
 		}
 		this.countdownFinishTime = newCountDownFinishTime
 		this.countdownTimer = setTimeout(() => {
-			console.log('count down finished') // @TODO: start level
+			this.stateManager.startLevel()
 		}, duration)
 
 		this.game.sendToAllPlayers(Payload.lobbyCountdown(duration))
