@@ -20,6 +20,8 @@ import {
 	playersSetLocalPlayerId,
 	playersSetIsSpectating,
 	playersSetIsReady,
+	lobbyCountdownStopCountdownAction,
+	lobbyCountdownStartCountdownAction,
 } from '../actions'
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
@@ -94,6 +96,13 @@ function subscribeToGameSocket(socket: WebSocket) {
 					}),
 				)
 			}
+			if (typeof data.lobbyCountdown !== 'undefined') {
+				emit(
+					data.lobbyCountdown.duration === null
+						? lobbyCountdownStopCountdownAction()
+						: lobbyCountdownStartCountdownAction(data.lobbyCountdown.duration),
+				)
+			}
 		}
 
 		socket.addEventListener('close', onClose)
@@ -147,6 +156,7 @@ function* watchGameDisconnectRequestCompleted() {
 
 function* requestGameDisconnectCompleted() {
 	yield put(playersClearAction())
+	yield put(lobbyCountdownStopCountdownAction())
 }
 
 export function* gameRootSaga() {

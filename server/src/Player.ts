@@ -38,6 +38,19 @@ export class Player {
 		return this.name
 	}
 
+	protected setIsSpectating(isSpectating: boolean) {
+		this.isSpectating = Boolean(isSpectating)
+		this.callbacks.onIsSpectatingChange()
+		if (this.isSpectating) {
+			this.setIsReady(false)
+		}
+	}
+
+	protected setIsReady(isReady: boolean) {
+		this.isReady = Boolean(isReady)
+		this.callbacks.onIsReadyChange()
+	}
+
 	protected onMessage = (message: WebSocket.Data) => {
 		if (typeof message !== 'string') {
 			throw new Error(`Unknown message type "${typeof message}".`)
@@ -46,12 +59,10 @@ export class Player {
 		console.log('New message', data)
 
 		if (typeof data.isSpectating !== 'undefined') {
-			this.isSpectating = Boolean(data.isSpectating)
-			this.callbacks.onIsSpectatingChange()
+			this.setIsSpectating(data.isSpectating)
 		}
 		if (typeof data.isReady !== 'undefined') {
-			this.isReady = Boolean(data.isReady)
-			this.callbacks.onIsReadyChange()
+			this.setIsReady(data.isReady)
 		}
 	}
 

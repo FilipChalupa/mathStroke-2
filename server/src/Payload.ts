@@ -41,4 +41,8 @@ export namespace Payload {
 			playerId: player.id,
 		},
 	})
+
+	export const lobbyCountdown = (duration: number | null) => ({
+		lobbyCountdown: { duration },
+	})
 }

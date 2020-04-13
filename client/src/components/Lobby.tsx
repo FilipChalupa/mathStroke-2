@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 import { useLocalPlayer } from '../useLocalPlayer'
 import { playersSetLocalIsSpectating, playersSetLocalIsReady } from '../actions'
+import { LobbyCountdown } from './LobbyCountdown'
 
 export const Lobby: React.SFC = () => {
 	const dispatch = useDispatch()
@@ -26,67 +27,70 @@ export const Lobby: React.SFC = () => {
 	}, [localPlayer])
 
 	return (
-		<Paper>
-			<Table stickyHeader>
-				<TableHead>
-					<TableRow>
-						<TableCell>#</TableCell>
-						<TableCell>Name</TableCell>
-						<TableCell>Ready</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{nonSpectatingPlayers.map((player, i) => (
-						<TableRow key={player.id}>
-							<TableCell>{i + 1}.</TableCell>
-							<TableCell>@TODO</TableCell>
-							<TableCell>
-								<Checkbox
-									checked={player.isReady}
-									disabled={!localPlayer || player.id !== localPlayer.id}
-									onClick={
-										localPlayer && player.id === localPlayer.id
-											? toggleIsReady
-											: undefined
-									}
-								/>
-								{/* @TODO: current user make clickable */}
-							</TableCell>
-						</TableRow>
-					))}
-					{spectatorsCount > 0 && (
+		<>
+			<LobbyCountdown />
+			<Paper>
+				<Table stickyHeader>
+					<TableHead>
 						<TableRow>
-							<TableCell>👁️</TableCell>
-							<TableCell colSpan={2}>
-								<i>
-									{spectatorsCount}{' '}
-									{spectatorsCount === 1 ? 'spectator' : 'spectators'}
-									{localPlayer && localPlayer.isSpectating && (
-										<> including you</>
-									)}
-								</i>
-							</TableCell>
+							<TableCell>#</TableCell>
+							<TableCell>Name</TableCell>
+							<TableCell>Ready</TableCell>
 						</TableRow>
-					)}
-				</TableBody>
-			</Table>
+					</TableHead>
+					<TableBody>
+						{nonSpectatingPlayers.map((player, i) => (
+							<TableRow key={player.id}>
+								<TableCell>{i + 1}.</TableCell>
+								<TableCell>@TODO</TableCell>
+								<TableCell>
+									<Checkbox
+										checked={player.isReady}
+										disabled={!localPlayer || player.id !== localPlayer.id}
+										onClick={
+											localPlayer && player.id === localPlayer.id
+												? toggleIsReady
+												: undefined
+										}
+									/>
+									{/* @TODO: current user make clickable */}
+								</TableCell>
+							</TableRow>
+						))}
+						{spectatorsCount > 0 && (
+							<TableRow>
+								<TableCell>👁️</TableCell>
+								<TableCell colSpan={2}>
+									<i>
+										{spectatorsCount}{' '}
+										{spectatorsCount === 1 ? 'spectator' : 'spectators'}
+										{localPlayer && localPlayer.isSpectating && (
+											<> including you</>
+										)}
+									</i>
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
 
-			{localPlayer && (
-				<>
-					<Button
-						onClick={() => {
-							dispatch(playersSetLocalIsSpectating(!localPlayer.isSpectating))
-						}}
-					>
-						{localPlayer.isSpectating ? 'Unspectate' : 'Spectate'}
-					</Button>{' '}
-					{!localPlayer.isSpectating && (
-						<Button onClick={toggleIsReady}>
-							{localPlayer.isReady ? 'Unready' : 'Ready'}
-						</Button>
-					)}
-				</>
-			)}
-		</Paper>
+				{localPlayer && (
+					<>
+						<Button
+							onClick={() => {
+								dispatch(playersSetLocalIsSpectating(!localPlayer.isSpectating))
+							}}
+						>
+							{localPlayer.isSpectating ? 'Unspectate' : 'Spectate'}
+						</Button>{' '}
+						{!localPlayer.isSpectating && (
+							<Button onClick={toggleIsReady}>
+								{localPlayer.isReady ? 'Unready' : 'Ready'}
+							</Button>
+						)}
+					</>
+				)}
+			</Paper>
+		</>
 	)
 }
