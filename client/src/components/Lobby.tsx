@@ -42,7 +42,7 @@ export const Lobby: React.SFC = () => {
 						{nonSpectatingPlayers.map((player, i) => (
 							<TableRow key={player.id}>
 								<TableCell>{i + 1}.</TableCell>
-								<TableCell>@TODO</TableCell>
+								<TableCell>{player.name}</TableCell>
 								<TableCell>
 									<Checkbox
 										checked={player.isReady}
