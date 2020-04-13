@@ -4,7 +4,7 @@ import { Payload } from './Payload.js'
 
 export class Player {
 	readonly id = generateId()
-	protected isSpectating = true
+	protected isSpectating = false
 	protected isReady = false
 	protected name = `John ${Math.round(10 + Math.random() * 89)}`
 
