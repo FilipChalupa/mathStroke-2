@@ -72,16 +72,25 @@ export class Game {
 	}
 
 	protected onConnection = (socket: WebSocket) => {
-		const player = new Player(socket, () => {
-			this.players = this.players.filter((x) => x.id !== player.id)
-			this.sendToAllPlayers(Payload.disconnectedPlayer(player))
+		const player = new Player(socket, {
+			onDisconnect: () => {
+				this.players = this.players.filter((x) => x.id !== player.id)
+				this.sendToAllPlayers(Payload.disconnectedPlayer(player))
 
-			console.log('Players count', this.players.length)
-			if (this.autoCloseEmpty && this.players.length === 0) {
-				this.startCloseEmptyCountdown()
-			}
+				console.log('Players count', this.players.length)
+				if (this.autoCloseEmpty && this.players.length === 0) {
+					this.startCloseEmptyCountdown()
+				}
+			},
+			onIsReadyChange: () => {
+				this.sendToAllPlayers(Payload.isReady(player))
+			},
+			onIsSpectatingChange: () => {
+				this.sendToAllPlayers(Payload.isSpectating(player))
+			},
 		})
 		this.sendToAllPlayers(Payload.connectedPlayer(player))
+		player.send(Payload.localPlayerId(player))
 		this.players.push(player)
 		this.sendCatchUpData(player)
 

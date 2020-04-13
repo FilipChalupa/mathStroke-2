@@ -6,6 +6,7 @@ import {
 	take,
 	takeEvery,
 	put,
+	takeLatest,
 } from 'redux-saga/effects'
 import { actionIds } from '../common'
 import {
@@ -16,9 +17,13 @@ import {
 	playersAddAction,
 	playersRemoveAction,
 	gameUpdateInfoAction,
+	playersSetLocalPlayerId,
+	playersSetIsSpectating,
+	playersSetIsReady,
 } from '../actions'
-import { getGameSocket, closeGameSocket } from '../gameConnection'
+import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
+import { Payload } from '../Payload'
 
 function* gameConnectionFlow() {
 	// @TODO: error handling
@@ -48,27 +53,41 @@ function subscribeToGameSocket(socket: WebSocket) {
 		const onMessage = (message: MessageEvent) => {
 			const data = JSON.parse(message.data)
 
-			if (data.connected) {
+			if (typeof data.playerConnected !== 'undefined') {
 				emit(
 					playersAddAction({
-						id: data.connected.id,
-						isSpectating: data.connected.isSpectating,
-						isReady: data.connected.isReady,
-						name: data.connected.name,
+						id: data.playerConnected.id,
+						isSpectating: data.playerConnected.isSpectating,
+						isReady: data.playerConnected.isReady,
+						name: data.playerConnected.name,
 					}),
 				)
 			}
-			if (data.disconnected) {
-				emit(playersRemoveAction(data.disconnected.id))
+			if (typeof data.localPlayerId !== 'undefined') {
+				emit(playersSetLocalPlayerId(data.localPlayerId))
 			}
-			if (data.gameState) {
+			if (typeof data.playerDisconnected !== 'undefined') {
+				emit(playersRemoveAction(data.playerDisconnected.id))
+			}
+			if (typeof data.isSpectating !== 'undefined') {
+				emit(
+					playersSetIsSpectating(
+						data.isSpectating.playerId,
+						data.isSpectating.value,
+					),
+				)
+			}
+			if (typeof data.isReady !== 'undefined') {
+				emit(playersSetIsReady(data.isReady.playerId, data.isReady.value))
+			}
+			if (typeof data.gameState !== 'undefined') {
 				emit(
 					gameUpdateInfoAction({
 						state: data.gameState,
 					}),
 				)
 			}
-			if (data.gameName) {
+			if (typeof data.gameName !== 'undefined') {
 				emit(
 					gameUpdateInfoAction({
 						name: data.gameName,
@@ -97,8 +116,26 @@ function* read(socket: WebSocket) {
 	}
 }
 
+function* write(socket: WebSocket) {
+	yield fork(function* () {
+		yield takeLatest(actionIds.PLAYERS_SET_LOCAL_IS_READY, function* (
+			action: any,
+		) {
+			sendToSocket(socket, Payload.isReady(action.payload.isReady))
+		})
+	})
+	yield fork(function* () {
+		yield takeLatest(actionIds.PLAYERS_SET_LOCAL_IS_SPECTATING, function* (
+			action: any,
+		) {
+			sendToSocket(socket, Payload.isSpectating(action.payload.isSpectating))
+		})
+	})
+}
+
 function* handleSocket(socket: WebSocket) {
 	yield fork(read, socket)
+	yield fork(write, socket)
 }
 
 function* watchGameDisconnectRequestCompleted() {

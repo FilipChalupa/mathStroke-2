@@ -9,10 +9,12 @@ export interface Player {
 
 export interface PlayersState {
 	players: Player[]
+	localPlayerId: null | Player['id']
 }
 
 const initialState: PlayersState = {
 	players: [],
+	localPlayerId: null,
 }
 
 export const playersReducer = (
@@ -32,6 +34,47 @@ export const playersReducer = (
 		}
 		case actionIds.PLAYERS_CLEAR: {
 			return { ...state, players: [] }
+		}
+		case actionIds.PLAYERS_SET_LOCAL_PLAYER_ID: {
+			return { ...state, localPlayerId: action.payload.id }
+		}
+		case actionIds.PLAYERS_SET_LOCAL_PLAYER_ID: {
+			return { ...state, localPlayerId: action.payload.id }
+		}
+		case actionIds.PLAYERS_CLEAR_IS_READY: {
+			return {
+				...state,
+				players: state.players.map((player) => ({
+					...player,
+					isReady: false,
+				})),
+			}
+		}
+		case actionIds.PLAYERS_SET_IS_SPECTATING: {
+			return {
+				...state,
+				players: state.players.map((player) =>
+					player.id !== action.payload.playerId
+						? player
+						: {
+								...player,
+								isSpectating: action.payload.isSpectating,
+						  },
+				),
+			}
+		}
+		case actionIds.PLAYERS_SET_IS_READY: {
+			return {
+				...state,
+				players: state.players.map((player) =>
+					player.id !== action.payload.playerId
+						? player
+						: {
+								...player,
+								isReady: action.payload.isReady,
+						  },
+				),
+			}
 		}
 	}
 	return state

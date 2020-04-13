@@ -9,8 +9,12 @@ export namespace Payload {
 
 	export const gameName = (gameName: string) => ({ gameName })
 
+	export const localPlayerId = (player: Player) => ({
+		localPlayerId: player.id,
+	})
+
 	export const connectedPlayer = (player: Player) => ({
-		connected: {
+		playerConnected: {
 			id: player.id,
 			isSpectating: player.getIsSpectating(),
 			isReady: player.getIsReady(),
@@ -19,8 +23,22 @@ export namespace Payload {
 	})
 
 	export const disconnectedPlayer = (player: Player) => ({
-		disconnected: {
+		playerDisconnected: {
 			id: player.id,
+		},
+	})
+
+	export const isSpectating = (player: Player) => ({
+		isSpectating: {
+			value: player.getIsSpectating(),
+			playerId: player.id,
+		},
+	})
+
+	export const isReady = (player: Player) => ({
+		isReady: {
+			value: player.getIsReady(),
+			playerId: player.id,
 		},
 	})
 }

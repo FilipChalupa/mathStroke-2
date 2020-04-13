@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { State } from '../reducers'
 import {
 	Table,
@@ -9,12 +9,21 @@ import {
 	TableBody,
 	Paper,
 	Checkbox,
+	Button,
 } from '@material-ui/core'
+import { useLocalPlayer } from '../useLocalPlayer'
+import { playersSetLocalIsSpectating, playersSetLocalIsReady } from '../actions'
 
 export const Lobby: React.SFC = () => {
+	const dispatch = useDispatch()
 	const players = useSelector((state: State) => state.players.players)
+	const localPlayer = useLocalPlayer()
 	const nonSpectatingPlayers = players.filter((player) => !player.isSpectating)
 	const spectatorsCount = players.length - nonSpectatingPlayers.length
+
+	const toggleIsReady = React.useCallback(() => {
+		dispatch(playersSetLocalIsReady(!localPlayer.isReady))
+	}, [localPlayer])
 
 	return (
 		<Paper>
@@ -32,7 +41,15 @@ export const Lobby: React.SFC = () => {
 							<TableCell>{i + 1}.</TableCell>
 							<TableCell>@TODO</TableCell>
 							<TableCell>
-								<Checkbox checked={player.isReady} disabled />
+								<Checkbox
+									checked={player.isReady}
+									disabled={!localPlayer || player.id !== localPlayer.id}
+									onClick={
+										localPlayer && player.id === localPlayer.id
+											? toggleIsReady
+											: undefined
+									}
+								/>
 								{/* @TODO: current user make clickable */}
 							</TableCell>
 						</TableRow>
@@ -44,12 +61,32 @@ export const Lobby: React.SFC = () => {
 								<i>
 									{spectatorsCount}{' '}
 									{spectatorsCount === 1 ? 'spectator' : 'spectators'}
+									{localPlayer && localPlayer.isSpectating && (
+										<> including you</>
+									)}
 								</i>
 							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>
 			</Table>
+
+			{localPlayer && (
+				<>
+					<Button
+						onClick={() => {
+							dispatch(playersSetLocalIsSpectating(!localPlayer.isSpectating))
+						}}
+					>
+						{localPlayer.isSpectating ? 'Unspectate' : 'Spectate'}
+					</Button>{' '}
+					{!localPlayer.isSpectating && (
+						<Button onClick={toggleIsReady}>
+							{localPlayer.isReady ? 'Unready' : 'Ready'}
+						</Button>
+					)}
+				</>
+			)}
 		</Paper>
 	)
 }

@@ -14,7 +14,6 @@ import { Lobby } from './Lobby'
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
 
-	const players = useSelector((state: State) => state.players.players)
 	const dispatch = useDispatch()
 
 	const gameId = useLocationHash() || 'unknown'

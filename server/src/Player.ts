@@ -5,12 +5,16 @@ import { Payload } from './Payload.js'
 export class Player {
 	readonly id = generateId()
 	protected isSpectating = true
-	protected isReady = true
+	protected isReady = false
 	protected name = `John ${Math.round(10 + Math.random() * 89)}`
 
 	constructor(
 		readonly socket: WebSocket,
-		protected onDisconnectCallback: () => void,
+		protected callbacks: {
+			onDisconnect: () => void
+			onIsReadyChange: () => void
+			onIsSpectatingChange: () => void
+		},
 	) {
 		console.log('Player created')
 
@@ -35,11 +39,24 @@ export class Player {
 	}
 
 	protected onMessage = (message: WebSocket.Data) => {
-		console.log('New message', message)
+		if (typeof message !== 'string') {
+			throw new Error(`Unknown message type "${typeof message}".`)
+		}
+		const data = JSON.parse(message)
+		console.log('New message', data)
+
+		if (typeof data.isSpectating !== 'undefined') {
+			this.isSpectating = Boolean(data.isSpectating)
+			this.callbacks.onIsSpectatingChange()
+		}
+		if (typeof data.isReady !== 'undefined') {
+			this.isReady = Boolean(data.isReady)
+			this.callbacks.onIsReadyChange()
+		}
 	}
 
 	protected onClose = () => {
 		console.log('Connection to player lost')
-		this.onDisconnectCallback()
+		this.callbacks.onDisconnect()
 	}
 }

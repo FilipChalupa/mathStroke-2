@@ -1,3 +1,5 @@
+import { Payload } from './Payload'
+
 export function getGameSocket(gameId: string): Promise<WebSocket> {
 	const socket = new WebSocket(
 		`${location.protocol.replace('http', 'ws')}//${
@@ -21,4 +23,8 @@ export function getGameSocket(gameId: string): Promise<WebSocket> {
 
 export function closeGameSocket(socket: WebSocket) {
 	socket.close()
+}
+
+export function sendToSocket(socket: WebSocket, payload: Payload) {
+	socket.send(JSON.stringify(payload))
 }
