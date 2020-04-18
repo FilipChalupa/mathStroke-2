@@ -10,6 +10,7 @@ import { routes } from '../routes'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { useLocationHash } from '../useLocationHash'
 import { Lobby } from './Lobby'
+import { Level } from './Level'
 
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
@@ -42,6 +43,7 @@ export const Game: React.SFC = () => {
 				</>
 			)}
 			{gameInfo && gameInfo.state === 'lobby' && <Lobby />}
+			{gameInfo && gameInfo.state === 'level' && <Level />}
 		</>
 	)
 }
