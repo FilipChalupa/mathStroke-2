@@ -19,7 +19,7 @@ export class StateManager {
 		this.changeState(nextLevel)
 	}
 
-	public goToLobby() {
+	public goToLobby = () => {
 		console.log('Go to lobby')
 		const lobby = this.createLobby()
 		this.changeState(lobby)
@@ -37,5 +37,6 @@ export class StateManager {
 		this.state.destroy()
 		this.state = newState
 		this.game.sendToAllPlayers(Payload.gameState(this.state.name))
+		this.state.initialize()
 	}
 }

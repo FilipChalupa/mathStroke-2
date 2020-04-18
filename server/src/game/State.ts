@@ -5,9 +5,7 @@ import { StateManager } from './StateManager.js'
 export abstract class State {
 	abstract readonly name: string
 
-	constructor(readonly game: Game, readonly stateManager: StateManager) {
-		this.initialize()
-	}
+	constructor(readonly game: Game, readonly stateManager: StateManager) {}
 
 	public initialize() {}
 	public onPlayerConnect(player: Player) {}
