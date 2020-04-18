@@ -23,6 +23,7 @@ import {
 	lobbyCountdownStopCountdownAction,
 	lobbyCountdownStartCountdownAction,
 	playersClearIsReady,
+	levelClearAction,
 } from '../actions'
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
@@ -84,6 +85,9 @@ function subscribeToGameSocket(socket: WebSocket) {
 				emit(playersSetIsReady(data.isReady.playerId, data.isReady.value))
 			}
 			if (typeof data.gameState !== 'undefined') {
+				if (data.gameState === 'level') {
+					emit(levelClearAction())
+				}
 				emit(
 					gameUpdateInfoAction({
 						state: data.gameState,
@@ -142,6 +146,13 @@ function* write(socket: WebSocket) {
 			action: any,
 		) {
 			sendToSocket(socket, Payload.isSpectating(action.payload.isSpectating))
+		})
+	})
+	yield fork(function* () {
+		yield takeLatest(actionIds.LEVEL_SUBMIT_SOLUTION_START, function* (
+			action: any,
+		) {
+			sendToSocket(socket, Payload.submitSolution(action.payload.solution))
 		})
 	})
 }

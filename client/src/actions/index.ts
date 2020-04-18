@@ -1,4 +1,5 @@
 export * from './game'
+export * from './level'
 export * from './lobbyCountdown'
 export * from './players'
 export * from './publicGames'
