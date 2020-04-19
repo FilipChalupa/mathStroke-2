@@ -49,4 +49,14 @@ export namespace Payload {
 	export const lobbyCountdown = (duration: number | null) => ({
 		lobbyCountdown: { duration },
 	})
+
+	export const levelSolutionVerdict = (
+		isAccepted: boolean,
+		cooldown: number,
+	) => ({
+		levelSolutionVerdict: {
+			cooldown,
+			isAccepted,
+		},
+	})
 }

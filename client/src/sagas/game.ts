@@ -24,6 +24,8 @@ import {
 	lobbyCountdownStartCountdownAction,
 	playersClearIsReady,
 	levelClearAction,
+	levelSolutionAcceptedAction,
+	levelSolutionRejectedAction,
 } from '../actions'
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
@@ -110,6 +112,13 @@ function subscribeToGameSocket(socket: WebSocket) {
 			}
 			if (typeof data.clearIsReady !== 'undefined') {
 				emit(playersClearIsReady())
+			}
+			if (typeof data.levelSolutionVerdict !== 'undefined') {
+				if (data.levelSolutionVerdict.isAccepted) {
+					emit(levelSolutionAcceptedAction(data.levelSolutionVerdict.cooldown))
+				} else {
+					emit(levelSolutionRejectedAction(data.levelSolutionVerdict.cooldown))
+				}
 			}
 		}
 

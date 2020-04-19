@@ -2,10 +2,12 @@ import { BaseAction, actionIds } from '../common'
 
 export interface LevelState {
 	isSubmittingSolution: boolean
+	isOnCooldown: boolean
 }
 
 const initialState: LevelState = {
 	isSubmittingSolution: false,
+	isOnCooldown: false,
 }
 
 export const levelReducer = (
@@ -18,7 +20,10 @@ export const levelReducer = (
 		}
 		case actionIds.LEVEL_SOLUTION_ACCEPTED:
 		case actionIds.LEVEL_SOLUTION_REJECTED: {
-			return { ...state, isSubmittingSolution: false }
+			return { ...state, isSubmittingSolution: false, isOnCooldown: true }
+		}
+		case actionIds.LEVEL_CLEAR_COOLDOWN: {
+			return { ...state, isOnCooldown: false }
 		}
 		case actionIds.LEVEL_CLEAR: {
 			return initialState

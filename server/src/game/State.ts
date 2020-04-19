@@ -12,6 +12,7 @@ export abstract class State {
 	public onPlayerDisconnect(player: Player) {}
 	public onPlayerIsReadyChange(player: Player) {}
 	public onPlayerIsSpectatingChange(player: Player) {}
+	public onPlayerSolutionSubmission(player: Player, solution: string) {}
 
 	public destroy() {}
 }

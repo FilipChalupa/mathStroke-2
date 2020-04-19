@@ -105,6 +105,11 @@ export class Game {
 				this.sendToAllPlayers(Payload.isSpectating(player))
 				this.stateManager.getCurrentState().onPlayerIsSpectatingChange(player)
 			},
+			onSolutionSubmission: (solution: string) => {
+				this.stateManager
+					.getCurrentState()
+					.onPlayerSolutionSubmission(player, solution)
+			},
 		})
 		this.sendToAllPlayers(Payload.connectedPlayer(player))
 		player.send(Payload.localPlayerId(player))

@@ -7,9 +7,10 @@ import { State } from '../reducers'
 export const Level: React.SFC = () => {
 	const [solution, setSolution] = React.useState('')
 	const solutionInputRef = React.useRef<HTMLInputElement>()
-	const isDisabled = useSelector(
-		(state: State) => state.level.isSubmittingSolution,
+	const { isSubmittingSolution, isOnCooldown } = useSelector(
+		(state: State) => state.level,
 	)
+	const isDisabled = isSubmittingSolution || isOnCooldown
 
 	const dispatch = useDispatch()
 

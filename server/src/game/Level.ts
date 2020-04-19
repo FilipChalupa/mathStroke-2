@@ -3,6 +3,8 @@ import { Game } from '../Game.js'
 import { StateManager } from './StateManager.js'
 import { Task } from './Task.js'
 import { Instructions } from './Instructions.js'
+import { Player } from '../Player.js'
+import { Payload } from '../Payload.js'
 
 export class Level extends State {
 	readonly name = 'level'
@@ -32,6 +34,27 @@ export class Level extends State {
 		this.tasksRunning.forEach((task) => {
 			task.destroy()
 		})
+	}
+
+	public onPlayerSolutionSubmission(player: Player, solution: string) {
+		console.log(player.getName(), solution)
+
+		const solvedTaskIndex = this.tasksRunning.findIndex(
+			(task) => task.solution === solution,
+		)
+
+		if (solvedTaskIndex === -1) {
+			// Task with that solution not found
+			player.send(Payload.levelSolutionVerdict(false, 3000)) // @TODO dynamic cooldown
+			return
+		}
+
+		// Task with that soltution found
+		player.send(Payload.levelSolutionVerdict(true, 1000)) // @TODO dynamic cooldown
+		const solvedTask = this.tasksRunning[solvedTaskIndex]
+		this.tasksRunning.splice(solvedTaskIndex, 1) // Remove solced task
+		// @TODO: broadcast that task is solved
+		solvedTask.destroy()
 	}
 
 	protected getMinimumTasksCountToBeSolved() {

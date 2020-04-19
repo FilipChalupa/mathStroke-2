@@ -7,13 +7,18 @@ export const levelSubmitSolutionStartAction = (
 	payload: { solution },
 })
 
-export const levelSolutionAcceptedAction = (): BaseAction => ({
+export const levelSolutionAcceptedAction = (cooldown: number): BaseAction => ({
 	type: actionIds.LEVEL_SOLUTION_ACCEPTED,
-	payload: null,
+	payload: { cooldown },
 })
 
-export const levelSolutionRejectedAction = (): BaseAction => ({
+export const levelSolutionRejectedAction = (cooldown: number): BaseAction => ({
 	type: actionIds.LEVEL_SOLUTION_REJECTED,
+	payload: { cooldown },
+})
+
+export const levelClearCooldownAction = (): BaseAction => ({
+	type: actionIds.LEVEL_CLEAR_COOLDOWN,
 	payload: null,
 })
 

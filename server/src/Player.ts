@@ -14,6 +14,7 @@ export class Player {
 			onDisconnect: () => void
 			onIsReadyChange: () => void
 			onIsSpectatingChange: () => void
+			onSolutionSubmission: (solution: string) => void
 		},
 	) {
 		console.log('Player created')
@@ -55,6 +56,10 @@ export class Player {
 		this.callbacks.onIsReadyChange()
 	}
 
+	protected submitSolution(solution: string) {
+		this.callbacks.onSolutionSubmission(solution)
+	}
+
 	protected onMessage = (message: WebSocket.Data) => {
 		if (typeof message !== 'string') {
 			throw new Error(`Unknown message type "${typeof message}".`)
@@ -67,6 +72,9 @@ export class Player {
 		}
 		if (typeof data.isReady !== 'undefined') {
 			this.setIsReady(data.isReady)
+		}
+		if (typeof data.solution !== 'undefined') {
+			this.submitSolution(data.solution)
 		}
 	}
 
