@@ -2,7 +2,7 @@ import { Game } from '../Game.js'
 import { State } from './State.js'
 import { Lobby } from './Lobby.js'
 import { Level } from './Level.js'
-import { Payload } from '../Payload.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
 
 export class StateManager {
 	protected state: State = this.createLobby()
@@ -36,7 +36,9 @@ export class StateManager {
 	protected changeState(newState: State) {
 		this.state.destroy()
 		this.state = newState
-		this.game.sendToAllPlayers(Payload.gameState(this.state.name))
+		this.game.sendToAllPlayers(
+			PayloadFromServer.createGameState(this.state.name),
+		)
 		this.state.initialize()
 	}
 }

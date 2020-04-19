@@ -3,7 +3,7 @@ import { Player } from '../Player.js'
 import { StateManager } from './StateManager.js'
 
 export abstract class State {
-	abstract readonly name: string
+	abstract readonly name: 'level' | 'lobby'
 
 	constructor(readonly game: Game, readonly stateManager: StateManager) {}
 

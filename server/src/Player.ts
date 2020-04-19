@@ -1,14 +1,10 @@
 import WebSocket from 'ws'
 import { generateId } from './generateId.js'
-import { Payload } from './Payload.js'
-import { PayloadFromClient } from '../../common/Payload.js'
+import { PayloadFromClient } from '../../common/PayloadFromClient.js'
+import { PayloadFromServer } from '../../common/PayloadFromServer.js'
+import { PlayerCommon } from '../../common/PlayerCommon.js'
 
-export class Player {
-	readonly id = generateId()
-	protected isSpectating = false
-	protected isReady = false
-	protected name = `John ${Math.round(10 + Math.random() * 89)}`
-
+export class Player extends PlayerCommon {
 	constructor(
 		readonly socket: WebSocket,
 		protected callbacks: {
@@ -18,26 +14,21 @@ export class Player {
 			onSolutionSubmission: (solution: string) => void
 		},
 	) {
+		super(
+			generateId(),
+			false,
+			false,
+			`John ${Math.round(10 + Math.random() * 89)}`,
+		)
+
 		console.log('Player created')
 
 		this.socket.on('message', this.onMessage)
 		this.socket.on('close', this.onClose)
 	}
 
-	public send(data: Payload) {
+	public send(data: PayloadFromServer) {
 		this.socket.send(JSON.stringify(data))
-	}
-
-	public getIsSpectating() {
-		return this.isSpectating
-	}
-
-	public getIsReady() {
-		return this.isReady
-	}
-
-	public getName() {
-		return this.name
 	}
 
 	public forceNotReadyLocally() {
@@ -77,6 +68,9 @@ export class Player {
 			this.setIsSpectating(payload.data.value)
 		} else if (payload.type === PayloadFromClient.Type.SubmitSolution) {
 			this.submitSolution(payload.data.value)
+		} else {
+			// @TODO: check type never in typescript compilation
+			throw Error(`Unknown message type "${payload!.type}" from server.`)
 		}
 	}
 

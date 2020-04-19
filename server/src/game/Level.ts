@@ -1,10 +1,8 @@
 import { State } from './State.js'
-import { Game } from '../Game.js'
-import { StateManager } from './StateManager.js'
 import { Task } from './Task.js'
 import { Instructions } from './Instructions.js'
 import { Player } from '../Player.js'
-import { Payload } from '../Payload.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
 
 export class Level extends State {
 	readonly name = 'level'
@@ -45,12 +43,12 @@ export class Level extends State {
 
 		if (solvedTaskIndex === -1) {
 			// Task with that solution not found
-			player.send(Payload.levelSolutionVerdict(false, 3000)) // @TODO dynamic cooldown
+			player.send(PayloadFromServer.createLevelSolutionVerdict(false, 3000)) // @TODO dynamic cooldown
 			return
 		}
 
 		// Task with that soltution found
-		player.send(Payload.levelSolutionVerdict(true, 1000)) // @TODO dynamic cooldown
+		player.send(PayloadFromServer.createLevelSolutionVerdict(true, 1000)) // @TODO dynamic cooldown
 		const solvedTask = this.tasksRunning[solvedTaskIndex]
 		this.tasksRunning.splice(solvedTaskIndex, 1) // Remove solced task
 		// @TODO: broadcast that task is solved

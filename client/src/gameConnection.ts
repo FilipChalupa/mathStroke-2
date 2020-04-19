@@ -1,4 +1,4 @@
-import { PayloadFromClient } from '../../common/Payload'
+import { PayloadFromClient } from '../../common/PayloadFromClient'
 
 export function getGameSocket(gameId: string): Promise<WebSocket> {
 	const socket = new WebSocket(

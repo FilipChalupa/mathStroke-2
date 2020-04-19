@@ -29,8 +29,8 @@ import {
 } from '../actions'
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
-import { Payload } from '../Payload'
-import { PayloadFromClient } from '../../../common/Payload'
+import { PayloadFromClient } from '../../../common/PayloadFromClient'
+import { PayloadFromServer } from '../../../common/PayloadFromServer'
 
 function* gameConnectionFlow() {
 	// @TODO: error handling
@@ -58,68 +58,61 @@ function subscribeToGameSocket(socket: WebSocket) {
 		}
 
 		const onMessage = (message: MessageEvent) => {
-			const data = JSON.parse(message.data)
+			const payload = JSON.parse(message.data) as PayloadFromServer
 
-			if (typeof data.playerConnected !== 'undefined') {
-				emit(
-					playersAddAction({
-						id: data.playerConnected.id,
-						isSpectating: data.playerConnected.isSpectating,
-						isReady: data.playerConnected.isReady,
-						name: data.playerConnected.name,
-					}),
-				)
-			}
-			if (typeof data.localPlayerId !== 'undefined') {
-				emit(playersSetLocalPlayerId(data.localPlayerId))
-			}
-			if (typeof data.playerDisconnected !== 'undefined') {
-				emit(playersRemoveAction(data.playerDisconnected.id))
-			}
-			if (typeof data.isSpectating !== 'undefined') {
-				emit(
-					playersSetIsSpectating(
-						data.isSpectating.playerId,
-						data.isSpectating.value,
-					),
-				)
-			}
-			if (typeof data.isReady !== 'undefined') {
-				emit(playersSetIsReady(data.isReady.playerId, data.isReady.value))
-			}
-			if (typeof data.gameState !== 'undefined') {
-				if (data.gameState === 'level') {
+			console.log('New message from server')
+			console.log('Type:', payload.type)
+			console.log('Data:', payload.data)
+
+			if (payload.type === PayloadFromServer.Type.GameState) {
+				if (payload.data.value === 'level') {
 					emit(levelClearAction()) // @TODO: clear level on leaving
 				}
 				emit(
 					gameUpdateInfoAction({
-						state: data.gameState,
+						state: payload.data.value,
 					}),
 				)
-			}
-			if (typeof data.gameName !== 'undefined') {
+			} else if (payload.type === PayloadFromServer.Type.GameName) {
 				emit(
 					gameUpdateInfoAction({
-						name: data.gameName,
+						name: payload.data.value,
 					}),
 				)
-			}
-			if (typeof data.lobbyCountdown !== 'undefined') {
+			} else if (payload.type === PayloadFromServer.Type.LocalPlayerId) {
+				emit(playersSetLocalPlayerId(payload.data.value))
+			} else if (payload.type === PayloadFromServer.Type.ConnectedPlayer) {
 				emit(
-					data.lobbyCountdown.duration === null
-						? lobbyCountdownStopCountdownAction()
-						: lobbyCountdownStartCountdownAction(data.lobbyCountdown.duration),
+					playersAddAction({
+						id: payload.data.id,
+						isSpectating: payload.data.isSpectating,
+						isReady: payload.data.isReady,
+						name: payload.data.name,
+					}),
 				)
-			}
-			if (typeof data.clearIsReady !== 'undefined') {
+			} else if (payload.type === PayloadFromServer.Type.DisconnectedPlayer) {
+				emit(playersRemoveAction(payload.data.id))
+			} else if (payload.type === PayloadFromServer.Type.IsSpectating) {
+				emit(playersSetIsSpectating(payload.data.playerId, payload.data.value))
+			} else if (payload.type === PayloadFromServer.Type.IsReady) {
+				emit(playersSetIsReady(payload.data.playerId, payload.data.value))
+			} else if (payload.type === PayloadFromServer.Type.ClearIsReady) {
 				emit(playersClearIsReady())
-			}
-			if (typeof data.levelSolutionVerdict !== 'undefined') {
-				if (data.levelSolutionVerdict.isAccepted) {
-					emit(levelSolutionAcceptedAction(data.levelSolutionVerdict.cooldown))
+			} else if (payload.type === PayloadFromServer.Type.LobbyCountdown) {
+				emit(
+					payload.data.duration === null
+						? lobbyCountdownStopCountdownAction()
+						: lobbyCountdownStartCountdownAction(payload.data.duration),
+				)
+			} else if (payload.type === PayloadFromServer.Type.LevelSolutionVerdict) {
+				if (payload.data.isAccepted) {
+					emit(levelSolutionAcceptedAction(payload.data.cooldown))
 				} else {
-					emit(levelSolutionRejectedAction(data.levelSolutionVerdict.cooldown))
+					emit(levelSolutionRejectedAction(payload.data.cooldown))
 				}
+			} else {
+				// @TODO: check type never in typescript compilation
+				throw Error(`Unknown message type "${payload!.type}" from server.`)
 			}
 		}
 

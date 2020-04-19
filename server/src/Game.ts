@@ -1,8 +1,8 @@
 import WebSocket from 'ws'
 import { generateId } from './generateId.js'
 import { Player } from './Player.js'
-import { Payload } from './Payload.js'
 import { StateManager } from './game/StateManager.js'
+import { PayloadFromServer } from '../../common/PayloadFromServer.js'
 
 const CLOSE_EMPTY_GAME_AFTER = 30000 // 30 seconds
 
@@ -57,11 +57,11 @@ export class Game {
 		return this.players.filter((player) => !player.getIsSpectating())
 	}
 
-	protected sendToPlayer(player: Player, data: Payload) {
+	protected sendToPlayer(player: Player, data: PayloadFromServer) {
 		player.send(data)
 	}
 
-	public sendToAllPlayers(data: Payload) {
+	public sendToAllPlayers(data: PayloadFromServer) {
 		this.players.forEach((player) => {
 			this.sendToPlayer(player, data)
 		})
@@ -69,18 +69,23 @@ export class Game {
 
 	public clearIsReady() {
 		this.players.forEach((player) => player.forceNotReadyLocally())
-		this.sendToAllPlayers(Payload.clearIsReady())
+		this.sendToAllPlayers(PayloadFromServer.createClearIsReady())
 	}
 
 	protected sendCatchUpData(player: Player) {
 		this.sendToPlayer(
 			player,
-			Payload.gameState(this.stateManager.getCurrentState().name),
+			PayloadFromServer.createGameState(
+				this.stateManager.getCurrentState().name,
+			),
 		)
-		this.sendToPlayer(player, Payload.gameName(this.name))
+		this.sendToPlayer(player, PayloadFromServer.createGameName(this.name))
 
 		this.players.forEach((otherPlayer) => {
-			this.sendToPlayer(player, Payload.connectedPlayer(otherPlayer))
+			this.sendToPlayer(
+				player,
+				PayloadFromServer.createConnectedPlayer(otherPlayer),
+			)
 		})
 	}
 
@@ -88,7 +93,9 @@ export class Game {
 		const player = new Player(socket, {
 			onDisconnect: () => {
 				this.players = this.players.filter((x) => x.id !== player.id)
-				this.sendToAllPlayers(Payload.disconnectedPlayer(player))
+				this.sendToAllPlayers(
+					PayloadFromServer.createDisconnectedPlayer(player),
+				)
 
 				this.stateManager.getCurrentState().onPlayerDisconnect(player)
 
@@ -98,11 +105,11 @@ export class Game {
 				}
 			},
 			onIsReadyChange: () => {
-				this.sendToAllPlayers(Payload.isReady(player))
+				this.sendToAllPlayers(PayloadFromServer.createIsReady(player))
 				this.stateManager.getCurrentState().onPlayerIsReadyChange(player)
 			},
 			onIsSpectatingChange: () => {
-				this.sendToAllPlayers(Payload.isSpectating(player))
+				this.sendToAllPlayers(PayloadFromServer.createIsSpectating(player))
 				this.stateManager.getCurrentState().onPlayerIsSpectatingChange(player)
 			},
 			onSolutionSubmission: (solution: string) => {
@@ -111,8 +118,8 @@ export class Game {
 					.onPlayerSolutionSubmission(player, solution)
 			},
 		})
-		this.sendToAllPlayers(Payload.connectedPlayer(player))
-		player.send(Payload.localPlayerId(player))
+		this.sendToAllPlayers(PayloadFromServer.createConnectedPlayer(player))
+		player.send(PayloadFromServer.createLocalPlayerId(player))
 		this.players.push(player)
 		this.stateManager.getCurrentState().onPlayerConnect(player)
 		this.sendCatchUpData(player)

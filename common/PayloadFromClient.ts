@@ -58,5 +58,3 @@ export type PayloadFromClient =
 	| PayloadFromClient.IsSpectating
 	| PayloadFromClient.IsReady
 	| PayloadFromClient.SubmitSolution
-
-export namespace PayloadFromSever {}

@@ -1,5 +1,5 @@
 import { State } from './State.js'
-import { Payload } from '../Payload.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
 
 const READY_PLAYERS_TO_START_COUNTDOWN_RATIO = 0.7
 const READY_PLAYERS_TO_START_IMMEDIATELY_RATIO = 0.9
@@ -15,7 +15,7 @@ export class Lobby extends State {
 
 	public initialize() {
 		this.game.clearIsReady()
-		this.game.sendToAllPlayers(Payload.lobbyCountdown(null))
+		this.game.sendToAllPlayers(PayloadFromServer.createLobbyCountdown(null))
 	}
 
 	public onPlayerConnect() {
@@ -64,7 +64,7 @@ export class Lobby extends State {
 			this.stateManager.startLevel()
 		}, duration)
 
-		this.game.sendToAllPlayers(Payload.lobbyCountdown(duration))
+		this.game.sendToAllPlayers(PayloadFromServer.createLobbyCountdown(duration))
 	}
 
 	protected stopCountdown() {
@@ -75,7 +75,7 @@ export class Lobby extends State {
 		this.countdownTimer = null
 		this.countdownFinishTime = Number.MAX_SAFE_INTEGER
 
-		this.game.sendToAllPlayers(Payload.lobbyCountdown(null))
+		this.game.sendToAllPlayers(PayloadFromServer.createLobbyCountdown(null))
 	}
 
 	public destroy() {
