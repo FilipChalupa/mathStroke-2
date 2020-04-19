@@ -17,19 +17,21 @@ export const Level: React.SFC = () => {
 	const onSubmit = React.useCallback(
 		async (event: React.FormEvent) => {
 			event.preventDefault()
-			console.log('@TODO: send solution to backend', solution)
+			// @TODO: clear solution input on success
 			//setSolution('')
-			//solutionInputRef.current.focus()
 			dispatch(levelSubmitSolutionStartAction(solution))
 		},
 		[solution],
 	)
 
+	React.useEffect(() => {
+		solutionInputRef.current.focus()
+	}, [isDisabled])
+
 	return (
 		<form onSubmit={onSubmit}>
 			<TextField
 				label="Solution"
-				autoFocus
 				value={solution}
 				onChange={(event) => setSolution(event.target.value)}
 				inputRef={solutionInputRef}

@@ -88,7 +88,7 @@ function subscribeToGameSocket(socket: WebSocket) {
 			}
 			if (typeof data.gameState !== 'undefined') {
 				if (data.gameState === 'level') {
-					emit(levelClearAction())
+					emit(levelClearAction()) // @TODO: clear level on leaving
 				}
 				emit(
 					gameUpdateInfoAction({
