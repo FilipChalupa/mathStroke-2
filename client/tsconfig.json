@@ -8,5 +8,5 @@
 		"target": "es6",
 		"jsx": "react"
 	},
-	"include": ["./src/**/*"]
+	"include": ["./src/**/*", "../common/**/*"]
 }
