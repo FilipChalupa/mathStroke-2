@@ -31,6 +31,7 @@ import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
 import { PayloadFromClient } from '../../../common/PayloadFromClient'
 import { PayloadFromServer } from '../../../common/PayloadFromServer'
+import { Player } from '../reducers/players'
 
 function* gameConnectionFlow() {
 	// @TODO: error handling
@@ -83,12 +84,14 @@ function subscribeToGameSocket(socket: WebSocket) {
 				emit(playersSetLocalPlayerId(payload.data.value))
 			} else if (payload.type === PayloadFromServer.Type.ConnectedPlayer) {
 				emit(
-					playersAddAction({
-						id: payload.data.id,
-						isSpectating: payload.data.isSpectating,
-						isReady: payload.data.isReady,
-						name: payload.data.name,
-					}),
+					playersAddAction(
+						new Player(
+							payload.data.id,
+							payload.data.isSpectating,
+							payload.data.isReady,
+							payload.data.name,
+						),
+					),
 				)
 			} else if (payload.type === PayloadFromServer.Type.DisconnectedPlayer) {
 				emit(playersRemoveAction(payload.data.id))

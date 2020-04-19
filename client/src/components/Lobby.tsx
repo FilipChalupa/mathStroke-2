@@ -19,11 +19,13 @@ export const Lobby: React.SFC = () => {
 	const dispatch = useDispatch()
 	const players = useSelector((state: State) => state.players.players)
 	const localPlayer = useLocalPlayer()
-	const nonSpectatingPlayers = players.filter((player) => !player.isSpectating)
+	const nonSpectatingPlayers = players.filter(
+		(player) => !player.getIsSpectating(),
+	)
 	const spectatorsCount = players.length - nonSpectatingPlayers.length
 
 	const toggleIsReady = React.useCallback(() => {
-		dispatch(playersSetLocalIsReady(!localPlayer.isReady))
+		dispatch(playersSetLocalIsReady(!localPlayer.getIsReady()))
 	}, [localPlayer])
 
 	return (
@@ -42,10 +44,10 @@ export const Lobby: React.SFC = () => {
 						{nonSpectatingPlayers.map((player, i) => (
 							<TableRow key={player.id}>
 								<TableCell>{i + 1}.</TableCell>
-								<TableCell>{player.name}</TableCell>
+								<TableCell>{player.getName()}</TableCell>
 								<TableCell>
 									<Checkbox
-										checked={player.isReady}
+										checked={player.getIsReady()}
 										disabled={!localPlayer || player.id !== localPlayer.id}
 										onClick={
 											localPlayer && player.id === localPlayer.id
@@ -64,7 +66,7 @@ export const Lobby: React.SFC = () => {
 									<i>
 										{spectatorsCount}{' '}
 										{spectatorsCount === 1 ? 'spectator' : 'spectators'}
-										{localPlayer && localPlayer.isSpectating && (
+										{localPlayer && localPlayer.getIsSpectating() && (
 											<> including you</>
 										)}
 									</i>
@@ -78,14 +80,16 @@ export const Lobby: React.SFC = () => {
 					<>
 						<Button
 							onClick={() => {
-								dispatch(playersSetLocalIsSpectating(!localPlayer.isSpectating))
+								dispatch(
+									playersSetLocalIsSpectating(!localPlayer.getIsSpectating()),
+								)
 							}}
 						>
-							{localPlayer.isSpectating ? 'Unspectate' : 'Spectate'}
+							{localPlayer.getIsSpectating() ? 'Unspectate' : 'Spectate'}
 						</Button>{' '}
-						{!localPlayer.isSpectating && (
+						{!localPlayer.getIsSpectating() && (
 							<Button onClick={toggleIsReady}>
-								{localPlayer.isReady ? 'Unready' : 'Ready'}
+								{localPlayer.getIsReady() ? 'Unready' : 'Ready'}
 							</Button>
 						)}
 					</>

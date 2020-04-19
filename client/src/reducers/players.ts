@@ -1,11 +1,17 @@
 import { BaseAction, actionIds } from '../common'
+import { PlayerCommon } from '../../../common/PlayerCommon'
 
-export interface Player {
-	id: string
-	isSpectating: boolean
-	isReady: boolean
-	name: string
+export class Player extends PlayerCommon {
+	public setIsSpectating(isSpectating: boolean) {
+		this.isSpectating = isSpectating
+	}
+
+	public setIsReady(isReady: boolean) {
+		this.isReady = isReady
+	}
 }
+
+// @TODO: don't store classes in store https://medium.com/collaborne-engineering/why-not-to-store-objects-in-redux-7f41243020fc
 
 export interface PlayersState {
 	players: Player[]
@@ -42,39 +48,26 @@ export const playersReducer = (
 			return { ...state, localPlayerId: action.payload.id }
 		}
 		case actionIds.PLAYERS_CLEAR_IS_READY: {
-			return {
-				...state,
-				players: state.players.map((player) => ({
-					...player,
-					isReady: false,
-				})),
-			}
+			state.players.forEach((player) => {
+				player.setIsReady(false)
+			})
+			return { ...state, players: [...state.players] }
 		}
 		case actionIds.PLAYERS_SET_IS_SPECTATING: {
-			return {
-				...state,
-				players: state.players.map((player) =>
-					player.id !== action.payload.playerId
-						? player
-						: {
-								...player,
-								isSpectating: action.payload.isSpectating,
-						  },
-				),
-			}
+			state.players.forEach((player) => {
+				if (player.id === action.payload.playerId) {
+					player.setIsSpectating(action.payload.isSpectating)
+				}
+			})
+			return { ...state, players: [...state.players] }
 		}
 		case actionIds.PLAYERS_SET_IS_READY: {
-			return {
-				...state,
-				players: state.players.map((player) =>
-					player.id !== action.payload.playerId
-						? player
-						: {
-								...player,
-								isReady: action.payload.isReady,
-						  },
-				),
-			}
+			state.players.forEach((player) => {
+				if (player.id === action.payload.playerId) {
+					player.setIsReady(action.payload.isReady)
+				}
+			})
+			return { ...state, players: [...state.players] }
 		}
 	}
 	return state

@@ -36,7 +36,7 @@ export class Player extends PlayerCommon {
 	}
 
 	protected setIsSpectating(isSpectating: boolean) {
-		this.isSpectating = Boolean(isSpectating)
+		this.isSpectating = isSpectating
 		this.callbacks.onIsSpectatingChange()
 		if (this.isSpectating) {
 			this.setIsReady(false)
@@ -44,7 +44,7 @@ export class Player extends PlayerCommon {
 	}
 
 	protected setIsReady(isReady: boolean) {
-		this.isReady = Boolean(isReady)
+		this.isReady = isReady
 		this.callbacks.onIsReadyChange()
 	}
 
