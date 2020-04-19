@@ -1,5 +1,5 @@
-import { Instructions } from './Instructions'
-import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
+import { Instructions } from './Instructions.js'
+import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp.js'
 
 export class Task {
 	protected expirationTimer: NodeJS.Timeout

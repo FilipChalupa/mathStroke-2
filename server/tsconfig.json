@@ -11,5 +11,6 @@
 		"sourceMap": true,
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"exclude": ["../dist", "../client", "../node_modules", "../common/**/*"]
+	"include": ["./src/**/*", "../common/**/*"],
+	"exclude": ["../dist", "../client", "../node_modules"]
 }
