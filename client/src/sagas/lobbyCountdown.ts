@@ -9,15 +9,16 @@ import {
 } from 'redux-saga/effects'
 import { actionIds, BaseAction } from '../common'
 import { lobbyCountdownSetRemainingSecondsCountdownAction } from '../actions/lobbyCountdown'
+import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
 
 function* countdown(action: BaseAction) {
 	const { remainingTime } = action.payload
-	const finishTime = new Date().getTime() + remainingTime
+	const finishTime = getCurrentTimestamp() + remainingTime
 
 	const wait = (duration: number) =>
 		new Promise((resolve) => setTimeout(resolve, duration))
 	while (true) {
-		const currentTime = new Date().getTime()
+		const currentTime = getCurrentTimestamp()
 		const remainingSeconds =
 			Math.ceil(Math.max(0, finishTime - currentTime) / 1000) - 1
 		yield put(

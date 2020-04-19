@@ -1,7 +1,11 @@
 import { Instructions } from './Instructions'
+import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
 
 export class Task {
 	protected expirationTimer: NodeJS.Timeout
+	protected track = Math.random()
+	protected createdAt = getCurrentTimestamp()
+	protected timeToSolve = 5000 // 5 seconds // @TODO: calculate proper duration
 
 	constructor(
 		protected readonly instructions: Instructions,
@@ -12,8 +16,8 @@ export class Task {
 	) {
 		this.expirationTimer = setTimeout(
 			() => this.callbacks.onTaskExpired(this),
-			5000,
-		) // @TODO: calculate proper duration
+			this.timeToSolve,
+		)
 	}
 
 	public destroy() {
