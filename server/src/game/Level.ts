@@ -54,10 +54,13 @@ export class Level extends State {
 
 	protected onFail() {
 		console.log('failed')
-		if (this.generateNewTaskTimer) {
-			clearTimeout(this.generateNewTaskTimer)
-		}
-		setTimeout(this.stateManager.goToLobby, Level.returnToLobbyAfter)
+		;[this.generateNewTaskTimer, this.returnToLobbyTimer].forEach(
+			(timer) => timer && clearTimeout(timer),
+		)
+		this.returnToLobbyTimer = setTimeout(
+			this.stateManager.goToLobby,
+			Level.returnToLobbyAfter,
+		)
 	}
 
 	protected generateNewTask = () => {
