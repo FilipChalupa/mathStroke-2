@@ -30,6 +30,7 @@ import {
 import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
 import { eventChannel } from 'redux-saga'
 import { Payload } from '../Payload'
+import { PayloadFromClient } from '../../../common/Payload'
 
 function* gameConnectionFlow() {
 	// @TODO: error handling
@@ -147,21 +148,30 @@ function* write(socket: WebSocket) {
 		yield takeLatest(actionIds.PLAYERS_SET_LOCAL_IS_READY, function* (
 			action: any,
 		) {
-			sendToSocket(socket, Payload.isReady(action.payload.isReady))
+			sendToSocket(
+				socket,
+				PayloadFromClient.createIsReady(action.payload.isReady),
+			)
 		})
 	})
 	yield fork(function* () {
 		yield takeLatest(actionIds.PLAYERS_SET_LOCAL_IS_SPECTATING, function* (
 			action: any,
 		) {
-			sendToSocket(socket, Payload.isSpectating(action.payload.isSpectating))
+			sendToSocket(
+				socket,
+				PayloadFromClient.createIsSpectating(action.payload.isSpectating),
+			)
 		})
 	})
 	yield fork(function* () {
 		yield takeLatest(actionIds.LEVEL_SUBMIT_SOLUTION_START, function* (
 			action: any,
 		) {
-			sendToSocket(socket, Payload.submitSolution(action.payload.solution))
+			sendToSocket(
+				socket,
+				PayloadFromClient.createSubmitSolution(action.payload.solution),
+			)
 		})
 	})
 }

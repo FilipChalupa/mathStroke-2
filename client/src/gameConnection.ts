@@ -1,4 +1,4 @@
-import { Payload } from './Payload'
+import { PayloadFromClient } from '../../common/Payload'
 
 export function getGameSocket(gameId: string): Promise<WebSocket> {
 	const socket = new WebSocket(
@@ -25,6 +25,6 @@ export function closeGameSocket(socket: WebSocket) {
 	socket.close()
 }
 
-export function sendToSocket(socket: WebSocket, payload: Payload) {
+export function sendToSocket(socket: WebSocket, payload: PayloadFromClient) {
 	socket.send(JSON.stringify(payload))
 }

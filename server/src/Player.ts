@@ -1,6 +1,7 @@
 import WebSocket from 'ws'
 import { generateId } from './generateId.js'
 import { Payload } from './Payload.js'
+import { PayloadFromClient } from '../../common/Payload.js'
 
 export class Player {
 	readonly id = generateId()
@@ -64,17 +65,18 @@ export class Player {
 		if (typeof message !== 'string') {
 			throw new Error(`Unknown message type "${typeof message}".`)
 		}
-		const data = JSON.parse(message)
-		console.log('New message', data)
+		const payload = JSON.parse(message) as PayloadFromClient
 
-		if (typeof data.isSpectating !== 'undefined') {
-			this.setIsSpectating(data.isSpectating)
-		}
-		if (typeof data.isReady !== 'undefined') {
-			this.setIsReady(data.isReady)
-		}
-		if (typeof data.solution !== 'undefined') {
-			this.submitSolution(data.solution)
+		console.log('New message from client')
+		console.log('Type:', payload.type)
+		console.log('Data:', payload.data)
+
+		if (payload.type === PayloadFromClient.Type.IsReady) {
+			this.setIsReady(payload.data.value)
+		} else if (payload.type === PayloadFromClient.Type.IsSpectating) {
+			this.setIsSpectating(payload.data.value)
+		} else if (payload.type === PayloadFromClient.Type.SubmitSolution) {
+			this.submitSolution(payload.data.value)
 		}
 	}
 
