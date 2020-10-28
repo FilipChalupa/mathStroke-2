@@ -12,6 +12,8 @@ export namespace PayloadFromServer {
 		ClearIsReady = 'ClearIsReady',
 		LobbyCountdown = 'LobbyCountdown',
 		LevelSolutionVerdict = 'LevelSolutionVerdict',
+		LevelNewTask = 'LevelNewTask',
+		LevelTaskSolved = 'LevelTaskSolved',
 	}
 
 	export interface GameState {
@@ -185,6 +187,43 @@ export namespace PayloadFromServer {
 			},
 		}
 	}
+
+	export interface LevelNewTask {
+		type: Type.LevelNewTask
+		data: {
+			id: string
+			instructions: string
+		}
+	}
+
+	export function createLevelNewTask(
+		id: string,
+		instructions: string,
+	): LevelNewTask {
+		return {
+			type: Type.LevelNewTask,
+			data: {
+				id,
+				instructions,
+			},
+		}
+	}
+
+	export interface LevelTaskSolved {
+		type: Type.LevelTaskSolved
+		data: {
+			id: string
+		}
+	}
+
+	export function createLevelTaskSolved(id: string): LevelTaskSolved {
+		return {
+			type: Type.LevelTaskSolved,
+			data: {
+				id,
+			},
+		}
+	}
 }
 
 export type PayloadFromServer =
@@ -198,3 +237,5 @@ export type PayloadFromServer =
 	| PayloadFromServer.ClearIsReady
 	| PayloadFromServer.LobbyCountdown
 	| PayloadFromServer.LevelSolutionVerdict
+	| PayloadFromServer.LevelNewTask
+	| PayloadFromServer.LevelTaskSolved

@@ -1,8 +1,7 @@
+import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
+import { Player } from '../Player.js'
 import { State } from './State.js'
 import { Task } from './Task.js'
-import { Instructions } from './Instructions.js'
-import { Player } from '../Player.js'
-import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
 
 export class Level extends State {
 	readonly name = 'level'
@@ -38,7 +37,7 @@ export class Level extends State {
 		console.log(player.getName(), solution)
 
 		const solvedTaskIndex = this.tasksRunning.findIndex(
-			(task) => task.solution === solution,
+			(task) => task.getSolution() === solution,
 		)
 
 		if (solvedTaskIndex === -1) {
@@ -47,11 +46,13 @@ export class Level extends State {
 			return
 		}
 
-		// Task with that soltution found
+		// Task with that solution found
 		player.send(PayloadFromServer.createLevelSolutionVerdict(true, 1000)) // @TODO dynamic cooldown
 		const solvedTask = this.tasksRunning[solvedTaskIndex]
-		this.tasksRunning.splice(solvedTaskIndex, 1) // Remove solced task
-		// @TODO: broadcast that task is solved
+		this.tasksRunning.splice(solvedTaskIndex, 1) // Remove solved task
+		this.game.sendToAllPlayers(
+			PayloadFromServer.createLevelTaskSolved(solvedTask.getId()),
+		)
 		solvedTask.destroy()
 	}
 
@@ -90,17 +91,27 @@ export class Level extends State {
 			clearTimeout(this.generateNewTaskTimer)
 		}
 
-		const instructions = new Instructions()
-		const solution = `${Math.floor(Math.random() * 50)}` // @TODO: generate task with unique solution
-		const task = new Task(instructions, solution, {
+		const task = new Task({
+			onInitialization: (task) => {
+				console.log(
+					'New task with solution',
+					task.getSolution(),
+					' has been generated.',
+				)
+				this.game.sendToAllPlayers(
+					PayloadFromServer.createLevelNewTask(
+						task.getId(),
+						task.getInstructions().getText(),
+					),
+				)
+			},
 			onTaskExpired: (task) => {
-				console.log('Task with solution', task.solution, 'expired')
+				console.log('Task with solution', task.getSolution(), 'expired')
 				this.onFail()
 			},
 		})
 
 		this.tasksRunning.push(task)
-		console.log('New task with solution', task.solution, ' has been generated.')
 
 		this.generateNewTaskTimer = setTimeout(this.generateNewTask, 3000) // @TODO: calculate proper duration
 	}

@@ -1,36 +1,39 @@
+import { eventChannel } from 'redux-saga'
 import {
 	all,
+	call,
 	cancel,
 	fork,
-	call,
+	put,
 	take,
 	takeEvery,
-	put,
 	takeLatest,
 } from 'redux-saga/effects'
-import { actionIds } from '../common'
+import { assertNever } from '../../../common/assertNever'
+import { PayloadFromClient } from '../../../common/PayloadFromClient'
+import { PayloadFromServer } from '../../../common/PayloadFromServer'
 import {
-	gameDisconnectRequestCompletedAction,
-	playersClearAction,
-	gameDisconnectRequestStartAction,
 	gameConnectRequestCompletedAction,
-	playersAddAction,
-	playersRemoveAction,
+	gameDisconnectRequestCompletedAction,
+	gameDisconnectRequestStartAction,
 	gameUpdateInfoAction,
-	playersSetLocalPlayerId,
-	playersSetIsSpectating,
-	playersSetIsReady,
-	lobbyCountdownStopCountdownAction,
-	lobbyCountdownStartCountdownAction,
-	playersClearIsReady,
 	levelClearAction,
 	levelSolutionAcceptedAction,
 	levelSolutionRejectedAction,
+	lobbyCountdownStartCountdownAction,
+	lobbyCountdownStopCountdownAction,
+	playersAddAction,
+	playersClearAction,
+	playersClearIsReady,
+	playersRemoveAction,
+	playersSetIsReady,
+	playersSetIsSpectating,
+	playersSetLocalPlayerId,
+	tasksAddAction,
+	tasksRemoveAction,
 } from '../actions'
-import { getGameSocket, closeGameSocket, sendToSocket } from '../gameConnection'
-import { eventChannel } from 'redux-saga'
-import { PayloadFromClient } from '../../../common/PayloadFromClient'
-import { PayloadFromServer } from '../../../common/PayloadFromServer'
+import { actionIds } from '../common'
+import { closeGameSocket, getGameSocket, sendToSocket } from '../gameConnection'
 import { Player } from '../reducers/players'
 
 function* gameConnectionFlow() {
@@ -113,9 +116,18 @@ function subscribeToGameSocket(socket: WebSocket) {
 				} else {
 					emit(levelSolutionRejectedAction(payload.data.cooldown))
 				}
+			} else if (payload.type === PayloadFromServer.Type.LevelNewTask) {
+				emit(
+					tasksAddAction({
+						id: payload.data.id,
+						instructions: payload.data.instructions,
+					}),
+				)
+				// @TODO: emit clear all tasks at the end of level
+			} else if (payload.type === PayloadFromServer.Type.LevelTaskSolved) {
+				emit(tasksRemoveAction(payload.data.id))
 			} else {
-				// @TODO: check type never in typescript compilation
-				throw Error(`Unknown message type "${payload!.type}" from server.`)
+				assertNever(payload)
 			}
 		}
 
