@@ -8,16 +8,20 @@ export const LoadingIndicator: React.FunctionComponent = () => {
 	const { loading: isLoadingGames } = useStateSelector(
 		(state) => state.publicGames,
 	)
+	const {
+		isLoading: isLoadingGame,
+		isConnected: isConnectedGame,
+	} = useStateSelector((state) => state.game)
 
 	React.useEffect(() => {
-		const newIsLoading = isLoadingGames
+		const newIsLoading = isLoadingGames || isLoadingGame || !isConnectedGame
 
 		// @TODO: always show loader for at leaset ~300ms
 
 		if (isLoading !== newIsLoading) {
 			setIsLoading(newIsLoading)
 		}
-	}, [isLoading, isLoadingGames])
+	}, [isLoading, isLoadingGames, isLoadingGame])
 
 	return (
 		<div className="loadingIndicator">{isLoading && <LinearProgress />}</div>
