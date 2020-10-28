@@ -30,6 +30,7 @@ import {
 	playersSetIsSpectating,
 	playersSetLocalPlayerId,
 	tasksAddAction,
+	tasksClearAction,
 	tasksRemoveAction,
 } from '../actions'
 import { actionIds } from '../common'
@@ -71,6 +72,7 @@ function subscribeToGameSocket(socket: WebSocket) {
 			if (payload.type === PayloadFromServer.Type.GameState) {
 				if (payload.data.value === 'level') {
 					emit(levelClearAction()) // @TODO: clear level on leaving
+					emit(tasksClearAction()) // @TODO: this should be done on leaving not starting
 				}
 				emit(
 					gameUpdateInfoAction({
@@ -123,7 +125,6 @@ function subscribeToGameSocket(socket: WebSocket) {
 						instructions: payload.data.instructions,
 					}),
 				)
-				// @TODO: emit clear all tasks at the end of level
 			} else if (payload.type === PayloadFromServer.Type.LevelTaskSolved) {
 				emit(tasksRemoveAction(payload.data.id))
 			} else {
