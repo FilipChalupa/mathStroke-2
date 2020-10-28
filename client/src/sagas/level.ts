@@ -3,14 +3,16 @@ import { levelClearCooldownAction } from '../actions'
 import { actionIds } from '../common'
 
 function* handleCooldown() {
-	const solutionVerdict = yield race({
-		accepted: take(actionIds.LEVEL_SOLUTION_ACCEPTED),
-		rejected: take(actionIds.LEVEL_SOLUTION_REJECTED),
-	})
-	const { cooldown } =
-		solutionVerdict.accepted?.payload || solutionVerdict.rejected.payload
-	yield delay(cooldown)
-	yield put(levelClearCooldownAction())
+	while (true) {
+		const solutionVerdict = yield race({
+			accepted: take(actionIds.LEVEL_SOLUTION_ACCEPTED),
+			rejected: take(actionIds.LEVEL_SOLUTION_REJECTED),
+		})
+		const { cooldown } =
+			solutionVerdict.accepted?.payload || solutionVerdict.rejected.payload
+		yield delay(cooldown)
+		yield put(levelClearCooldownAction())
+	}
 }
 
 function* levelSolutionFlow() {
