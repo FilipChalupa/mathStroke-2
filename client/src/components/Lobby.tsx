@@ -8,11 +8,14 @@ import {
 	TableHead,
 	TableRow,
 } from '@material-ui/core'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { playersSetLocalIsReady, playersSetLocalIsSpectating } from '../actions'
+import { routes } from '../routes'
 import { useLocalPlayer } from '../useLocalPlayer'
 import { useStateSelector } from '../useStateSelector'
 import { LobbyCountdown } from './LobbyCountdown'
@@ -78,9 +81,13 @@ export const Lobby: React.SFC = () => {
 						)}
 					</TableBody>
 				</Table>
-
 				{localPlayer && (
 					<>
+						{!localPlayer.getIsSpectating() && (
+							<Button startIcon={<PlayArrowIcon />} onClick={toggleIsReady}>
+								{localPlayer.getIsReady() ? 'Unready' : 'Ready'}
+							</Button>
+						)}{' '}
 						<Button
 							startIcon={<VisibilityIcon />}
 							onClick={() => {
@@ -90,14 +97,25 @@ export const Lobby: React.SFC = () => {
 							}}
 						>
 							{localPlayer.getIsSpectating() ? 'Unspectate' : 'Spectate'}
-						</Button>{' '}
-						{!localPlayer.getIsSpectating() && (
-							<Button startIcon={<PlayArrowIcon />} onClick={toggleIsReady}>
-								{localPlayer.getIsReady() ? 'Unready' : 'Ready'}
-							</Button>
-						)}
+						</Button>
 					</>
-				)}
+				)}{' '}
+				<Button
+					startIcon={<ExitToAppIcon />}
+					component={Link}
+					to={routes.homepage}
+					onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+						if (
+							localPlayer &&
+							!localPlayer.getIsSpectating() &&
+							!confirm('Do you really want to leave?')
+						) {
+							event.preventDefault()
+						}
+					}}
+				>
+					Leave
+				</Button>
 			</Paper>
 		</>
 	)
