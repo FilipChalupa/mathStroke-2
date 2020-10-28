@@ -1,15 +1,15 @@
 import { Button, TextField } from '@material-ui/core'
 import * as React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { levelSubmitSolutionStartAction } from '../actions/level'
-import { State } from '../reducers'
+import { useStateSelector } from '../useStateSelector'
 import { Tasks } from './Tasks'
 
 export const Level: React.SFC = () => {
 	const [solution, setSolution] = React.useState('')
 	const solutionInputRef = React.useRef<HTMLInputElement>()
-	const { isSubmittingSolution, isOnCooldown } = useSelector(
-		(state: State) => state.level,
+	const { isSubmittingSolution, isOnCooldown } = useStateSelector(
+		(state) => state.level,
 	)
 	const isDisabled = isSubmittingSolution || isOnCooldown
 

@@ -1,23 +1,23 @@
-import * as React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { State } from '../reducers'
 import {
+	Button,
+	Checkbox,
+	Paper,
 	Table,
+	TableBody,
+	TableCell,
 	TableHead,
 	TableRow,
-	TableCell,
-	TableBody,
-	Paper,
-	Checkbox,
-	Button,
 } from '@material-ui/core'
+import * as React from 'react'
+import { useDispatch } from 'react-redux'
+import { playersSetLocalIsReady, playersSetLocalIsSpectating } from '../actions'
 import { useLocalPlayer } from '../useLocalPlayer'
-import { playersSetLocalIsSpectating, playersSetLocalIsReady } from '../actions'
+import { useStateSelector } from '../useStateSelector'
 import { LobbyCountdown } from './LobbyCountdown'
 
 export const Lobby: React.SFC = () => {
 	const dispatch = useDispatch()
-	const players = useSelector((state: State) => state.players.players)
+	const players = useStateSelector((state) => state.players.players)
 	const localPlayer = useLocalPlayer()
 	const nonSpectatingPlayers = players.filter(
 		(player) => !player.getIsSpectating(),

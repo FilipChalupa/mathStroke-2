@@ -1,13 +1,12 @@
 import { LinearProgress } from '@material-ui/core'
 import * as React from 'react'
-import { useSelector } from 'react-redux'
-import { State } from '../reducers'
+import { useStateSelector } from '../useStateSelector'
 import './loadingIndicator.css'
 
 export const LoadingIndicator: React.FunctionComponent = () => {
 	const [isLoading, setIsLoading] = React.useState(false)
-	const { loading: isLoadingGames } = useSelector(
-		(state: State) => state.publicGames,
+	const { loading: isLoadingGames } = useStateSelector(
+		(state) => state.publicGames,
 	)
 
 	React.useEffect(() => {

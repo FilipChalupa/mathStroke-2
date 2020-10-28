@@ -1,16 +1,16 @@
 import * as React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {
 	gameConnectRequestStartAction,
 	gameDisconnectRequestStartAction,
 } from '../actions'
-import { State } from '../reducers'
 import { routes } from '../routes'
-import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { useLocationHash } from '../useLocationHash'
-import { Lobby } from './Lobby'
+import { useStateSelector } from '../useStateSelector'
+import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 import { Level } from './Level'
+import { Lobby } from './Lobby'
 
 export const Game: React.SFC = () => {
 	useUpdateTitleOnMount('Game')
@@ -19,8 +19,8 @@ export const Game: React.SFC = () => {
 
 	const gameId = useLocationHash() || 'unknown'
 
-	const { isConnected, isLoading, gameInfo } = useSelector(
-		(state: State) => state.game,
+	const { isConnected, isLoading, gameInfo } = useStateSelector(
+		(state) => state.game,
 	)
 
 	React.useEffect(() => {

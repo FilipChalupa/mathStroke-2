@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { useSelector } from 'react-redux'
-import { State } from '../reducers'
+import { useStateSelector } from '../useStateSelector'
 
 export const Tasks: React.FunctionComponent = () => {
-	const { tasks } = useSelector((state: State) => state.tasks)
+	const { tasks } = useStateSelector((state) => state.tasks)
 
 	return (
 		<ul>

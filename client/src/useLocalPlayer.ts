@@ -1,11 +1,8 @@
-import { useSelector } from 'react-redux'
-import { State } from './reducers'
+import { useStateSelector } from './useStateSelector'
 
 export function useLocalPlayer() {
-	const players = useSelector((state: State) => state.players.players)
-	const localPlayerId = useSelector(
-		(state: State) => state.players.localPlayerId,
-	)
+	const players = useStateSelector((state) => state.players.players)
+	const localPlayerId = useStateSelector((state) => state.players.localPlayerId)
 	if (!localPlayerId) {
 		return null
 	}

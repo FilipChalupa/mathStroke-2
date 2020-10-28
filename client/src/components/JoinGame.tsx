@@ -8,18 +8,18 @@ import {
 } from '@material-ui/core'
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports'
 import * as React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { publicGamesRequestStartAction } from '../actions'
 import { createGameUrl } from '../createGameUrl'
-import { State } from '../reducers'
 import { routes } from '../routes'
+import { useStateSelector } from '../useStateSelector'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 
 export const JoinGame: React.FunctionComponent = () => {
 	useUpdateTitleOnMount('Join game')
 
-	const { games, loading } = useSelector((state: State) => state.publicGames)
+	const { games, loading } = useStateSelector((state) => state.publicGames)
 	const dispatch = useDispatch()
 
 	React.useEffect(() => {
