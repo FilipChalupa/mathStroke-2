@@ -4,26 +4,37 @@ import { useStateSelector } from '../useStateSelector'
 import './loadingIndicator.css'
 
 export const LoadingIndicator: React.FunctionComponent = () => {
-	const [isLoading, setIsLoading] = React.useState(false)
 	const { loading: isLoadingGames } = useStateSelector(
 		(state) => state.publicGames,
 	)
-	const {
-		isLoading: isLoadingGame,
-		isConnected: isConnectedGame,
-	} = useStateSelector((state) => state.game)
+	const { isLoading: isLoadingGame } = useStateSelector((state) => state.game)
 
-	React.useEffect(() => {
-		const newIsLoading = isLoadingGames || isLoadingGame || !isConnectedGame
-
-		// @TODO: always show loader for at leaset ~300ms
-
-		if (isLoading !== newIsLoading) {
-			setIsLoading(newIsLoading)
-		}
-	}, [isLoading, isLoadingGames, isLoadingGame])
+	const isLoading = isLoadingGames || isLoadingGame
 
 	return (
-		<div className="loadingIndicator">{isLoading && <LinearProgress />}</div>
+		<div className="loadingIndicator">
+			<LoadingIndicatorInner active={isLoading} />
+		</div>
 	)
+}
+
+export const LoadingIndicatorInner: React.FunctionComponent<{
+	active: boolean
+}> = ({ active }) => {
+	const [wearOffActive, setWearOffActive] = React.useState(false)
+	const wearOffTimer = React.useRef<null | number>(null)
+
+	React.useEffect(() => {
+		if (active) {
+			setWearOffActive(true)
+			if (wearOffTimer.current) {
+				window.clearTimeout(wearOffTimer.current)
+			}
+			wearOffTimer.current = window.setTimeout(() => {
+				setWearOffActive(false)
+			}, 300)
+		}
+	}, [active])
+
+	return (active || wearOffActive) && <LinearProgress />
 }
