@@ -37,17 +37,15 @@ export const Lobby: React.SFC = () => {
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
+							<TableCell></TableCell>
 							<TableCell>#</TableCell>
 							<TableCell>Name</TableCell>
-							<TableCell>Ready</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{nonSpectatingPlayers.map((player, i) => (
 							<TableRow key={player.id}>
-								<TableCell>{i + 1}.</TableCell>
-								<TableCell>{player.getName()}</TableCell>
-								<TableCell>
+								<TableCell padding="checkbox">
 									<Checkbox
 										checked={player.getIsReady()}
 										disabled={!localPlayer || player.id !== localPlayer.id}
@@ -57,16 +55,17 @@ export const Lobby: React.SFC = () => {
 												: undefined
 										}
 									/>
-									{/* @TODO: current user make clickable */}
 								</TableCell>
+								<TableCell>{i + 1}.</TableCell>
+								<TableCell>{player.getName()}</TableCell>
 							</TableRow>
 						))}
 						{spectatorsCount > 0 && (
 							<TableRow>
-								<TableCell>
+								<TableCell colSpan={2}>
 									<VisibilityIcon />
 								</TableCell>
-								<TableCell colSpan={2}>
+								<TableCell>
 									<i>
 										{spectatorsCount}{' '}
 										{spectatorsCount === 1 ? 'spectator' : 'spectators'}
