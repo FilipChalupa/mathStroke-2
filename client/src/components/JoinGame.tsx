@@ -1,5 +1,6 @@
 import {
 	Button,
+	Container,
 	Grid,
 	List,
 	ListItem,
@@ -30,7 +31,7 @@ export const JoinGame: React.FunctionComponent = () => {
 	}, [])
 
 	return (
-		<>
+		<Container maxWidth="sm">
 			<Typography variant="h4" align="center">
 				Join game
 			</Typography>
@@ -75,6 +76,6 @@ export const JoinGame: React.FunctionComponent = () => {
 					</ListItem>
 				))}
 			</List>
-		</>
+		</Container>
 	)
 }

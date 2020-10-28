@@ -1,6 +1,7 @@
 import {
 	Button,
 	Checkbox,
+	Container,
 	FormControlLabel,
 	TextField,
 	Typography,
@@ -37,7 +38,7 @@ export const NewGame: React.FunctionComponent = () => {
 	)
 
 	return (
-		<>
+		<Container maxWidth="xs">
 			<Typography variant="h4" align="center">
 				New game
 				{isLoading && <div>Loading</div>}
@@ -70,6 +71,6 @@ export const NewGame: React.FunctionComponent = () => {
 					</div>
 				</form>
 			</Typography>
-		</>
+		</Container>
 	)
 }

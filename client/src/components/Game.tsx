@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -31,19 +32,29 @@ export const Game: React.SFC = () => {
 	}, [])
 	return (
 		<>
-			<Link to={routes.homepage}>Game</Link>
-			<div>
-				{isConnected ? 'connected' : 'connecting'}{' '}
-				{isLoading ? 'loading' : 'loaded'}
-			</div>
-			{gameInfo && (
-				<>
-					<div>Name: {gameInfo.name}</div>
-					<div>State: {gameInfo.state}</div>
-				</>
+			<Container maxWidth="md">
+				<Link to={routes.homepage}>Game</Link>
+				<div>
+					{isConnected ? 'connected' : 'connecting'}{' '}
+					{isLoading ? 'loading' : 'loaded'}
+				</div>
+				{gameInfo && (
+					<>
+						<div>Name: {gameInfo.name}</div>
+						<div>State: {gameInfo.state}</div>
+					</>
+				)}
+			</Container>
+			{gameInfo && gameInfo.state === 'lobby' && (
+				<Container maxWidth="md">
+					<Lobby />
+				</Container>
 			)}
-			{gameInfo && gameInfo.state === 'lobby' && <Lobby />}
-			{gameInfo && gameInfo.state === 'level' && <Level />}
+			{gameInfo && gameInfo.state === 'level' && (
+				<Container maxWidth="sm">
+					<Level />
+				</Container>
+			)}
 		</>
 	)
 }

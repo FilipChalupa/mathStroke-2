@@ -1,5 +1,6 @@
 import {
 	AppBar,
+	Container,
 	Link as MaterialLink,
 	Toolbar,
 	Typography,
@@ -12,9 +13,11 @@ export const Header: React.FunctionComponent = () => {
 	return (
 		<AppBar position="sticky" className="header">
 			<Toolbar>
-				<MaterialLink to={routes.homepage} component={Link} color="inherit">
-					<Typography variant="h5">Math Stroke</Typography>
-				</MaterialLink>
+				<Container>
+					<MaterialLink to={routes.homepage} component={Link} color="inherit">
+						<Typography variant="h5">Math Stroke</Typography>
+					</MaterialLink>
+				</Container>
 			</Toolbar>
 		</AppBar>
 	)
