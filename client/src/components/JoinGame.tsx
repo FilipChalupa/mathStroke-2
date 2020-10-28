@@ -1,6 +1,5 @@
 import {
 	Button,
-	LinearProgress,
 	List,
 	ListItem,
 	ListItemIcon,
@@ -57,7 +56,6 @@ export const JoinGame: React.FunctionComponent = () => {
 					</ListItem>
 				))}
 			</List>
-			{loading && <LinearProgress />}
 		</>
 	)
 }

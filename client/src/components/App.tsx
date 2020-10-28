@@ -1,19 +1,20 @@
 import * as React from 'react'
-import { ThemeProvider } from './ThemeProvider'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { routes } from '../routes'
-import { Homepage } from './Homepage'
-import { NewGame } from './NewGame'
-import { JoinGame } from './JoinGame'
-import { Game } from './Game'
-
-import { store } from '../store'
 import { Provider as ReduxProvider } from 'react-redux'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { routes } from '../routes'
+import { store } from '../store'
+import { Game } from './Game'
+import { Homepage } from './Homepage'
+import { JoinGame } from './JoinGame'
+import { LoadingIndicator } from './LoadingIndicator'
+import { NewGame } from './NewGame'
+import { ThemeProvider } from './ThemeProvider'
 
 export const App: React.SFC = () => (
 	<ReduxProvider store={store}>
 		<ThemeProvider>
 			<Router>
+				<LoadingIndicator />
 				<Switch>
 					{Object.entries(routes).map(([name, path]) => (
 						<Route path={path} key={name}>
