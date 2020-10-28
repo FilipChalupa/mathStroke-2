@@ -16,11 +16,14 @@ app.use(express.static('dist/public'))
 
 app.get('/public-games.json', (request, response) =>
 	response.send({
-		games: gamesManager.getPublicGames().map((game) => ({
-			id: game.id,
-			name: game.name,
-			playersCount: game.getPlayersCount(),
-		})),
+		games: gamesManager
+			.getPublicGames()
+			.map((game) => ({
+				id: game.id,
+				name: game.name,
+				playersCount: game.getPlayersCount(),
+			}))
+			.sort((a, b) => b.playersCount - a.playersCount),
 	}),
 )
 
