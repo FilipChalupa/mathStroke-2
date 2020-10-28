@@ -1,4 +1,5 @@
 import { LinearProgress } from '@material-ui/core'
+import cn from 'classnames'
 import * as React from 'react'
 import { useStateSelector } from '../useStateSelector'
 import './loadingIndicator.css'
@@ -36,5 +37,14 @@ export const LoadingIndicatorInner: React.FunctionComponent<{
 		}
 	}, [active])
 
-	return (active || wearOffActive) && <LinearProgress />
+	return (
+		<div
+			className={cn(
+				'loadingIndicator-in',
+				(active || wearOffActive) && 'is-active',
+			)}
+		>
+			<LinearProgress />
+		</div>
+	)
 }
