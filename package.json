@@ -10,7 +10,6 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node dist/server/server/src/index.js",
-		"install": "npm run build",
 		"build": "npm run build:server && npm run build:client",
 		"dev:server": "npm run watch:server & nodemon --watch dist/server --exec \"node dist/server/server/src/index.js\"",
 		"build:server": "tsc --project server",
