@@ -3,10 +3,21 @@ import { Game } from './Game.js'
 export class GamesManager {
 	protected games: Game[] = []
 
-	public createGame(name: string, isPublic: boolean, autoCloseEmpty: boolean) {
-		const game = new Game(name, isPublic, autoCloseEmpty, () => {
-			this.games = this.games.filter((x) => x.id !== game.id)
-		})
+	public createGame(
+		name: string,
+		isPublic: boolean,
+		autoCloseEmpty: boolean,
+		customId?: string,
+	) {
+		const game = new Game(
+			name,
+			isPublic,
+			autoCloseEmpty,
+			() => {
+				this.games = this.games.filter((x) => x.id !== game.id)
+			},
+			customId,
+		)
 
 		this.games.push(game)
 

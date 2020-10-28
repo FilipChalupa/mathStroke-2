@@ -8,7 +8,11 @@ const port = parseInt(process.env.PORT || '', 10) || 8080
 
 const gamesManager = new GamesManager()
 
-gamesManager.createGame('Initial test room', true, false)
+gamesManager.createGame('Initial room', true, false, 'initial')
+
+for (let i = 1; i <= 9; i++) {
+	gamesManager.createGame(`Test room ${i}`, true, false, `test-${i}`)
+}
 
 app.use(express.json())
 

@@ -1,13 +1,12 @@
 import WebSocket from 'ws'
+import { PayloadFromServer } from '../../common/PayloadFromServer.js'
+import { StateManager } from './game/StateManager.js'
 import { generateId } from './generateId.js'
 import { Player } from './Player.js'
-import { StateManager } from './game/StateManager.js'
-import { PayloadFromServer } from '../../common/PayloadFromServer.js'
 
 const CLOSE_EMPTY_GAME_AFTER = 30000 // 30 seconds
 
 export class Game {
-	readonly id = generateId()
 	protected socketServer = new WebSocket.Server({ noServer: true })
 	protected players: Player[] = []
 	protected stateManager: StateManager = new StateManager(this)
@@ -18,6 +17,7 @@ export class Game {
 		readonly isPublic: boolean,
 		readonly autoCloseEmpty: boolean,
 		protected onCloseCallback: () => void,
+		readonly id = generateId(),
 	) {
 		this.socketServer.on('connection', this.onConnection)
 
