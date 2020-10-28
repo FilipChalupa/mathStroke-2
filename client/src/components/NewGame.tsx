@@ -1,18 +1,17 @@
-import * as React from 'react'
 import {
-	Typography,
-	TextField,
-	FormControlLabel,
-	Checkbox,
 	Button,
+	Checkbox,
+	FormControlLabel,
+	TextField,
+	Typography,
 } from '@material-ui/core'
-import { routes } from '../routes'
-import { Link, useHistory } from 'react-router-dom'
-import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
+import * as React from 'react'
+import { useHistory } from 'react-router-dom'
 import { createGame } from '../createGame'
 import { createGameUrl } from '../createGameUrl'
+import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
 
-export const NewGame: React.SFC = () => {
+export const NewGame: React.FunctionComponent = () => {
 	useUpdateTitleOnMount('New game')
 
 	const [isLoading, setIsLoading] = React.useState(false)
@@ -40,7 +39,7 @@ export const NewGame: React.SFC = () => {
 	return (
 		<>
 			<Typography variant="h4" align="center">
-				<Link to={routes.homepage}>New game</Link>
+				New game
 				{isLoading && <div>Loading</div>}
 				<form onSubmit={onSubmit}>
 					<div>

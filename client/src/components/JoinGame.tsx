@@ -32,7 +32,7 @@ export const JoinGame: React.FunctionComponent = () => {
 	return (
 		<>
 			<Typography variant="h4" align="center">
-				<Link to={routes.homepage}>Join game</Link>
+				Join game
 			</Typography>
 			<Grid container justify="center" spacing={2}>
 				<Grid item>
