@@ -8,6 +8,8 @@ import {
 	TableHead,
 	TableRow,
 } from '@material-ui/core'
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { playersSetLocalIsReady, playersSetLocalIsSpectating } from '../actions'
@@ -61,7 +63,9 @@ export const Lobby: React.SFC = () => {
 						))}
 						{spectatorsCount > 0 && (
 							<TableRow>
-								<TableCell>👁️</TableCell>
+								<TableCell>
+									<VisibilityIcon />
+								</TableCell>
 								<TableCell colSpan={2}>
 									<i>
 										{spectatorsCount}{' '}
@@ -79,6 +83,7 @@ export const Lobby: React.SFC = () => {
 				{localPlayer && (
 					<>
 						<Button
+							startIcon={<VisibilityIcon />}
 							onClick={() => {
 								dispatch(
 									playersSetLocalIsSpectating(!localPlayer.getIsSpectating()),
@@ -88,7 +93,7 @@ export const Lobby: React.SFC = () => {
 							{localPlayer.getIsSpectating() ? 'Unspectate' : 'Spectate'}
 						</Button>{' '}
 						{!localPlayer.getIsSpectating() && (
-							<Button onClick={toggleIsReady}>
+							<Button startIcon={<PlayArrowIcon />} onClick={toggleIsReady}>
 								{localPlayer.getIsReady() ? 'Unready' : 'Ready'}
 							</Button>
 						)}
