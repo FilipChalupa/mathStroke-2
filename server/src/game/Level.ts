@@ -54,12 +54,20 @@ export class Level extends State {
 			PayloadFromServer.createLevelTaskSolved(solvedTask.getId()),
 		)
 		solvedTask.destroy()
+
+		this.taskSolved++
+		if (this.areAllTasksSolved()) {
+			this.returnToLobby()
+		}
 	}
 
 	protected getMinimumTasksCountToBeSolved() {
-		return (
-			Math.max(0, this.game.getNonSpectactingPlayers().length - 1) *
-			Level.tasksToBeSolvedCountMultiplier
+		return Math.ceil(
+			this.tasksToBeSolvedCountBase *
+				Math.pow(
+					Level.tasksToBeSolvedCountMultiplier,
+					Math.max(0, this.game.getNonSpectactingPlayers().length - 1),
+				),
 		)
 	}
 
@@ -76,6 +84,10 @@ export class Level extends State {
 
 	protected onFail() {
 		console.log('failed')
+		this.returnToLobby()
+	}
+
+	protected returnToLobby() {
 		;[this.generateNewTaskTimer, this.returnToLobbyTimer].forEach(
 			(timer) => timer && clearTimeout(timer),
 		)
@@ -89,6 +101,10 @@ export class Level extends State {
 		console.log('Generate')
 		if (this.generateNewTaskTimer) {
 			clearTimeout(this.generateNewTaskTimer)
+		}
+
+		if (this.areAllTasksGenerated()) {
+			return
 		}
 
 		const task = new Task({
