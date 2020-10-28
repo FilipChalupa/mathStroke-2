@@ -1,14 +1,23 @@
+import {
+	Button,
+	LinearProgress,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Typography,
+} from '@material-ui/core'
+import SportsEsportsIcon from '@material-ui/icons/SportsEsports'
 import * as React from 'react'
-import { Typography, LinearProgress, Button } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { publicGamesRequestStartAction } from '../actions'
+import { createGameUrl } from '../createGameUrl'
+import { State } from '../reducers'
 import { routes } from '../routes'
 import { useUpdateTitleOnMount } from '../useUpdateTitleOnMount'
-import { createGameUrl } from '../createGameUrl'
-import { useSelector, useDispatch } from 'react-redux'
-import { State } from '../reducers'
-import { publicGamesRequestStartAction } from '../actions'
 
-export const JoinGame: React.SFC = () => {
+export const JoinGame: React.FunctionComponent = () => {
 	useUpdateTitleOnMount('Join game')
 
 	const { games, loading } = useSelector((state: State) => state.publicGames)
@@ -30,15 +39,24 @@ export const JoinGame: React.SFC = () => {
 			>
 				Refresh
 			</Button>
-			<ul>
+			<List>
 				{games.map((game) => (
-					<li key={game.id}>
-						<Link to={createGameUrl(game.id)}>
-							{game.name} ({game.playersCount})
-						</Link>
-					</li>
+					<ListItem
+						key={game.id}
+						button
+						component={Link}
+						to={createGameUrl(game.id)}
+					>
+						<ListItemIcon>
+							<SportsEsportsIcon />
+						</ListItemIcon>
+						<ListItemText
+							primary={game.name}
+							secondary={`Players: ${game.playersCount}`}
+						/>
+					</ListItem>
 				))}
-			</ul>
+			</List>
 			{loading && <LinearProgress />}
 		</>
 	)
