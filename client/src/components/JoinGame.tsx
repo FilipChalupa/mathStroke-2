@@ -1,11 +1,14 @@
 import {
 	Button,
+	Grid,
 	List,
 	ListItem,
 	ListItemIcon,
 	ListItemText,
 	Typography,
 } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
@@ -31,13 +34,29 @@ export const JoinGame: React.FunctionComponent = () => {
 			<Typography variant="h4" align="center">
 				<Link to={routes.homepage}>Join game</Link>
 			</Typography>
-			<Button
-				disabled={loading}
-				variant="contained"
-				onClick={() => dispatch(publicGamesRequestStartAction())}
-			>
-				Refresh
-			</Button>
+			<Grid container justify="center" spacing={2}>
+				<Grid item>
+					<Button
+						startIcon={<RefreshIcon />}
+						disabled={loading}
+						variant="contained"
+						onClick={() => dispatch(publicGamesRequestStartAction())}
+					>
+						Refresh
+					</Button>
+				</Grid>
+				<Grid item>
+					<Button
+						startIcon={<AddIcon />}
+						component={Link}
+						to={routes.newGame}
+						variant="contained"
+						color="primary"
+					>
+						New game
+					</Button>
+				</Grid>
+			</Grid>
 			<List>
 				{games.map((game) => (
 					<ListItem
