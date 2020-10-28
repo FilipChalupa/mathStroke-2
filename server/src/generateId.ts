@@ -1,6 +1,5 @@
-let lastId = 0
+import { v4 as uuidv4 } from 'uuid'
 
 export function generateId() {
-	// @TODO: make ids unpredictable
-	return `i${++lastId}`
+	return uuidv4()
 }

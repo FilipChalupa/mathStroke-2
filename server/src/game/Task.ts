@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
 import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp.js'
+import { generateId } from '../generateId.js'
 import { Instructions } from './Instructions.js'
 
 export class Task {
@@ -9,7 +9,7 @@ export class Task {
 	protected timeToSolve = 5000 // 5 seconds // @TODO: calculate proper duration
 	protected solution: string
 	protected instructions: Instructions
-	protected id = uuidv4()
+	protected id = generateId()
 
 	constructor(
 		protected readonly callbacks: {
