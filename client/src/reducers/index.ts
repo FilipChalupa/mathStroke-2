@@ -5,6 +5,7 @@ import { lobbyCountdownReducer, LobbyCountdownState } from './lobbyCountdown'
 import { playersReducer, PlayersState } from './players'
 import { publicGamesReducer, PublicGamesState } from './publicGames'
 import { tasksReducer, TasksState } from './tasks'
+import { timeReducer, TimeState } from './time'
 
 export interface State {
 	game: GameState
@@ -13,6 +14,7 @@ export interface State {
 	players: PlayersState
 	publicGames: PublicGamesState
 	tasks: TasksState
+	time: TimeState
 }
 
 export const rootReducers = combineReducers<State>({
@@ -22,4 +24,5 @@ export const rootReducers = combineReducers<State>({
 	players: playersReducer,
 	publicGames: publicGamesReducer,
 	tasks: tasksReducer,
+	time: timeReducer,
 })

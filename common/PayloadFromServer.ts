@@ -14,6 +14,7 @@ export namespace PayloadFromServer {
 		LevelSolutionVerdict = 'LevelSolutionVerdict',
 		LevelNewTask = 'LevelNewTask',
 		LevelTaskSolved = 'LevelTaskSolved',
+		TimeSynchronization = 'TimeSynchronization',
 	}
 
 	export interface GameState {
@@ -229,6 +230,20 @@ export namespace PayloadFromServer {
 			},
 		}
 	}
+
+	export interface TimeSynchronization {
+		type: Type.TimeSynchronization
+		data: {
+			timestamp: number
+		}
+	}
+
+	export function createTimeSynchronization(): TimeSynchronization {
+		return {
+			type: Type.TimeSynchronization,
+			data: { timestamp: Date.now() },
+		}
+	}
 }
 
 export type PayloadFromServer =
@@ -244,3 +259,4 @@ export type PayloadFromServer =
 	| PayloadFromServer.LevelSolutionVerdict
 	| PayloadFromServer.LevelNewTask
 	| PayloadFromServer.LevelTaskSolved
+	| PayloadFromServer.TimeSynchronization

@@ -33,6 +33,8 @@ export const actionIds = {
 	TASKS_ADD: 'TASKS_ADD',
 	TASKS_REMOVE: 'TASKS_REMOVE',
 	TASKS_CLEAR: 'TASKS_CLEAR',
+
+	TIME_SET_OFFSET: 'TIME_SET_OFFSET',
 }
 
 export interface BaseAction {

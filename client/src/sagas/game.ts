@@ -32,6 +32,7 @@ import {
 	tasksAddAction,
 	tasksClearAction,
 	tasksRemoveAction,
+	timeSetOffset,
 } from '../actions'
 import { actionIds } from '../common'
 import { closeGameSocket, getGameSocket, sendToSocket } from '../gameConnection'
@@ -123,6 +124,8 @@ function subscribeToGameSocket(socket: WebSocket) {
 				emit(tasksAddAction(payload.data))
 			} else if (payload.type === PayloadFromServer.Type.LevelTaskSolved) {
 				emit(tasksRemoveAction(payload.data.id))
+			} else if (payload.type === PayloadFromServer.Type.TimeSynchronization) {
+				emit(timeSetOffset(payload.data.timestamp - Date.now()))
 			} else {
 				assertNever(payload)
 			}
