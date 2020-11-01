@@ -1,15 +1,15 @@
 import {
 	all,
-	fork,
 	call,
-	take,
-	takeLatest,
+	fork,
 	put,
 	race,
+	take,
+	takeLatest,
 } from 'redux-saga/effects'
-import { actionIds, BaseAction } from '../common'
-import { lobbyCountdownSetRemainingSecondsCountdownAction } from '../actions/lobbyCountdown'
 import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
+import { lobbyCountdownSetRemainingSecondsCountdownAction } from '../actions/lobbyCountdown'
+import { actionIds, BaseAction } from '../common'
 
 function* countdown(action: BaseAction) {
 	const { remainingTime } = action.payload
@@ -40,7 +40,6 @@ function* countdown(action: BaseAction) {
 }
 
 function* watchLobbyCountdownStartCountdown() {
-	console.log('lets watch')
 	yield takeLatest(actionIds.LOBBY_COUNTDOWN_START_COUNTDOWN, countdown)
 }
 
