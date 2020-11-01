@@ -47,11 +47,19 @@ export class Level extends State {
 		}
 
 		// Task with that solution found
-		player.send(PayloadFromServer.createLevelSolutionVerdict(true, 1000)) // @TODO dynamic cooldown
+		const cooldown = 1000 // @TODO dynamic cooldown
+		player.send(PayloadFromServer.createLevelSolutionVerdict(true, cooldown))
 		const solvedTask = this.tasksRunning[solvedTaskIndex]
 		this.tasksRunning.splice(solvedTaskIndex, 1) // Remove solved task
 		this.game.sendToAllPlayers(
 			PayloadFromServer.createLevelTaskSolved(solvedTask.getId()),
+		)
+		this.game.sendToAllPlayers(
+			PayloadFromServer.createPlayerMove({
+				id: player.id,
+				xPosition: Math.random(),
+				timeInDestination: cooldown,
+			}),
 		)
 		solvedTask.destroy()
 

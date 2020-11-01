@@ -1,3 +1,3 @@
-export function getCurrentTimestamp() {
-	return new Date().getTime()
+export const getCurrentTimestamp = () => {
+	return Date.now()
 }

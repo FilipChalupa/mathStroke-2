@@ -1,3 +1,4 @@
+import { getCurrentTimestamp } from './getCurrentTimestamp'
 import { PlayerCommon } from './PlayerCommon'
 
 export namespace PayloadFromServer {
@@ -15,6 +16,7 @@ export namespace PayloadFromServer {
 		LevelNewTask = 'LevelNewTask',
 		LevelTaskSolved = 'LevelTaskSolved',
 		TimeSynchronization = 'TimeSynchronization',
+		PlayerMove = 'PlayerMove',
 	}
 
 	export interface GameState {
@@ -69,7 +71,7 @@ export namespace PayloadFromServer {
 			isSpectating: boolean
 			isReady: boolean
 			name: string
-			xPosition: number
+			xPosition: PlayerCommon['xPosition']
 		}
 	}
 
@@ -241,7 +243,23 @@ export namespace PayloadFromServer {
 	export function createTimeSynchronization(): TimeSynchronization {
 		return {
 			type: Type.TimeSynchronization,
-			data: { timestamp: Date.now() },
+			data: { timestamp: getCurrentTimestamp() },
+		}
+	}
+
+	export interface PlayerMove {
+		type: Type.PlayerMove
+		data: {
+			id: string
+			xPosition: number
+			timeInDestination: number
+		}
+	}
+
+	export function createPlayerMove(data: PlayerMove['data']): PlayerMove {
+		return {
+			type: Type.PlayerMove,
+			data,
 		}
 	}
 }
@@ -260,3 +278,4 @@ export type PayloadFromServer =
 	| PayloadFromServer.LevelNewTask
 	| PayloadFromServer.LevelTaskSolved
 	| PayloadFromServer.TimeSynchronization
+	| PayloadFromServer.PlayerMove

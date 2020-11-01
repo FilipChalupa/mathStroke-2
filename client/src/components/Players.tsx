@@ -31,7 +31,7 @@ const PlayersItem: React.FunctionComponent<{
 		<div
 			className="players-item"
 			style={{
-				['--players-x' as any]: player.getXPosition(),
+				['--players-x' as any]: player.getXPosition().target,
 			}}
 		>
 			<div className="players-item-in">

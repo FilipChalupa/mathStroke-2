@@ -10,6 +10,7 @@ import {
 	takeLatest,
 } from 'redux-saga/effects'
 import { assertNever } from '../../../common/assertNever'
+import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
 import { PayloadFromClient } from '../../../common/PayloadFromClient'
 import { PayloadFromServer } from '../../../common/PayloadFromServer'
 import {
@@ -125,7 +126,9 @@ function subscribeToGameSocket(socket: WebSocket) {
 			} else if (payload.type === PayloadFromServer.Type.LevelTaskSolved) {
 				emit(tasksRemoveAction(payload.data.id))
 			} else if (payload.type === PayloadFromServer.Type.TimeSynchronization) {
-				emit(timeSetOffset(payload.data.timestamp - Date.now()))
+				emit(timeSetOffset(payload.data.timestamp - getCurrentTimestamp()))
+			} else if (payload.type === PayloadFromServer.Type.PlayerMove) {
+				console.warn('@TODO', payload.data)
 			} else {
 				assertNever(payload)
 			}

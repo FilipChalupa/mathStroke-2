@@ -1,4 +1,5 @@
 import WebSocket from 'ws'
+import { getCurrentTimestamp } from '../../common/getCurrentTimestamp.js'
 import { PayloadFromClient } from '../../common/PayloadFromClient.js'
 import { PayloadFromServer } from '../../common/PayloadFromServer.js'
 import { PlayerCommon } from '../../common/PlayerCommon.js'
@@ -19,7 +20,12 @@ export class Player extends PlayerCommon {
 			false,
 			false,
 			`John ${Math.round(10 + Math.random() * 89)}`,
-			0.5,
+			{
+				last: 0.5,
+				lastTime: getCurrentTimestamp(),
+				target: 0.5,
+				targetTime: getCurrentTimestamp(),
+			},
 		)
 
 		console.log('Player created')

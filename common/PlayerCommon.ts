@@ -4,7 +4,12 @@ export abstract class PlayerCommon {
 		protected isSpectating: boolean,
 		protected isReady: boolean,
 		protected name: string,
-		protected xPosition: number,
+		protected xPosition: {
+			last: number
+			lastTime: number
+			target: number
+			targetTime: number
+		},
 	) {}
 
 	public getIsSpectating() {
