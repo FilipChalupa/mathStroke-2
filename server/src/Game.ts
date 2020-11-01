@@ -121,8 +121,8 @@ export class Game {
 		this.sendToAllPlayers(PayloadFromServer.createConnectedPlayer(player))
 		player.send(PayloadFromServer.createLocalPlayerId(player))
 		this.players.push(player)
-		this.stateManager.getCurrentState().onPlayerConnect(player)
 		this.sendCatchUpData(player)
+		this.stateManager.getCurrentState().onPlayerConnect(player)
 
 		this.stopCloseEmptyCountdown()
 	}

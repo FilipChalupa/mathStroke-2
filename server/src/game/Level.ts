@@ -97,6 +97,13 @@ export class Level extends State {
 		)
 	}
 
+	protected createTaskPayload = (task: Task) =>
+		PayloadFromServer.createLevelNewTask(
+			task.getId(),
+			task.getInstructions().getText(),
+			task.getXPosition(),
+		)
+
 	protected generateNewTask = () => {
 		console.log('Generate')
 		if (this.generateNewTaskTimer) {
@@ -114,13 +121,7 @@ export class Level extends State {
 					task.getSolution(),
 					' has been generated.',
 				)
-				this.game.sendToAllPlayers(
-					PayloadFromServer.createLevelNewTask(
-						task.getId(),
-						task.getInstructions().getText(),
-						task.getXPosition(),
-					),
-				)
+				this.game.sendToAllPlayers(this.createTaskPayload(task))
 			},
 			onTaskExpired: (task) => {
 				console.log('Task with solution', task.getSolution(), 'expired')
@@ -131,5 +132,11 @@ export class Level extends State {
 		this.tasksRunning.push(task)
 
 		this.generateNewTaskTimer = setTimeout(this.generateNewTask, 3000) // @TODO: calculate proper duration
+	}
+
+	public onPlayerConnect(player: Player) {
+		this.tasksRunning.forEach((task) => {
+			player.send(this.createTaskPayload(task))
+		})
 	}
 }
