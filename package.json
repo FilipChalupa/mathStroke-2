@@ -9,11 +9,11 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node dist/server/server/src/index.js",
+		"start": "node dist/server/index.js",
 		"build": "npm run build:server && npm run build:client",
-		"dev:server": "npm run watch:server & nodemon --watch dist/server --exec \"node dist/server/server/src/index.js\"",
-		"build:server": "tsc --project server",
-		"watch:server": "tsc --project server -w",
+		"dev:server": "npm run watch:server & nodemon --watch dist/server --exec \"node dist/server/index.js\"",
+		"build:server": "webpack --mode production --config server/webpack.config.ts",
+		"watch:server": "nodemon --watch server/webpack.config.ts --exec \"webpack --mode development --config server/webpack.config.ts --watch\"",
 		"dev:client": "npm run watch:client",
 		"build:client": "webpack --mode production --config client/webpack.config.ts",
 		"watch:client": "nodemon --watch client/webpack.config.ts --exec \"webpack --mode development --config client/webpack.config.ts --watch\""
@@ -57,6 +57,7 @@
 		"typeface-roboto": "0.0.75",
 		"typescript": "^3.9.7",
 		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12"
+		"webpack-cli": "^3.3.12",
+		"webpack-node-externals": "^2.5.2"
 	}
 }

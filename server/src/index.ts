@@ -1,63 +1,67 @@
 import express from 'express'
-import http from 'http'
-import url from 'url'
-import { GamesManager } from './GamesManager.js'
+console.log('Test')
+console.log(express)
 
-const app = express()
-const port = parseInt(process.env.PORT || '', 10) || 8080
+// import express from 'express'
+// import http from 'http'
+// import url from 'url'
+// import { GamesManager } from './GamesManager'
 
-const gamesManager = new GamesManager()
+// const app = express()
+// const port = parseInt(process.env.PORT || '', 10) || 8080
 
-gamesManager.createGame('Initial room', true, false, 'initial')
+// const gamesManager = new GamesManager()
 
-for (let i = 1; i <= 9; i++) {
-	gamesManager.createGame(`Test room ${i}`, true, false, `test-${i}`)
-}
+// gamesManager.createGame('Initial room', true, false, 'initial')
 
-app.use(express.json())
+// for (let i = 1; i <= 9; i++) {
+// 	gamesManager.createGame(`Test room ${i}`, true, false, `test-${i}`)
+// }
 
-app.use(express.static('dist/public'))
+// app.use(express.json())
 
-app.get('/public-games.json', (request, response) =>
-	response.send({
-		games: gamesManager
-			.getPublicGames()
-			.map((game) => ({
-				id: game.id,
-				name: game.name,
-				playersCount: game.getPlayersCount(),
-			}))
-			.sort((a, b) => b.playersCount - a.playersCount),
-	}),
-)
+// app.use(express.static('dist/public'))
 
-app.post('/create-game.json', (request, response) => {
-	// @TODO: reuse api parser from client
-	const data = request.body
+// app.get('/public-games.json', (request, response) =>
+// 	response.send({
+// 		games: gamesManager
+// 			.getPublicGames()
+// 			.map((game) => ({
+// 				id: game.id,
+// 				name: game.name,
+// 				playersCount: game.getPlayersCount(),
+// 			}))
+// 			.sort((a, b) => b.playersCount - a.playersCount),
+// 	}),
+// )
 
-	const game = gamesManager.createGame(data.gameName, data.isPublic, true)
+// app.post('/create-game.json', (request, response) => {
+// 	// @TODO: reuse api parser from client
+// 	const data = request.body
 
-	response.send({
-		gameId: game.id,
-	})
-})
+// 	const game = gamesManager.createGame(data.gameName, data.isPublic, true)
 
-const server = http.createServer(app)
+// 	response.send({
+// 		gameId: game.id,
+// 	})
+// })
 
-server.on('upgrade', (request, socket, head) => {
-	const { pathname } = url.parse(request.url)
+// const server = http.createServer(app)
 
-	const match = pathname?.match(/\/game\/(.*)\.ws/)
-	const gameId = match ? match[1] : null
-	const game = gameId ? gamesManager.getGameById(gameId) : undefined
+// server.on('upgrade', (request, socket, head) => {
+// 	const { pathname } = url.parse(request.url)
 
-	if (game) {
-		game.handleIncomingConnection(request, socket, head)
-	} else {
-		socket.destroy()
-	}
-})
+// 	const match = pathname?.match(/\/game\/(.*)\.ws/)
+// 	const gameId = match ? match[1] : null
+// 	const game = gameId ? gamesManager.getGameById(gameId) : undefined
 
-server.listen(port, () => {
-	console.log(`Server started on port ${port}`)
-})
+// 	if (game) {
+// 		game.handleIncomingConnection(request, socket, head)
+// 	} else {
+// 		socket.destroy()
+// 	}
+// })
+
+// server.listen(port, () => {
+// 	console.log(`Server started on port ${port}`)
+// })

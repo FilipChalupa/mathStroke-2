@@ -1,5 +1,5 @@
-import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
-import { State } from './State.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer'
+import { State } from './State'
 
 const READY_PLAYERS_TO_START_COUNTDOWN_RATIO = 0.7
 const READY_PLAYERS_TO_START_IMMEDIATELY_RATIO = 0.9

@@ -1,8 +1,8 @@
 import WebSocket from 'ws'
-import { PayloadFromServer } from '../../common/PayloadFromServer.js'
-import { StateManager } from './game/StateManager.js'
-import { generateId } from './generateId.js'
-import { Player } from './Player.js'
+import { PayloadFromServer } from '../../common/PayloadFromServer'
+import { StateManager } from './game/StateManager'
+import { generateId } from './generateId'
+import { Player } from './Player'
 
 const CLOSE_EMPTY_GAME_AFTER = 30000 // 30 seconds
 

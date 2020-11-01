@@ -1,8 +1,8 @@
-import { Game } from '../Game.js'
-import { State } from './State.js'
-import { Lobby } from './Lobby.js'
-import { Level } from './Level.js'
-import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer'
+import { Game } from '../Game'
+import { Level } from './Level'
+import { Lobby } from './Lobby'
+import { State } from './State'
 
 export class StateManager {
 	protected state: State = this.createLobby()

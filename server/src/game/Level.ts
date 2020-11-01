@@ -1,7 +1,7 @@
-import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
-import { Player } from '../Player.js'
-import { State } from './State.js'
-import { Task } from './Task.js'
+import { PayloadFromServer } from '../../../common/PayloadFromServer'
+import { Player } from '../Player'
+import { State } from './State'
+import { Task } from './Task'
 
 export class Level extends State {
 	readonly name = 'level'

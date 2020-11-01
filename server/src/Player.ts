@@ -1,9 +1,9 @@
 import WebSocket from 'ws'
-import { getCurrentTimestamp } from '../../common/getCurrentTimestamp.js'
-import { PayloadFromClient } from '../../common/PayloadFromClient.js'
-import { PayloadFromServer } from '../../common/PayloadFromServer.js'
-import { PlayerCommon } from '../../common/PlayerCommon.js'
-import { generateId } from './generateId.js'
+import { getCurrentTimestamp } from '../../common/getCurrentTimestamp'
+import { PayloadFromClient } from '../../common/PayloadFromClient'
+import { PayloadFromServer } from '../../common/PayloadFromServer'
+import { PlayerCommon } from '../../common/PlayerCommon'
+import { generateId } from './generateId'
 
 export class Player extends PlayerCommon {
 	constructor(

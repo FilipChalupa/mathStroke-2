@@ -1,6 +1,6 @@
-import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp.js'
-import { generateId } from '../generateId.js'
-import { Instructions } from './Instructions.js'
+import { getCurrentTimestamp } from '../../../common/getCurrentTimestamp'
+import { generateId } from '../generateId'
+import { Instructions } from './Instructions'
 
 export class Task {
 	protected expirationTimer: NodeJS.Timeout

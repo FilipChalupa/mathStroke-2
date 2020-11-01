@@ -1,6 +1,6 @@
-import { Game } from '../Game.js'
-import { Player } from '../Player.js'
-import { StateManager } from './StateManager.js'
+import { Game } from '../Game'
+import { Player } from '../Player'
+import { StateManager } from './StateManager'
 
 export abstract class State {
 	abstract readonly name: 'level' | 'lobby'
