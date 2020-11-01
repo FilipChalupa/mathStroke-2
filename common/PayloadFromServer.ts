@@ -195,18 +195,21 @@ export namespace PayloadFromServer {
 		data: {
 			id: string
 			instructions: string
+			xPosition: number
 		}
 	}
 
 	export function createLevelNewTask(
 		id: string,
 		instructions: string,
+		xPosition: number,
 	): LevelNewTask {
 		return {
 			type: Type.LevelNewTask,
 			data: {
 				id,
 				instructions,
+				xPosition,
 			},
 		}
 	}

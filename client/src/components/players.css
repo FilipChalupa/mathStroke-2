@@ -5,14 +5,14 @@
 .players-item {
 	--players-x: 0.5;
 
-	position: absolute;
-	top: 0;
+	position: relative;
 	left: -0.5%;
 	width: 1%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	font-size: 16px;
+	text-align: center;
 	transform: translateX(calc(var(--players-x) * 10000%));
 }
 

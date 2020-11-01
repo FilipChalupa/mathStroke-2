@@ -3,6 +3,7 @@ import { actionIds, BaseAction } from '../common'
 export interface Task {
 	id: string
 	instructions: string
+	xPosition: number
 }
 
 export interface TasksState {

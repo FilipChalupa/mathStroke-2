@@ -1,0 +1,38 @@
+.tasks {
+	position: relative;
+
+	outline: 1px solid;
+}
+
+.tasks-item {
+	--tasks-x: 0.5;
+
+	position: absolute;
+	bottom: 0;
+	left: -0.5%;
+	width: 1%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 16px;
+	text-align: center;
+	transform: translateX(calc(var(--tasks-x) * 10000%));
+}
+
+.tasks-item-in {
+	display: flex;
+	flex-direction: column;
+}
+
+.tasks-image {
+	width: 3em;
+	height: 3em;
+	border-radius: 50%;
+	background-color: currentColor;
+	align-self: center;
+}
+
+.tasks-instructions {
+	white-space: nowrap;
+	margin-top: 0.5em;
+}

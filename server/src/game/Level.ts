@@ -118,6 +118,7 @@ export class Level extends State {
 					PayloadFromServer.createLevelNewTask(
 						task.getId(),
 						task.getInstructions().getText(),
+						task.getXPosition(),
 					),
 				)
 			},

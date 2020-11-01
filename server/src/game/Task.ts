@@ -10,6 +10,7 @@ export class Task {
 	protected solution: string
 	protected instructions: Instructions
 	protected id = generateId()
+	protected xPosition = Math.random()
 
 	constructor(
 		protected readonly callbacks: {
@@ -40,6 +41,10 @@ export class Task {
 
 	public getInstructions() {
 		return this.instructions
+	}
+
+	public getXPosition() {
+		return this.xPosition
 	}
 
 	public destroy() {

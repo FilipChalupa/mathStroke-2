@@ -120,12 +120,7 @@ function subscribeToGameSocket(socket: WebSocket) {
 					emit(levelSolutionRejectedAction(payload.data.cooldown))
 				}
 			} else if (payload.type === PayloadFromServer.Type.LevelNewTask) {
-				emit(
-					tasksAddAction({
-						id: payload.data.id,
-						instructions: payload.data.instructions,
-					}),
-				)
+				emit(tasksAddAction(payload.data))
 			} else if (payload.type === PayloadFromServer.Type.LevelTaskSolved) {
 				emit(tasksRemoveAction(payload.data.id))
 			} else {
