@@ -1,11 +1,15 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField, useMediaQuery } from '@material-ui/core'
 import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { levelSubmitSolutionStartAction } from '../actions/level'
 import { useStateSelector } from '../useStateSelector'
+import { Battlefield } from './Battlefield'
+import { BattlefieldSimplified } from './BattlefieldSimplified'
 import { Tasks } from './Tasks'
 
-export const Level: React.SFC = () => {
+export const Level: React.FunctionComponent = () => {
+	const isSimplified = !useMediaQuery('(min-width: 700px')
+
 	const [solution, setSolution] = React.useState('')
 	const solutionInputRef = React.useRef<HTMLInputElement>()
 	const { isSubmittingSolution, isOnCooldown } = useStateSelector(
@@ -32,6 +36,7 @@ export const Level: React.SFC = () => {
 
 	return (
 		<>
+			{isSimplified ? <BattlefieldSimplified /> : <Battlefield />}
 			<form onSubmit={onSubmit}>
 				<TextField
 					label="Solution"
