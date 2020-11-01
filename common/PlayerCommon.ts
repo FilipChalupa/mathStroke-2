@@ -4,6 +4,7 @@ export abstract class PlayerCommon {
 		protected isSpectating: boolean,
 		protected isReady: boolean,
 		protected name: string,
+		protected xPosition: number,
 	) {}
 
 	public getIsSpectating() {
@@ -16,5 +17,9 @@ export abstract class PlayerCommon {
 
 	public getName() {
 		return this.name
+	}
+
+	public getXPosition() {
+		return this.xPosition
 	}
 }

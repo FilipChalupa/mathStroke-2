@@ -68,6 +68,7 @@ export namespace PayloadFromServer {
 			isSpectating: boolean
 			isReady: boolean
 			name: string
+			xPosition: number
 		}
 	}
 
@@ -79,6 +80,7 @@ export namespace PayloadFromServer {
 				isSpectating: player.getIsSpectating(),
 				isReady: player.getIsReady(),
 				name: player.getName(),
+				xPosition: player.getXPosition(),
 			},
 		}
 	}

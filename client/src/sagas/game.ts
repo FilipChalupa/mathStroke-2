@@ -95,6 +95,7 @@ function subscribeToGameSocket(socket: WebSocket) {
 							payload.data.isSpectating,
 							payload.data.isReady,
 							payload.data.name,
+							payload.data.xPosition,
 						),
 					),
 				)

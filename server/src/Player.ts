@@ -1,8 +1,8 @@
 import WebSocket from 'ws'
-import { generateId } from './generateId.js'
 import { PayloadFromClient } from '../../common/PayloadFromClient.js'
 import { PayloadFromServer } from '../../common/PayloadFromServer.js'
 import { PlayerCommon } from '../../common/PlayerCommon.js'
+import { generateId } from './generateId.js'
 
 export class Player extends PlayerCommon {
 	constructor(
@@ -19,6 +19,7 @@ export class Player extends PlayerCommon {
 			false,
 			false,
 			`John ${Math.round(10 + Math.random() * 89)}`,
+			0.5,
 		)
 
 		console.log('Player created')
