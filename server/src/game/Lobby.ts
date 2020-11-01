@@ -1,11 +1,11 @@
-import { State } from './State.js'
 import { PayloadFromServer } from '../../../common/PayloadFromServer.js'
+import { State } from './State.js'
 
 const READY_PLAYERS_TO_START_COUNTDOWN_RATIO = 0.7
 const READY_PLAYERS_TO_START_IMMEDIATELY_RATIO = 0.9
 
 const COUNTDOWN_DURATION = 31000 // 31 seconds
-const IMMEDIATE_COUNTDOWN_DURATION = 4000 // 4 seconds
+const IMMEDIATE_COUNTDOWN_DURATION = 4000 * 0 + 1 // 4 seconds
 
 export class Lobby extends State {
 	readonly name = 'lobby'
@@ -40,7 +40,7 @@ export class Lobby extends State {
 
 		const readyRatio = readyPlayersCount / nonSpectactingPlayersCount
 
-		if (readyRatio >= READY_PLAYERS_TO_START_IMMEDIATELY_RATIO) {
+		if (true || readyRatio >= READY_PLAYERS_TO_START_IMMEDIATELY_RATIO) {
 			this.setCountdown(IMMEDIATE_COUNTDOWN_DURATION)
 		} else if (readyRatio >= READY_PLAYERS_TO_START_COUNTDOWN_RATIO) {
 			this.setCountdown(COUNTDOWN_DURATION)

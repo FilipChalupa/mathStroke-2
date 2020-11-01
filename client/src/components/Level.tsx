@@ -5,7 +5,6 @@ import { levelSubmitSolutionStartAction } from '../actions/level'
 import { useStateSelector } from '../useStateSelector'
 import { Battlefield } from './Battlefield'
 import { BattlefieldSimplified } from './BattlefieldSimplified'
-import { Tasks } from './Tasks'
 
 export const Level: React.FunctionComponent = () => {
 	const isSimplified = !useMediaQuery('(min-width: 700px')
@@ -36,7 +35,6 @@ export const Level: React.FunctionComponent = () => {
 
 	return (
 		<>
-			{isSimplified ? <BattlefieldSimplified /> : <Battlefield />}
 			<form onSubmit={onSubmit}>
 				<TextField
 					label="Solution"
@@ -53,8 +51,8 @@ export const Level: React.FunctionComponent = () => {
 				>
 					Submit
 				</Button>
+				{isSimplified ? <BattlefieldSimplified /> : <Battlefield />}
 			</form>
-			<Tasks />
 		</>
 	)
 }

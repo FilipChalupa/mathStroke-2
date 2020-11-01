@@ -6,7 +6,7 @@ export class Task {
 	protected expirationTimer: NodeJS.Timeout
 	protected track = Math.random()
 	protected createdAt = getCurrentTimestamp()
-	protected timeToSolve = 5000 // 5 seconds // @TODO: calculate proper duration
+	protected timeToSolve = 5000 * 0 + 500000 // 5 seconds // @TODO: calculate proper duration
 	protected solution: string
 	protected instructions: Instructions
 	protected id = generateId()
