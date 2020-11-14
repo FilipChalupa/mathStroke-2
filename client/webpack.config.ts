@@ -56,7 +56,7 @@ module.exports = {
 	entry: path.resolve(__dirname, './src/index.tsx'),
 	output: {
 		filename: 'main.js',
-		path: path.resolve(__dirname, '../dist/public'),
+		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/',
 	},
 	plugins: [...htmls],

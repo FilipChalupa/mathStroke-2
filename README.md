@@ -4,6 +4,8 @@ Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](ht
 
 ## Production run
 
+outdated
+
 ```bash
 npm ci
 npm run build
@@ -11,6 +13,8 @@ npm start
 ```
 
 ## Development run
+
+outdated
 
 ```bash
 npm ci

@@ -17,7 +17,7 @@ export class Game {
 		readonly isPublic: boolean,
 		readonly autoCloseEmpty: boolean,
 		protected onCloseCallback: () => void,
-		readonly id = generateId(),
+		readonly id = generateId()
 	) {
 		this.socketServer.on('connection', this.onConnection)
 
@@ -76,15 +76,15 @@ export class Game {
 		this.sendToPlayer(
 			player,
 			PayloadFromServer.createGameState(
-				this.stateManager.getCurrentState().name,
-			),
+				this.stateManager.getCurrentState().name
+			)
 		)
 		this.sendToPlayer(player, PayloadFromServer.createGameName(this.name))
 
 		this.players.forEach((otherPlayer) => {
 			this.sendToPlayer(
 				player,
-				PayloadFromServer.createConnectedPlayer(otherPlayer),
+				PayloadFromServer.createConnectedPlayer(otherPlayer)
 			)
 		})
 	}
@@ -94,7 +94,7 @@ export class Game {
 			onDisconnect: () => {
 				this.players = this.players.filter((x) => x.id !== player.id)
 				this.sendToAllPlayers(
-					PayloadFromServer.createDisconnectedPlayer(player),
+					PayloadFromServer.createDisconnectedPlayer(player)
 				)
 
 				this.stateManager.getCurrentState().onPlayerDisconnect(player)

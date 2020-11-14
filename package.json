@@ -1,63 +1,29 @@
 {
-	"name": "mathstroke2",
+	"name": "mathstroke-2",
 	"version": "1.0.0",
-	"description": "",
-	"private": true,
-	"type": "module",
-	"engines": {
-		"node": "14.x"
-	},
+	"description": "Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](https://github.com/FilipChalupa/mathStroke).",
+	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node dist/server/index.js",
-		"build": "npm run build:server && npm run build:client",
-		"dev:server": "npm run watch:server & nodemon --watch dist/server --exec \"node dist/server/index.js\"",
-		"build:server": "webpack --mode production --config server/webpack.config.ts",
-		"watch:server": "nodemon --watch server/webpack.config.ts --exec \"webpack --mode development --config server/webpack.config.ts --watch\"",
-		"dev:client": "npm run watch:client",
-		"build:client": "webpack --mode production --config client/webpack.config.ts",
-		"watch:client": "nodemon --watch client/webpack.config.ts --exec \"webpack --mode development --config client/webpack.config.ts --watch\""
+		"start": "cd server && npm start",
+		"build": "npm run build:client",
+		"build:client": "cd client && npm run build",
+		"dev:client": "cd client && npm run dev",
+		"dev:server": "cd server && npm run dev",
+		"install:client": "cd client && npm ci",
+		"install:server": "cd server && npm ci",
+		"install": "npm run install:client && npm run install:server",
+		"postinstall": "npm run build",
+		"dev": "npm run dev:client & npm run dev:server"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/FilipChalupa/mathStroke-2.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"dependencies": {
-		"express": "^4.17.1",
-		"uuid": "^8.3.1",
-		"ws": "^7.3.1"
+	"bugs": {
+		"url": "https://github.com/FilipChalupa/mathStroke-2/issues"
 	},
-	"devDependencies": {
-		"@material-ui/core": "^4.11.0",
-		"@material-ui/icons": "^4.9.1",
-		"@types/classnames": "^2.2.11",
-		"@types/express": "^4.17.8",
-		"@types/html-webpack-plugin": "^3.2.4",
-		"@types/node": "^13.13.29",
-		"@types/react": "^16.9.54",
-		"@types/react-dom": "^16.9.9",
-		"@types/react-redux": "^7.1.9",
-		"@types/react-router-dom": "^5.1.6",
-		"@types/uuid": "^8.3.0",
-		"@types/webpack": "^4.41.23",
-		"@types/ws": "^7.2.8",
-		"classnames": "^2.2.6",
-		"css-loader": "^3.6.0",
-		"file-loader": "^6.2.0",
-		"html-webpack-plugin": "^4.5.0",
-		"nodemon": "^2.0.6",
-		"react": "^16.14.0",
-		"react-dom": "^16.14.0",
-		"react-redux": "^7.2.2",
-		"react-router-dom": "^5.2.0",
-		"redux-saga": "^1.1.3",
-		"source-map-loader": "^0.2.4",
-		"style-loader": "^1.3.0",
-		"ts-loader": "^6.2.2",
-		"ts-node": "^8.10.2",
-		"typeface-roboto": "0.0.75",
-		"typescript": "^3.9.7",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12",
-		"webpack-node-externals": "^2.5.2"
-	}
+	"homepage": "https://github.com/FilipChalupa/mathStroke-2#readme"
 }
