@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](https://github.com/FilipChalupa/mathStroke).",
 	"main": "index.js",
+	"engines": {
+		"node": "14.x"
+	},
 	"scripts": {
 		"start": "cd server && npm start",
 		"build": "npm run build:client",
