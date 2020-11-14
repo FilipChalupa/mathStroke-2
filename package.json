@@ -14,7 +14,7 @@
 		"dev:server": "cd server && npm run dev",
 		"install:client": "cd client && npm ci",
 		"install:server": "cd server && npm ci",
-		"postinstall": "npm run install:client && npm run install:server && npm run build",
+		"postinstall": "npm run install:client && npm run install:server",
 		"dev": "npm run dev:client & npm run dev:server"
 	},
 	"repository": {
