@@ -1,9 +1,0 @@
-.layout {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-}
-.layout-content {
-	padding: 8px;
-	flex-grow: 1;
-}
