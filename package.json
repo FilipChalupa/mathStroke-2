@@ -1,0 +1,19 @@
+{
+	"name": "mathstroke-2",
+	"version": "1.0.0",
+	"private": true,
+	"description": "",
+	"main": "index.js",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/FilipChalupa/mathStroke-2.git"
+	},
+	"keywords": [],
+	"author": "Filip Chalupa <chalupa.filip@gmail.com>",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/FilipChalupa/mathStroke-2/issues"
+	},
+	"homepage": "https://github.com/FilipChalupa/mathStroke-2#readme"
+}
