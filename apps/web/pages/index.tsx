@@ -2,6 +2,7 @@ import { ServerRooms } from 'messages'
 import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { Rooms } from '../components/Rooms'
+import { assertNever } from '../utilities/assertNever'
 import { RoomsConnection, createRoomsConnection } from '../utilities/connection'
 
 export default function Web() {
@@ -34,7 +35,14 @@ const In: FunctionComponent<{ connection: RoomsConnection }> = ({
 
 	useEffect(() => {
 		const handleMessage = (message: ServerRooms.AnyMessage) => {
-			console.log('Message received', message)
+			console.log('Message received', message.type)
+			if (message.type === 'addRoomAnnouncement') {
+				console.warn('Not implemented', message.type)
+			} else if (message.type === 'removeRoomAnnouncement') {
+				console.warn('Not implemented', message.type)
+			} else {
+				assertNever(message)
+			}
 		}
 		connection.addMessageListener(handleMessage)
 

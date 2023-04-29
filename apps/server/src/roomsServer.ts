@@ -1,4 +1,5 @@
 import WebSocket from 'ws'
+import { addRoomAnnouncement } from './room/messages/rooms'
 import { Rooms } from './room/rooms'
 import { upgradeHandler } from './utilities/upgradeHandler'
 
@@ -6,7 +7,19 @@ export const createRoomsServer = (rooms: Rooms) => {
 	const ws = new WebSocket.Server({ noServer: true })
 
 	const handleUpgrade = upgradeHandler(ws, (wsClient) => {
-		console.log('New client')
+		console.log('New client connected.')
+
+		// Send debug data
+		addRoomAnnouncement(wsClient)
+		addRoomAnnouncement(wsClient)
+		setTimeout(() => {
+			addRoomAnnouncement(wsClient)
+		}, 1000)
+
+		wsClient.addEventListener('close', () => {
+			// @TODO
+			console.log('Client disconnected.')
+		})
 
 		wsClient.addEventListener('message', (event) => {
 			console.log('Message received: ', event.data)
