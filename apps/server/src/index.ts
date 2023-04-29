@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import http from 'http'
+import { createRooms } from './room/rooms'
 import { createRoomsServer } from './roomsServer'
 
 const port = 5000
@@ -14,7 +15,8 @@ app.get('/', (request, response) => {
 	response.send('Hello World!')
 })
 
-const roomsServer = createRoomsServer()
+const rooms = createRooms()
+const roomsServer = createRoomsServer(rooms)
 
 server.on('upgrade', (request, socket, head) => {
 	const pathname = request.url
