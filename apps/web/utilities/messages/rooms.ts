@@ -1,7 +1,7 @@
 import { ClientRooms } from 'messages'
 import { send as sendAny } from './send'
 
-const send = <Message extends ClientRooms.AnyClientMessage>(
+const send = <Message extends ClientRooms.AnyMessage>(
 	webSocket: WebSocket,
 	message: Message,
 ) => {

@@ -3,7 +3,7 @@ export namespace ClientRooms {
 		type: 'request-new-room'
 	}
 
-	export type AnyClientMessage = RequestNewRoom
+	export type AnyMessage = RequestNewRoom
 }
 
 // export const createConnection = (
