@@ -1,10 +1,10 @@
 export namespace ServerRooms {
 	export type AddRoomAnnouncement = {
-		type: 'add-room-announcement'
+		type: 'addRoomAnnouncement'
 	}
 
 	export type RemoveRoomAnnouncement = {
-		type: 'remove-room-announcement'
+		type: 'removeRoomAnnouncement'
 	}
 
 	export type AnyMessage = AddRoomAnnouncement | RemoveRoomAnnouncement

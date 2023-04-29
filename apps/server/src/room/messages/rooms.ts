@@ -11,12 +11,12 @@ const send = <Message extends ServerRooms.AnyMessage>(
 
 export const addRoomAnnouncement = (webSocket: WebSocket.WebSocket) => {
 	send(webSocket, {
-		type: 'add-room-announcement',
+		type: 'addRoomAnnouncement',
 	})
 }
 
 export const removeRoomAnnouncement = (webSocket: WebSocket.WebSocket) => {
 	send(webSocket, {
-		type: 'remove-room-announcement',
+		type: 'removeRoomAnnouncement',
 	})
 }

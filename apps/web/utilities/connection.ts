@@ -1,6 +1,15 @@
-import { AnyServerMessage, ServerRooms, createListenable } from 'messages'
+import {
+	AnyClientMessage,
+	AnyServerMessage,
+	ClientRooms,
+	ServerRooms,
+	createListenable,
+} from 'messages'
 
-const createConnection = <Message extends AnyServerMessage = never>(
+const createConnection = <
+	ClientMessage extends AnyClientMessage = never,
+	ServerMessage extends AnyServerMessage = never,
+>(
 	path: string,
 	handleOpen: () => void,
 ) => {
@@ -13,21 +22,32 @@ const createConnection = <Message extends AnyServerMessage = never>(
 		webSocket.close()
 	}
 
-	const messagesListener = createListenable<[message: Message]>()
+	const messagesListener = createListenable<[message: ServerMessage]>()
 
 	webSocket.addEventListener('message', (event) => {
-		const data: Message = JSON.parse(event.data)
+		const data: ServerMessage = JSON.parse(event.data)
 		messagesListener.emit(data)
 	})
+
+	const action = <Message extends ClientMessage>(
+		type: Message['type'],
+		data: Omit<Message, 'type'>,
+	) => {
+		webSocket.send(JSON.stringify({ type, ...data }))
+	}
 
 	return {
 		close,
 		addMessageListener: messagesListener.addListener,
 		removeMessageListener: messagesListener.removeListener,
+		action,
 	}
 }
 
 export const createRoomsConnection = (handleOpen: () => void) =>
-	createConnection<ServerRooms.AnyMessage>('/rooms', handleOpen)
+	createConnection<ClientRooms.AnyMessage, ServerRooms.AnyMessage>(
+		'/rooms',
+		handleOpen,
+	)
 
 export type RoomsConnection = ReturnType<typeof createRoomsConnection>

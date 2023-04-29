@@ -45,9 +45,11 @@ const In: FunctionComponent<{ connection: RoomsConnection }> = ({
 
 	const handleRequestNewRoom = useCallback(async () => {
 		console.log('request new room')
-		// requestNewRoom(connection)
+		connection.action('requestNewRoom', {
+			name: 'New Room ' + Math.round(Math.random() * 1000),
+		})
 		await new Promise((resolve) => setTimeout(resolve, 1000)) // @TODO: await new room information
-	}, [])
+	}, [connection])
 
 	return <Rooms onRequestNewRoom={handleRequestNewRoom} />
 }
