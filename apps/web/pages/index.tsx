@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import { ServerRooms } from 'messages'
 import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
@@ -15,16 +16,19 @@ export default function Web() {
 
 		return () => {
 			connection.close()
+			setConnection(null)
 		}
 	}, [])
 
 	useMirrorLoading(connection === null)
 
 	return (
-		<div>
-			<h1>Web</h1>
+		<>
+			<Typography variant="h2" component="h1">
+				Web
+			</Typography>
 			{connection && <In connection={connection} />}
-		</div>
+		</>
 	)
 }
 
