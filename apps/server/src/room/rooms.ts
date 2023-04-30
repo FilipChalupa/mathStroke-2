@@ -7,14 +7,21 @@ export const createRooms = () => {
 
 	const create = () => {
 		const id = `${Math.round(Math.random())}` // @TODO: smarter generator a wrapped type
-		const room = createStandaloneRoom(id)
+		const room = createStandaloneRoom(id, 'Barbucha')
 		rooms.push(room)
 	}
 
-	const findById = (id: string) => rooms.find((room) => room.id === id) ?? null
+	const findById = (id: string) =>
+		rooms.find((room) => room.getId() === id) ?? null
+
+	const listAll = () => rooms
+
+	// @TODO: assure at least one room exists
+	create()
 
 	return {
 		create,
 		findById,
+		listAll,
 	}
 }

@@ -9,12 +9,9 @@ export const createRoomsServer = (rooms: Rooms) => {
 	const handleUpgrade = upgradeHandler(ws, (wsClient) => {
 		console.log('New client connected.')
 
-		// Send debug data
-		addRoomAnnouncement(wsClient)
-		addRoomAnnouncement(wsClient)
-		setTimeout(() => {
-			addRoomAnnouncement(wsClient)
-		}, 1000)
+		rooms.listAll().forEach((room) => {
+			addRoomAnnouncement(wsClient, room)
+		})
 
 		wsClient.addEventListener('close', () => {
 			// @TODO
