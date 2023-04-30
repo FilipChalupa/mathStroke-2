@@ -1,8 +1,8 @@
 import { ServerRooms } from 'messages'
 import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
+import { assertNever } from 'utilities'
 import { Rooms } from '../components/Rooms'
-import { assertNever } from '../utilities/assertNever'
 import { RoomsConnection, createRoomsConnection } from '../utilities/connection'
 
 export default function Web() {

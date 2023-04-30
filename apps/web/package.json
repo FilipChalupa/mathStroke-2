@@ -23,6 +23,7 @@
 		"eslint-config-custom": "*",
 		"messages": "*",
 		"shared-loading-indicator": "^0.3.1",
+		"utilities": "*",
 		"tsconfig": "*",
 		"typescript": "^4.5.3"
 	}
