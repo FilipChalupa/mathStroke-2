@@ -13,13 +13,21 @@ const createConnection = <
 	path: string,
 	handleOpen: () => void,
 ) => {
+	let shouldBeClosed = false
 	const webSocket = new WebSocket(`ws://localhost:5000${path}`)
 	webSocket.addEventListener('open', () => {
+		if (shouldBeClosed) {
+			close()
+			return
+		}
 		handleOpen()
 	})
 
 	const close = () => {
-		webSocket.close()
+		shouldBeClosed = true
+		if (webSocket.readyState === WebSocket.OPEN) {
+			webSocket.close()
+		}
 	}
 
 	const messagesListener = createListenable<[message: ServerMessage]>()
