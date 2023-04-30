@@ -9,10 +9,8 @@ export const upgradeHandler = (
 	return (request: http.IncomingMessage, socket: Duplex, head: Buffer) => {
 		wsServer.handleUpgrade(request, socket, head, (wsClient) => {
 			wsServer.emit('connection', wsClient, request)
-			// @TODO: Messages not sent immediately are not received by the client. Figure that out and remove the timeout delay.
-			setTimeout(() => {
-				onConnection(wsClient)
-			}, 1000)
+			// @TODO: wait until client connected for real
+			onConnection(wsClient)
 		})
 	}
 }

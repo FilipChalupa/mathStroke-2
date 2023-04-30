@@ -1,29 +1,37 @@
-import WebSocket from 'ws'
-import { addRoomAnnouncement } from './room/messages/rooms'
+import { ClientRooms, ServerRooms } from 'messages'
 import { Rooms } from './room/rooms'
-import { upgradeHandler } from './utilities/upgradeHandler'
+import { createServer } from './utilities/createServer'
 
 export const createRoomsServer = (rooms: Rooms) => {
-	const ws = new WebSocket.Server({ noServer: true })
+	const server = createServer<ClientRooms.AnyMessage, ServerRooms.AnyMessage>()
 
-	const handleUpgrade = upgradeHandler(ws, (wsClient) => {
-		console.log('New client connected.')
-
+	server.addNewClientListener((client) => {
 		rooms.listAll().forEach((room) => {
-			addRoomAnnouncement(wsClient, room)
+			client.action('addRoomAnnouncement', {
+				id: room.getId(),
+				name: room.getName(), // @TODO
+			})
 		})
 
-		wsClient.addEventListener('close', () => {
-			// @TODO
-			console.log('Client disconnected.')
+		client.addMessageListener((message) => {
+			if (message.type === 'requestNewRoom') {
+				rooms.create(message.name)
+			} else {
+				// @TODO assertNever(message)
+			}
 		})
+	})
 
-		wsClient.addEventListener('message', (event) => {
-			console.log('Message received: ', event.data)
+	rooms.addNewRoomListener((room) => {
+		server.listClients().forEach((client) => {
+			client.action('addRoomAnnouncement', {
+				id: room.getId(),
+				name: room.getName(), // @TODO
+			})
 		})
 	})
 
 	return {
-		handleUpgrade,
+		handleUpgrade: server.handleUpgrade,
 	}
 }

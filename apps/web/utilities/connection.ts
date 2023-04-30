@@ -3,8 +3,8 @@ import {
 	AnyServerMessage,
 	ClientRooms,
 	ServerRooms,
-	createListenable,
 } from 'messages'
+import { createListenable } from 'utilities'
 
 const createConnection = <
 	ClientMessage extends AnyClientMessage = never,

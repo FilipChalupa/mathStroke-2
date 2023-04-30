@@ -39,7 +39,6 @@ const In: FunctionComponent<{ connection: RoomsConnection }> = ({
 
 	useEffect(() => {
 		const handleMessage = (message: ServerRooms.AnyMessage) => {
-			console.log('Message received', message.type)
 			if (message.type === 'addRoomAnnouncement') {
 				setRooms((rooms) => [
 					...rooms,
