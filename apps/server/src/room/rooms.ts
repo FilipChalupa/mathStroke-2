@@ -10,7 +10,7 @@ export const createRooms = () => {
 
 	const create = (name: string) => {
 		const id = `${++lastRoomId}` // @TODO: smarter generator a wrapped type
-		const room = createStandaloneRoom(id, name)
+		const room = createStandaloneRoom(id, name.trim())
 		rooms.push(room)
 		newRoomListener.emit(room)
 	}

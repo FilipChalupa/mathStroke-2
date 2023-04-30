@@ -2,13 +2,15 @@ import InboxIcon from '@mui/icons-material/Inbox'
 import {
 	Button,
 	Container,
+	Grid,
 	List,
 	ListItem,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	TextField,
 } from '@mui/material'
-import type { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { useLocalLoading } from 'shared-loading-indicator'
 
 export interface RoomsProps {
@@ -16,7 +18,7 @@ export interface RoomsProps {
 		id: string
 		name: string
 	}>
-	onRequestNewRoom: () => Promise<void>
+	onRequestNewRoom: (name: string) => Promise<void>
 }
 
 export const Rooms: FunctionComponent<RoomsProps> = ({
@@ -24,6 +26,7 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 	rooms,
 }) => {
 	const [isLoading, setIsLoading] = useLocalLoading()
+	const [newRoomName, setNewRoomName] = useState('')
 
 	return (
 		<Container>
@@ -34,22 +37,41 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 							<ListItemIcon>
 								<InboxIcon />
 							</ListItemIcon>
-							<ListItemText primary={room.name} />
+							<ListItemText primary={room.name || <i>Unnamed room</i>} />
 						</ListItemButton>
 					</ListItem>
 				))}
 			</List>
-			<Button
-				variant="contained"
-				disabled={isLoading}
-				onClick={async () => {
+			<form
+				onSubmit={async (event) => {
+					event.preventDefault()
 					setIsLoading(true)
-					await onRequestNewRoom() // @TODO: redirect to new room
+					await onRequestNewRoom(newRoomName) // @TODO: redirect to new room
+					setNewRoomName('')
 					setIsLoading(false)
 				}}
 			>
-				New room
-			</Button>
+				<Grid container gap={1}>
+					<Grid item flexGrow={1}>
+						<TextField
+							size="small"
+							label="Room name"
+							variant="outlined"
+							value={newRoomName}
+							disabled={isLoading}
+							fullWidth
+							onChange={(event) => {
+								setNewRoomName(event.target.value)
+							}}
+						/>
+					</Grid>
+					<Grid item>
+						<Button variant="contained" type="submit" disabled={isLoading}>
+							Create
+						</Button>
+					</Grid>
+				</Grid>
+			</form>
 		</Container>
 	)
 }

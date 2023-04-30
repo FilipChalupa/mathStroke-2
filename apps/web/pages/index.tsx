@@ -10,14 +10,17 @@ export default function Web() {
 	const [rooms, setRooms] = useState<RoomsProps['rooms']>([])
 	const [connection, setConnection] = useState<RoomsConnection | null>(null)
 
-	const handleRequestNewRoom = useCallback(async () => {
-		// @TODO: add null check
+	const handleRequestNewRoom = useCallback(
+		async (name: string) => {
+			// @TODO: add null check
 
-		connection.action('requestNewRoom', {
-			name: 'New Room ' + Math.round(Math.random() * 1000),
-		})
-		await new Promise((resolve) => setTimeout(resolve, 1000)) // @TODO: await new room information
-	}, [connection])
+			connection.action('requestNewRoom', {
+				name,
+			})
+			await new Promise((resolve) => setTimeout(resolve, 1000)) // @TODO: await new room information
+		},
+		[connection],
+	)
 
 	useEffect(() => {
 		const connection = createRoomsConnection(() => {
