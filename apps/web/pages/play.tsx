@@ -2,6 +2,7 @@ import { ServerPlay } from 'messages'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
+import { homeHref } from '../../server/src/utilities/href'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 
 export default function Play() {
@@ -15,7 +16,7 @@ export default function Play() {
 
 	useEffect(() => {
 		if (roomId === null) {
-			router.push('/')
+			router.push(homeHref())
 		}
 	}, [roomId, router])
 

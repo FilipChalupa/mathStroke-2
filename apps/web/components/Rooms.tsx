@@ -14,6 +14,7 @@ import {
 import Link from 'next/link'
 import { FunctionComponent, useState } from 'react'
 import { useLocalLoading } from 'shared-loading-indicator'
+import { playHref, watchHref } from '../../server/src/utilities/href'
 
 export interface RoomsProps {
 	rooms: Array<{
@@ -42,14 +43,14 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 								<IconButton
 									aria-label="spectate"
 									LinkComponent={Link}
-									href={`/watch?id=${room.id}`}
+									href={watchHref(room.id)}
 								>
 									<VisibilityIcon />
 								</IconButton>
 							</Tooltip>
 						}
 					>
-						<ListItemButton LinkComponent={Link} href={`/play?id=${room.id}`}>
+						<ListItemButton LinkComponent={Link} href={playHref(room.id)}>
 							<ListItemText primary={room.name || <i>Unnamed room</i>} />
 						</ListItemButton>
 					</ListItem>
