@@ -1,8 +1,12 @@
 import {
 	AnyClientMessage,
 	AnyServerMessage,
+	ClientPlay,
 	ClientRooms,
+	ClientWatch,
+	ServerPlay,
 	ServerRooms,
+	ServerWatch,
 } from 'messages'
 import { createListenable } from 'utilities'
 
@@ -58,4 +62,18 @@ export const createRoomsConnection = (handleOpen: () => void) =>
 		handleOpen,
 	)
 
+export const createPlayConnection = (roomId: string, handleOpen: () => void) =>
+	createConnection<ClientPlay.AnyMessage, ServerPlay.AnyMessage>(
+		`/play/${roomId}`,
+		handleOpen,
+	)
+
+export const createWatchConnection = (roomId: string, handleOpen: () => void) =>
+	createConnection<ClientWatch.AnyMessage, ServerWatch.AnyMessage>(
+		`/watch/${roomId}`,
+		handleOpen,
+	)
+
 export type RoomsConnection = ReturnType<typeof createRoomsConnection>
+export type PlayConnection = ReturnType<typeof createPlayConnection>
+export type WatchConnection = ReturnType<typeof createWatchConnection>
