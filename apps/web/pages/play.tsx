@@ -37,22 +37,32 @@ export default function Play() {
 
 const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [connection, setConnection] = useState<PlayConnection | null>(null)
+	const { reload } = useRouter()
 
 	useEffect(() => {
-		const connection = createPlayConnection(roomId, () => {
+		const handleOpen = () => {
 			setConnection(connection)
 
 			const handleMessage = (message: ServerPlay.AnyMessage) => {
 				// @TODO
 			}
 			connection.addMessageListener(handleMessage)
-		})
+		}
+		const handleCloseFromServer = () => {
+			// @TODO: detect intentional rejections
+			reload()
+		}
+		const connection = createPlayConnection(
+			roomId,
+			handleOpen,
+			handleCloseFromServer,
+		)
 
 		return () => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [roomId])
+	}, [reload, roomId])
 
 	useMirrorLoading(connection === null)
 

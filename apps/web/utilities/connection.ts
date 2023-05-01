@@ -16,6 +16,7 @@ const createConnection = <
 >(
 	path: string,
 	handleOpen: () => void,
+	handleCloseFromServer: () => void,
 ) => {
 	let shouldBeClosed = false
 	const webSocket = new WebSocket(`ws://localhost:5000${path}`)
@@ -25,6 +26,12 @@ const createConnection = <
 			return
 		}
 		handleOpen()
+	})
+
+	webSocket.addEventListener('close', (event) => {
+		if (shouldBeClosed === false) {
+			handleCloseFromServer()
+		}
 	})
 
 	const close = () => {
@@ -53,22 +60,36 @@ const createConnection = <
 	}
 }
 
-export const createRoomsConnection = (handleOpen: () => void) =>
+export const createRoomsConnection = (
+	handleOpen: () => void,
+	handleCloseFromServer: () => void,
+) =>
 	createConnection<ClientRooms.AnyMessage, ServerRooms.AnyMessage>(
 		'/rooms',
 		handleOpen,
+		handleCloseFromServer,
 	)
 
-export const createPlayConnection = (roomId: string, handleOpen: () => void) =>
+export const createPlayConnection = (
+	roomId: string,
+	handleOpen: () => void,
+	handleCloseFromServer: () => void,
+) =>
 	createConnection<ClientPlay.AnyMessage, ServerPlay.AnyMessage>(
 		`/play/${roomId}`,
 		handleOpen,
+		handleCloseFromServer,
 	)
 
-export const createWatchConnection = (roomId: string, handleOpen: () => void) =>
+export const createWatchConnection = (
+	roomId: string,
+	handleOpen: () => void,
+	handleCloseFromServer: () => void,
+) =>
 	createConnection<ClientWatch.AnyMessage, ServerWatch.AnyMessage>(
 		`/watch/${roomId}`,
 		handleOpen,
+		handleCloseFromServer,
 	)
 
 export type RoomsConnection = ReturnType<typeof createRoomsConnection>

@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material'
 import { ServerRooms } from 'messages'
+import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
@@ -9,6 +10,7 @@ import { RoomsConnection, createRoomsConnection } from '../utilities/connection'
 export default function Web() {
 	const [rooms, setRooms] = useState<RoomsProps['rooms']>([])
 	const [connection, setConnection] = useState<RoomsConnection | null>(null)
+	const { reload } = useRouter()
 
 	const handleRequestNewRoom = useCallback(
 		async (name: string) => {
@@ -21,7 +23,7 @@ export default function Web() {
 	)
 
 	useEffect(() => {
-		const connection = createRoomsConnection(() => {
+		const handleOpen = () => {
 			setConnection(connection)
 
 			const handleMessage = (message: ServerRooms.AnyMessage) => {
@@ -40,13 +42,17 @@ export default function Web() {
 				}
 			}
 			connection.addMessageListener(handleMessage)
-		})
+		}
+		const handleCloseFromServer = () => {
+			reload()
+		}
+		const connection = createRoomsConnection(handleOpen, handleCloseFromServer)
 
 		return () => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [])
+	}, [reload])
 
 	useMirrorLoading(connection === null)
 
