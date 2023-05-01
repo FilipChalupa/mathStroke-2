@@ -15,10 +15,12 @@ export default function Play() {
 	}, [router.query.id])
 
 	useEffect(() => {
-		if (roomId === null) {
+		if (roomId === null && router.isReady) {
 			router.push(homeHref())
 		}
 	}, [roomId, router])
+
+	useMirrorLoading(roomId === null)
 
 	if (roomId === null) {
 		return null
