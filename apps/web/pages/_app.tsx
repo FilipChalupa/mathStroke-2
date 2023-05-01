@@ -1,3 +1,4 @@
+import { AppProps } from 'next/app'
 import Head from 'next/head'
 import {
 	SharedLoadingIndicatorContextProvider,
@@ -5,7 +6,7 @@ import {
 } from 'shared-loading-indicator'
 import { PageNavigationLoadingTracker } from '../components/PageNavigationLoadingTracker'
 
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<SharedLoadingIndicatorContextProvider>
 			<Head>
