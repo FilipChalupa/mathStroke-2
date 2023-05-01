@@ -12,12 +12,9 @@ export default function Web() {
 
 	const handleRequestNewRoom = useCallback(
 		async (name: string) => {
-			// @TODO: add null check
-
-			connection.action('requestNewRoom', {
+			connection?.action('requestNewRoom', {
 				name,
 			})
-			await new Promise((resolve) => setTimeout(resolve, 1000)) // @TODO: await new room information
 		},
 		[connection],
 	)
