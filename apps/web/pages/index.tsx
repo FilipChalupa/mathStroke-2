@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import { ServerRooms } from 'messages'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
@@ -58,9 +58,11 @@ export default function Web() {
 
 	return (
 		<>
-			<Typography variant="h2" component="h1">
-				Web
-			</Typography>
+			<Container maxWidth="sm">
+				<Typography variant="h2" component="h1" align="center" gutterBottom>
+					mathStroke
+				</Typography>
+			</Container>
 			{connection && (
 				<Rooms onRequestNewRoom={handleRequestNewRoom} rooms={rooms} />
 			)}

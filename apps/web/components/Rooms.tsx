@@ -10,6 +10,7 @@ import {
 	ListItemText,
 	TextField,
 	Tooltip,
+	Typography,
 } from '@mui/material'
 import Link from 'next/link'
 import { FunctionComponent, useState } from 'react'
@@ -33,6 +34,9 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 
 	return (
 		<Container maxWidth="sm">
+			<Typography variant="h4" component="h2">
+				Choose a room
+			</Typography>
 			<List>
 				{rooms.map((room) => (
 					<ListItem

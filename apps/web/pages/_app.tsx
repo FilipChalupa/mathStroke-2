@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import {
 	SharedLoadingIndicatorContextProvider,
 	SharedProgressLoadingIndicator,
@@ -7,6 +8,9 @@ import { PageNavigationLoadingTracker } from '../components/PageNavigationLoadin
 export default function MyApp({ Component, pageProps }) {
 	return (
 		<SharedLoadingIndicatorContextProvider>
+			<Head>
+				<title>mathStroke</title>
+			</Head>
 			<PageNavigationLoadingTracker />
 			<SharedProgressLoadingIndicator />
 			<Component {...pageProps} />
