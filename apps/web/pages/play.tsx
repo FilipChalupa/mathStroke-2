@@ -1,4 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import { Button } from '@mui/material'
 import { ServerPlay } from 'messages'
@@ -8,6 +9,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
+import { useShare } from '../utilities/useShare'
 
 export default function Play() {
 	const router = useRouter()
@@ -54,6 +56,8 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 
 	useMirrorLoading(connection === null)
 
+	const share = useShare()
+
 	return (
 		<>
 			Play {connection !== null && 'connected'}
@@ -73,6 +77,25 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			>
 				Leave
 			</Button>
+			{share !== null && (
+				<>
+					{' '}
+					<Button
+						variant="contained"
+						type="button"
+						onClick={() => {
+							share({
+								title: 'mathStroke invite',
+								text: 'Join the game',
+								url: window.location.href,
+							})
+						}}
+						endIcon={<ShareIcon />}
+					>
+						Invite
+					</Button>
+				</>
+			)}
 		</>
 	)
 }
