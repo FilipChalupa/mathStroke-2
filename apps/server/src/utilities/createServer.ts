@@ -5,21 +5,21 @@ import { upgradeHandler } from './upgradeHandler'
 
 let lastClientId = 0
 
-const clientLog = (clientId: string, message: string) => {
-	// @TODO: add server identifier
-	console.log(`[${clientId}] ${message}`)
+const clientLog = (serverName: string, clientId: string, message: string) => {
+	console.log(`[${serverName}][${clientId}] ${message}`)
 }
 
 const createClient = <
 	ClientMessage extends AnyClientMessage = never,
 	ServerMessage extends AnyServerMessage = never,
 >(
+	serverName: string,
 	wsClient: WebSocket.WebSocket,
 ) => {
 	const socketEquals = (other: WebSocket.WebSocket) => wsClient === other
 
 	const id = `${++lastClientId}`
-	const log = (message: string) => clientLog(id, message)
+	const log = (message: string) => clientLog(serverName, id, message)
 
 	const messagesListener = createListenable<[message: ClientMessage]>()
 
@@ -48,7 +48,9 @@ const createClient = <
 export const createServer = <
 	ClientMessage extends AnyClientMessage = never,
 	ServerMessage extends AnyServerMessage = never,
->() => {
+>(
+	serverName: string,
+) => {
 	const ws = new WebSocket.Server({ noServer: true })
 
 	const newClientListener = createListenable<[client: Client]>()
@@ -58,7 +60,10 @@ export const createServer = <
 	const listClients = () => clients
 
 	const handleUpgrade = upgradeHandler(ws, (wsClient) => {
-		const client = createClient<ClientMessage, ServerMessage>(wsClient)
+		const client = createClient<ClientMessage, ServerMessage>(
+			serverName,
+			wsClient,
+		)
 		clients.push(client)
 		newClientListener.emit(client)
 		client.log('New client connected.')

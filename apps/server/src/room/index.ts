@@ -6,14 +6,13 @@ export const createRoom = (id: string, name: string) => {
 	const getId = () => id
 	const getName = () => name
 
-	const playServer = createServer<
-		ClientPlay.AnyMessage,
-		ServerPlay.AnyMessage
-	>()
+	const playServer = createServer<ClientPlay.AnyMessage, ServerPlay.AnyMessage>(
+		'play',
+	)
 	const watchServer = createServer<
 		ClientWatch.AnyMessage,
 		ServerWatch.AnyMessage
-	>()
+	>('watch')
 
 	return {
 		getId,

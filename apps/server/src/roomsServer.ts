@@ -3,7 +3,9 @@ import { Rooms } from './room/rooms'
 import { createServer } from './utilities/createServer'
 
 export const createRoomsServer = (rooms: Rooms) => {
-	const server = createServer<ClientRooms.AnyMessage, ServerRooms.AnyMessage>()
+	const server = createServer<ClientRooms.AnyMessage, ServerRooms.AnyMessage>(
+		'rooms',
+	)
 
 	server.addNewClientListener((client) => {
 		rooms.listAll().forEach((room) => {
