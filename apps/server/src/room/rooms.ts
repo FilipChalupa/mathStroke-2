@@ -1,15 +1,14 @@
 import { createListenable } from 'utilities'
+import { generateRoomId } from '../utilities/generateRoomId'
 import { Room, createRoom as createStandaloneRoom } from './'
 
 export type Rooms = ReturnType<typeof createRooms>
-
-let lastRoomId = 0
 
 export const createRooms = () => {
 	const rooms: Room[] = []
 
 	const create = (name: string) => {
-		const id = `${++lastRoomId}` // @TODO: smarter generator a wrapped type
+		const id = generateRoomId()
 		const room = createStandaloneRoom(id, name.trim())
 		rooms.push(room)
 		newRoomListener.emit(room)
