@@ -1,15 +1,17 @@
-import InboxIcon from '@mui/icons-material/Inbox'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
 	Button,
 	Container,
 	Grid,
+	IconButton,
 	List,
 	ListItem,
 	ListItemButton,
-	ListItemIcon,
 	ListItemText,
 	TextField,
+	Tooltip,
 } from '@mui/material'
+import Link from 'next/link'
 import { FunctionComponent, useState } from 'react'
 import { useLocalLoading } from 'shared-loading-indicator'
 
@@ -29,14 +31,25 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 	const [newRoomName, setNewRoomName] = useState('')
 
 	return (
-		<Container>
+		<Container maxWidth="sm">
 			<List>
 				{rooms.map((room) => (
-					<ListItem disablePadding key={room.id}>
-						<ListItemButton>
-							<ListItemIcon>
-								<InboxIcon />
-							</ListItemIcon>
+					<ListItem
+						disablePadding
+						key={room.id}
+						secondaryAction={
+							<Tooltip title="Spectate">
+								<IconButton
+									aria-label="spectate"
+									LinkComponent={Link}
+									href={`/watch?id=${room.id}`}
+								>
+									<VisibilityIcon />
+								</IconButton>
+							</Tooltip>
+						}
+					>
+						<ListItemButton LinkComponent={Link} href={`/play?id=${room.id}`}>
 							<ListItemText primary={room.name || <i>Unnamed room</i>} />
 						</ListItemButton>
 					</ListItem>
