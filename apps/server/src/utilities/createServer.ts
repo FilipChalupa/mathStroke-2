@@ -29,11 +29,8 @@ const createClient = <
 		log(`Message received: ${event.data}`)
 	})
 
-	const action = <Message extends ServerMessage>(
-		type: Message['type'],
-		data: Omit<Message, 'type'>,
-	) => {
-		wsClient.send(JSON.stringify({ type, ...data }))
+	const action = (message: ServerMessage) => {
+		wsClient.send(JSON.stringify(message))
 	}
 
 	return {

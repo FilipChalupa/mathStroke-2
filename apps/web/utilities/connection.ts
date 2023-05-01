@@ -41,11 +41,8 @@ const createConnection = <
 		messagesListener.emit(data)
 	})
 
-	const action = <Message extends ClientMessage>(
-		type: Message['type'],
-		data: Omit<Message, 'type'>,
-	) => {
-		webSocket.send(JSON.stringify({ type, ...data }))
+	const action = (message: ClientMessage) => {
+		webSocket.send(JSON.stringify(message))
 	}
 
 	return {

@@ -12,7 +12,8 @@ export default function Web() {
 
 	const handleRequestNewRoom = useCallback(
 		async (name: string) => {
-			connection?.action('requestNewRoom', {
+			connection?.action({
+				type: 'requestNewRoom',
 				name,
 			})
 		},

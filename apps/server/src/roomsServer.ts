@@ -1,4 +1,5 @@
 import { ClientRooms, ServerRooms } from 'messages'
+import { assertNever } from 'utilities'
 import { Rooms } from './room/rooms'
 import { createServer } from './utilities/createServer'
 
@@ -9,9 +10,10 @@ export const createRoomsServer = (rooms: Rooms) => {
 
 	server.addNewClientListener((client) => {
 		rooms.listAll().forEach((room) => {
-			client.action('addRoomAnnouncement', {
+			client.action({
+				type: 'addRoomAnnouncement',
 				id: room.getId(),
-				name: room.getName(), // @TODO
+				name: room.getName(),
 			})
 		})
 
@@ -19,16 +21,17 @@ export const createRoomsServer = (rooms: Rooms) => {
 			if (message.type === 'requestNewRoom') {
 				rooms.create(message.name)
 			} else {
-				// @TODO assertNever(message)
+				assertNever(message.type)
 			}
 		})
 	})
 
 	rooms.addNewRoomListener((room) => {
 		server.listClients().forEach((client) => {
-			client.action('addRoomAnnouncement', {
+			client.action({
+				type: 'addRoomAnnouncement',
 				id: room.getId(),
-				name: room.getName(), // @TODO
+				name: room.getName(),
 			})
 		})
 	})
