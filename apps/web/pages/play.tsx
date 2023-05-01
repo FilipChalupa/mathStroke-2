@@ -1,8 +1,12 @@
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import { Button } from '@mui/material'
 import { ServerPlay } from 'messages'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
-import { homeHref } from '../../server/src/utilities/href'
+import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 
 export default function Play() {
@@ -50,5 +54,25 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 
 	useMirrorLoading(connection === null)
 
-	return <>Play {connection !== null && 'connected'}</>
+	return (
+		<>
+			Play {connection !== null && 'connected'}
+			<Button
+				variant="contained"
+				LinkComponent={Link}
+				href={watchHref(roomId)}
+				endIcon={<VisibilityIcon />}
+			>
+				Spectate
+			</Button>{' '}
+			<Button
+				variant="contained"
+				LinkComponent={Link}
+				href={homeHref()}
+				endIcon={<ExitToAppIcon />}
+			>
+				Leave
+			</Button>
+		</>
+	)
 }
