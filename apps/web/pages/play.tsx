@@ -2,7 +2,7 @@ import { ServerPlay } from 'messages'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
-import { RoomsConnection, createPlayConnection } from '../utilities/connection'
+import { PlayConnection, createPlayConnection } from '../utilities/connection'
 
 export default function Play() {
 	const router = useRouter()
@@ -27,7 +27,7 @@ export default function Play() {
 }
 
 const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
-	const [connection, setConnection] = useState<RoomsConnection | null>(null)
+	const [connection, setConnection] = useState<PlayConnection | null>(null)
 
 	useEffect(() => {
 		const connection = createPlayConnection(roomId, () => {

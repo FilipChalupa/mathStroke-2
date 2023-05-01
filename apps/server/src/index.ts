@@ -19,10 +19,26 @@ const rooms = createRooms()
 const roomsServer = createRoomsServer(rooms)
 
 server.on('upgrade', (request, socket, head) => {
-	const pathname = request.url
+	const pathname = request.url ?? ''
 	if (pathname === '/rooms') {
 		roomsServer.handleUpgrade(request, socket, head)
 	} else {
+		const pattern = /^\/(play|watch)\/(.*)$/
+		const match = pathname.match(pattern)
+		if (match !== null) {
+			const [_, mode, roomId] = match
+			const room = rooms.findById(roomId)
+			if (room !== null) {
+				if (mode === 'play') {
+					room.handlePlayUpgrade(request, socket, head)
+				} else if (mode === 'watch') {
+					room.handleWatchUpgrade(request, socket, head)
+				} else {
+					throw new Error(`Unexpected mode: ${mode}`)
+				}
+				return
+			}
+		}
 		socket.destroy()
 	}
 })
