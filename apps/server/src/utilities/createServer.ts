@@ -16,9 +16,8 @@ const createClient = <
 	serverName: string,
 	wsClient: WebSocket.WebSocket,
 ) => {
-	const socketEquals = (other: WebSocket.WebSocket) => wsClient === other
-
 	const id = `${++lastClientId}`
+	const getId = () => id
 	const log = (message: string) => clientLog(serverName, id, message)
 
 	const messagesListener = createListenable<[message: ClientMessage]>()
@@ -34,7 +33,7 @@ const createClient = <
 	}
 
 	return {
-		socketEquals,
+		getId,
 		log,
 		addMessageListener: messagesListener.addListener,
 		removeMessageListener: messagesListener.removeListener,
@@ -51,6 +50,7 @@ export const createServer = <
 	const ws = new WebSocket.Server({ noServer: true })
 
 	const newClientListener = createListenable<[client: Client]>()
+	const leftClientListener = createListenable<[client: Client]>()
 
 	type Client = ReturnType<typeof createClient<ClientMessage, ServerMessage>>
 	let clients: Client[] = []
@@ -66,9 +66,11 @@ export const createServer = <
 		client.log('New client connected.')
 
 		wsClient.addEventListener('close', () => {
-			// @TODO
 			client.log('Client disconnected.')
-			clients = clients.filter((client) => !client.socketEquals(wsClient))
+			clients = clients.filter(
+				(otherClient) => client.getId() !== otherClient.getId(),
+			)
+			newClientListener.emit(client)
 		})
 	})
 
@@ -77,5 +79,7 @@ export const createServer = <
 		listClients,
 		addNewClientListener: newClientListener.addListener,
 		removeNewClientListener: newClientListener.removeListener,
+		addLeftClientListener: leftClientListener.addListener,
+		removeLeftClientListener: leftClientListener.removeListener,
 	}
 }

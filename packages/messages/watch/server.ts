@@ -1,8 +1,13 @@
 export namespace ServerWatch {
-	// @TODO: This is a placeholder
-	export type Placeholder = {
-		type: 'placeholder'
+	export type AddWatcherAnnouncement = {
+		type: 'addWatcherAnnouncement'
+		id: string
 	}
 
-	export type AnyMessage = Placeholder
+	export type LeftWatcherAnnouncement = {
+		type: 'leftWatcherAnnouncement'
+		id: string
+	}
+
+	export type AnyMessage = AddWatcherAnnouncement | LeftWatcherAnnouncement
 }
