@@ -12,6 +12,9 @@
 		"prettier": "^2.5.1",
 		"turbo": "latest"
 	},
+	"engines": {
+		"node": "18"
+	},
 	"name": "mathstroke-2",
 	"packageManager": "npm@9.3.1",
 	"workspaces": [
