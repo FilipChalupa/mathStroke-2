@@ -10,6 +10,9 @@ import {
 	ServerWatch,
 } from 'messages'
 
+const serverBasePath =
+	process.env.NEXT_PUBLIC_SERVER_BASE_PATH || 'ws://localhost:5000'
+
 const createConnection = <
 	ClientMessage extends AnyClientMessage = never,
 	ServerMessage extends AnyServerMessage = never,
@@ -19,7 +22,7 @@ const createConnection = <
 	handleCloseFromServer: () => void,
 ) => {
 	let shouldBeClosed = false
-	const webSocket = new WebSocket(`ws://localhost:5000${path}`)
+	const webSocket = new WebSocket(`${serverBasePath}${path}`)
 	webSocket.addEventListener('open', () => {
 		if (shouldBeClosed) {
 			close()

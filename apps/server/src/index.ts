@@ -4,7 +4,7 @@ import http from 'http'
 import { createRooms } from './room/rooms'
 import { createRoomsServer } from './roomsServer'
 
-const port = 5000
+const port = Number(process.env.PORT) || 5000
 
 const app = express()
 const server = http.createServer(app)
