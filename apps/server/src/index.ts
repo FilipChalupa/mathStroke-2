@@ -15,6 +15,11 @@ app.get('/', (request, response) => {
 	response.send('Hello World!')
 })
 
+// Endpoint to check if the server is running
+app.get('/health', (request, response) => {
+	response.send('ok')
+})
+
 const rooms = createRooms()
 const roomsServer = createRoomsServer(rooms)
 
