@@ -1,26 +1,21 @@
-# mathStroke2
+# mathStroke 2
 
-Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](https://github.com/FilipChalupa/mathStroke).
+## Setup
 
-## Production run
-
-outdated
+### Install dependencies
 
 ```bash
 npm ci
+```
+
+### Develop
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
 npm run build
-npm start
 ```
-
-## Development run
-
-outdated
-
-```bash
-npm ci
-npm run dev:server & npm run dev:client
-```
-
-## Deploy
-
-Push to `deploy/heroku`.

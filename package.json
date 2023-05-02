@@ -1,29 +1,21 @@
 {
-	"name": "mathstroke-2",
-	"version": "1.0.0",
-	"description": "Work in Progress. For mathStroke 1 go to [github.com/FilipChalupa/mathStroke](https://github.com/FilipChalupa/mathStroke).",
-	"main": "index.js",
+	"private": true,
 	"scripts": {
-		"start": "cd server && npm start",
-		"build": "npm run build:client",
-		"build:client": "cd client && npm run build",
-		"dev:client": "cd client && npm run dev",
-		"dev:server": "cd server && npm run dev",
-		"install:client": "cd client && npm ci",
-		"install:server": "cd server && npm ci",
-		"install": "npm run install:client && npm run install:server",
-		"preinstall": "npm run build",
-		"dev": "npm run dev:client & npm run dev:server"
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\""
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/FilipChalupa/mathStroke-2.git"
+	"devDependencies": {
+		"eslint": "^7.32.0",
+		"eslint-config-custom": "*",
+		"prettier": "^2.5.1",
+		"turbo": "latest"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/FilipChalupa/mathStroke-2/issues"
-	},
-	"homepage": "https://github.com/FilipChalupa/mathStroke-2#readme"
+	"name": "mathstroke-2",
+	"packageManager": "npm@9.3.1",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
 }

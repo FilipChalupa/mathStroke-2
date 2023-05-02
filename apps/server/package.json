@@ -1,0 +1,32 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"private": true,
+	"description": "",
+	"main": ".eslintrc.js",
+	"scripts": {
+		"dev": "tsx watch --clear-screen=false src/index.ts",
+		"build": "",
+		"start": "tsx src/index.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/cors": "^2.8.13",
+		"@types/express": "^4.17.17",
+		"@types/ws": "^8.5.4",
+		"eslint-config-custom": "*",
+		"tsconfig": "*",
+		"utilities": "*"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"custom-listenable": "^0.1.0",
+		"express": "^4.18.2",
+		"pure-rand": "^6.0.2",
+		"tsx": "^3.12.6",
+		"typescript": "^5.0.4",
+		"ws": "^8.13.0"
+	}
+}
