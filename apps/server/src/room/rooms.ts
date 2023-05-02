@@ -1,4 +1,4 @@
-import { createListenable } from 'utilities'
+import { listenable } from 'custom-listenable'
 import { generateRoomId } from '../utilities/generateRoomId'
 import { Room, createRoom as createStandaloneRoom } from './'
 
@@ -14,7 +14,7 @@ export const createRooms = () => {
 		newRoomListener.emit(room)
 	}
 
-	const newRoomListener = createListenable<[room: Room]>()
+	const newRoomListener = listenable<[room: Room]>()
 
 	const findById = (id: string) =>
 		rooms.find((room) => room.getId() === id) ?? null

@@ -1,5 +1,5 @@
+import { listenable } from 'custom-listenable'
 import { AnyClientMessage, AnyServerMessage } from 'messages'
-import { createListenable } from 'utilities'
 import WebSocket from 'ws'
 import { upgradeHandler } from './upgradeHandler'
 
@@ -20,7 +20,7 @@ const createClient = <
 	const getId = () => id
 	const log = (message: string) => clientLog(serverName, id, message)
 
-	const messagesListener = createListenable<[message: ClientMessage]>()
+	const messagesListener = listenable<[message: ClientMessage]>()
 
 	wsClient.addEventListener('message', (event) => {
 		const data: ClientMessage = JSON.parse(event.data.toString())
@@ -49,8 +49,8 @@ export const createServer = <
 ) => {
 	const ws = new WebSocket.Server({ noServer: true })
 
-	const newClientListener = createListenable<[client: Client]>()
-	const leftClientListener = createListenable<[client: Client]>()
+	const newClientListener = listenable<[client: Client]>()
+	const leftClientListener = listenable<[client: Client]>()
 
 	type Client = ReturnType<typeof createClient<ClientMessage, ServerMessage>>
 	let clients: Client[] = []

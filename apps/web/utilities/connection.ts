@@ -1,3 +1,4 @@
+import { listenable } from 'custom-listenable'
 import {
 	AnyClientMessage,
 	AnyServerMessage,
@@ -8,7 +9,6 @@ import {
 	ServerRooms,
 	ServerWatch,
 } from 'messages'
-import { createListenable } from 'utilities'
 
 const createConnection = <
 	ClientMessage extends AnyClientMessage = never,
@@ -41,7 +41,7 @@ const createConnection = <
 		}
 	}
 
-	const messagesListener = createListenable<[message: ServerMessage]>()
+	const messagesListener = listenable<[message: ServerMessage]>()
 
 	webSocket.addEventListener('message', (event) => {
 		const data: ServerMessage = JSON.parse(event.data)
