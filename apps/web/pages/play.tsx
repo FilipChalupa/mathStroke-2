@@ -43,6 +43,13 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [watchersCount, setWatchersCount] = useState(0)
 	const playerName = usePlayerName()
 	const playerColor = usePlayerColor()
+	const [players, setPlayers] = useState<
+		Array<{
+			id: string
+			name: string
+			color: string
+		}>
+	>([])
 
 	useEffect(() => {
 		const handleOpen = () => {
@@ -60,6 +67,31 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 				if (message.role === 'watch') {
 					if (message.type === 'updateWatchersCount') {
 						setWatchersCount(message.count)
+					} else if (message.type === 'addPlayer') {
+						setPlayers((players) => [
+							...players,
+							{
+								id: message.id,
+								name: message.name,
+								color: message.color,
+							},
+						])
+					} else if (message.type === 'removePlayer') {
+						setPlayers((players) =>
+							players.filter((player) => player.id !== message.id),
+						)
+					} else if (message.type === 'updatePlayerInformation') {
+						setPlayers((players) =>
+							players.map((player) =>
+								player.id === message.id
+									? {
+											...player,
+											name: message.name,
+											color: message.color,
+									  }
+									: player,
+							),
+						)
 					} else {
 						assertNever(message)
 					}
@@ -130,6 +162,11 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 				</>
 			)}
 			<div>Spectators count: {watchersCount}</div>
+			{players.map((player) => (
+				<div key={player.id}>
+					{player.name} ({player.color})
+				</div>
+			))}
 		</>
 	)
 }

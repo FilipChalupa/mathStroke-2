@@ -46,6 +46,7 @@ export const createClients = () => {
 			name: '',
 			color: defaultColor,
 		} as const
+		sendAllPlayers(newClient)
 		clients.push(newClient)
 		client.addMessageListener((message) => {
 			if (message.role === 'play') {
@@ -55,6 +56,12 @@ export const createClients = () => {
 			} else {
 				assertNever(message)
 			}
+		})
+		broadcastWatcherAction({
+			type: 'addPlayer',
+			id: client.getId(),
+			name: newClient.name,
+			color: newClient.color,
 		})
 	})
 
@@ -66,6 +73,10 @@ export const createClients = () => {
 			throw new Error('Trying to remove a client that does not exist')
 		}
 		clients.splice(leftIndex, 1)
+		broadcastWatcherAction({
+			type: 'removePlayer',
+			id: client.getId(),
+		})
 	})
 
 	watchServer.addNewClientListener((client) => {
@@ -79,6 +90,7 @@ export const createClients = () => {
 		})
 
 		broadcastWatchersCount()
+		sendAllPlayers(newClient)
 	})
 
 	watchServer.addLeftClientListener((client) => {
@@ -115,6 +127,20 @@ export const createClients = () => {
 		})
 	}
 
+	const sendAllPlayers = (client: Client) => {
+		clients.forEach((other) => {
+			if (other.role === 'play') {
+				client.client.action({
+					role: 'watch',
+					type: 'addPlayer',
+					id: other.client.getId(),
+					name: other.name,
+					color: other.color,
+				})
+			}
+		})
+	}
+
 	const handlePlayMessage = (
 		client: ClientPlay,
 		message: ClientPlay.AnyPlayOnlyMessage,
@@ -122,7 +148,12 @@ export const createClients = () => {
 		if (message.type === 'setPlayerInformation') {
 			client.name = message.name
 			client.color = message.color
-			// @TODO: broadcast new player information
+			broadcastWatcherAction({
+				type: 'updatePlayerInformation',
+				id: client.client.getId(),
+				name: client.name,
+				color: client.color,
+			})
 		} else {
 			assertNever(message.type)
 		}
