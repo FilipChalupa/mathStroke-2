@@ -3,6 +3,7 @@ export namespace ServerRooms {
 		type: 'addRoomAnnouncement'
 		id: string
 		name: string
+		playerCount: number
 	}
 
 	export type RemoveRoomAnnouncement = {
@@ -10,5 +11,14 @@ export namespace ServerRooms {
 		id: string
 	}
 
-	export type AnyMessage = AddRoomAnnouncement | RemoveRoomAnnouncement
+	export type UpdateRoomPlayerCount = {
+		type: 'updateRoomPlayerCount'
+		id: string
+		playerCount: number
+	}
+
+	export type AnyMessage =
+		| AddRoomAnnouncement
+		| RemoveRoomAnnouncement
+		| UpdateRoomPlayerCount
 }

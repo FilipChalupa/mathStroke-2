@@ -34,10 +34,22 @@ export default function Web() {
 						{
 							id: message.id,
 							name: message.name,
+							playerCount: message.playerCount,
 						},
 					])
 				} else if (message.type === 'removeRoomAnnouncement') {
 					setRooms((rooms) => rooms.filter((room) => room.id !== message.id))
+				} else if (message.type === 'updateRoomPlayerCount') {
+					setRooms((rooms) =>
+						rooms.map((room) =>
+							room.id === message.id
+								? {
+										...room,
+										playerCount: message.playerCount,
+								  }
+								: room,
+						),
+					)
 				} else {
 					assertNever(message)
 				}

@@ -22,7 +22,9 @@ export const createRooms = () => {
 	const listAll = () => rooms
 
 	// @TODO: assure at least one room exists
-	create('Barbucha')
+	setTimeout(() => {
+		create('Test room')
+	}, 100)
 
 	return {
 		create,

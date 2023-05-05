@@ -31,7 +31,9 @@ type ClientWatch = {
 
 type Client = ClientPlay | ClientWatch
 
-export const createClients = () => {
+export const createClients = (
+	onPlayerCountChange: (newCount: number) => void,
+) => {
 	const clients: Client[] = []
 
 	const playServer = createPlayServer('play')
@@ -63,6 +65,7 @@ export const createClients = () => {
 			name: newClient.name,
 			color: newClient.color,
 		})
+		onPlayerCountChange(getPlayerCount())
 	})
 
 	playServer.addLeftClientListener((client) => {
@@ -77,6 +80,7 @@ export const createClients = () => {
 			type: 'removePlayer',
 			id: client.getId(),
 		})
+		onPlayerCountChange(getPlayerCount())
 	})
 
 	watchServer.addNewClientListener((client) => {
@@ -146,7 +150,7 @@ export const createClients = () => {
 		message: ClientPlay.AnyPlayOnlyMessage,
 	) => {
 		if (message.type === 'setPlayerInformation') {
-			client.name = message.name
+			client.name = message.name.trim()
 			client.color = message.color
 			broadcastWatcherAction({
 				type: 'updatePlayerInformation',
@@ -165,7 +169,11 @@ export const createClients = () => {
 		// @TODO
 	}
 
+	const getPlayerCount = () =>
+		clients.filter(({ role }) => role === 'play').length
+
 	return {
+		getPlayerCount,
 		handleUpgrade: {
 			play: playServer.handleUpgrade,
 			watch: watchServer.handleUpgrade,

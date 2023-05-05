@@ -21,6 +21,7 @@ export interface RoomsProps {
 	rooms: Array<{
 		id: string
 		name: string
+		playerCount: number
 	}>
 	onRequestNewRoom: (name: string) => Promise<void>
 }
@@ -55,7 +56,10 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 						}
 					>
 						<ListItemButton LinkComponent={Link} href={playHref(room.id)}>
-							<ListItemText primary={room.name || <i>Unnamed room</i>} />
+							<ListItemText
+								primary={room.name || <i>Unnamed room</i>}
+								secondary={`Players: ${room.playerCount}`}
+							/>
 						</ListItemButton>
 					</ListItem>
 				))}
