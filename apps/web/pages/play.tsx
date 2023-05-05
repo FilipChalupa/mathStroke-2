@@ -172,7 +172,6 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 				</>
 			)}
 			<Container maxWidth="sm">
-				<div>Spectators count: {watchersCount}</div>
 				<TableContainer component={Paper}>
 					<Table size="small">
 						<TableHead>
@@ -190,6 +189,13 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 									<TableCell align="right">{player.color}</TableCell>
 								</TableRow>
 							))}
+							{watchersCount > 0 && (
+								<TableRow>
+									<TableCell colSpan={2}>
+										<i>Spectators count: {watchersCount}</i>
+									</TableCell>
+								</TableRow>
+							)}
 						</TableBody>
 					</Table>
 				</TableContainer>
