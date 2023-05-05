@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
+import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 import { useShare } from '../utilities/useShare'
@@ -38,13 +39,25 @@ export default function Play() {
 const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [connection, setConnection] = useState<PlayConnection | null>(null)
 	const { reload } = useRouter()
+	const [watchersCount, setWatchersCount] = useState(0)
 
 	useEffect(() => {
 		const handleOpen = () => {
 			setConnection(connection)
 
 			const handleMessage = (message: ServerPlay.AnyMessage) => {
-				// @TODO
+				console.log({ message })
+				if (message.role === 'watch') {
+					if (message.type === 'updateWatchersCount') {
+						setWatchersCount(message.count)
+					} else {
+						assertNever(message)
+					}
+				} else if (message.role === 'play') {
+					// @TODO
+				} else {
+					assertNever(message)
+				}
 			}
 			connection.addMessageListener(handleMessage)
 		}
@@ -106,6 +119,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 					</Button>
 				</>
 			)}
+			<div>Spectators count: {watchersCount}</div>
 		</>
 	)
 }

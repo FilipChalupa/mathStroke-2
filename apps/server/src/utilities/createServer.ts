@@ -70,7 +70,7 @@ export const createServer = <
 			clients = clients.filter(
 				(otherClient) => client.getId() !== otherClient.getId(),
 			)
-			newClientListener.emit(client)
+			leftClientListener.emit(client)
 		})
 	})
 

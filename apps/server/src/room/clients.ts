@@ -1,4 +1,5 @@
 import { ClientPlay, ClientWatch, ServerPlay, ServerWatch } from 'messages'
+import { assertNever } from 'utilities'
 import { createServer } from '../utilities/createServer'
 import { createPlayer } from './player'
 import { createWatcher } from './watcher'
@@ -6,43 +7,94 @@ import { createWatcher } from './watcher'
 type Player = ReturnType<typeof createPlayer>
 type Watcher = ReturnType<typeof createWatcher>
 
-export const createClients = () => {
-	const players: Player[] = []
-	const watchers: Watcher[] = []
+const createPlayServer = createServer<
+	ClientPlay.AnyMessage,
+	ServerPlay.AnyMessage
+>
+const createWatchServer = createServer<
+	ClientWatch.AnyMessage,
+	ServerWatch.AnyMessage
+>
 
-	const playServer = createServer<ClientPlay.AnyMessage, ServerPlay.AnyMessage>(
-		'play',
-	)
-	const watchServer = createServer<
-		ClientWatch.AnyMessage,
-		ServerWatch.AnyMessage
-	>('watch')
-	watchServer.addNewClientListener((client) => {
-		const addedWatcher = createWatcher(client)
-		watchers.push(addedWatcher)
-		watchers.forEach((watcher) => {
-			watcher.client.action({
-				type: 'addWatcherAnnouncement',
-				id: addedWatcher.client.getId(),
-			})
+type Client =
+	| {
+			role: 'play'
+			client: ReturnType<
+				ReturnType<typeof createPlayServer>['listClients']
+			>[number]
+	  }
+	| {
+			role: 'watch'
+			client: ReturnType<
+				ReturnType<typeof createWatchServer>['listClients']
+			>[number]
+	  }
+
+export const createClients = () => {
+	const clients: Client[] = []
+
+	const playServer = createPlayServer('play')
+	const watchServer = createWatchServer('watch')
+
+	playServer.addNewClientListener((client) => {
+		clients.push({
+			client,
+			role: 'play',
 		})
 	})
-	watchServer.addLeftClientListener((client) => {
-		const leftWatcherIndex = watchers.findIndex(
-			(watcher) => watcher.client.getId() === client.getId(),
+
+	playServer.addLeftClientListener((client) => {
+		const leftIndex = clients.findIndex(
+			(other) => other.client.getId() === client.getId(),
 		)
-		if (leftWatcherIndex < 0) {
-			throw new Error('Trying to remove a watcher that does not exist')
+		if (leftIndex < 0) {
+			throw new Error('Trying to remove a client that does not exist')
 		}
-		const removedWatcher = watchers[leftWatcherIndex]
-		watchers.splice(leftWatcherIndex, 1)
-		watchers.forEach((watcher) => {
-			watcher.client.action({
-				type: 'leftWatcherAnnouncement',
-				id: removedWatcher.client.getId(),
-			})
-		})
+		clients.splice(leftIndex, 1)
 	})
+
+	watchServer.addNewClientListener((client) => {
+		clients.push({
+			client,
+			role: 'watch',
+		})
+
+		broadcastWatchersCount()
+	})
+
+	watchServer.addLeftClientListener((client) => {
+		const leftIndex = clients.findIndex(
+			(other) => other.client.getId() === client.getId(),
+		)
+		if (leftIndex < 0) {
+			throw new Error('Trying to remove a client that does not exist')
+		}
+		clients.splice(leftIndex, 1)
+
+		broadcastWatchersCount()
+	})
+
+	const broadcastWatcherAction = (action: ServerWatch.AnyMessage) => {
+		clients.forEach(({ client, role }) => {
+			if (role === 'watch') {
+				client.action(action)
+			} else if (role === 'play') {
+				client.action({
+					role: 'watch',
+					...action,
+				})
+			} else {
+				assertNever(client)
+			}
+		})
+	}
+
+	const broadcastWatchersCount = () => {
+		broadcastWatcherAction({
+			type: 'updateWatchersCount',
+			count: clients.filter(({ role }) => role === 'watch').length,
+		})
+	}
 
 	return {
 		handleUpgrade: {
