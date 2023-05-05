@@ -1,7 +1,17 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import { Button } from '@mui/material'
+import {
+	Button,
+	Container,
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+} from '@mui/material'
 import { ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -161,12 +171,29 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 					</Button>
 				</>
 			)}
-			<div>Spectators count: {watchersCount}</div>
-			{players.map((player) => (
-				<div key={player.id}>
-					{player.name} ({player.color})
-				</div>
-			))}
+			<Container maxWidth="sm">
+				<div>Spectators count: {watchersCount}</div>
+				<TableContainer component={Paper}>
+					<Table size="small">
+						<TableHead>
+							<TableRow>
+								<TableCell>Name</TableCell>
+								<TableCell align="right">Color</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{players.map((player) => (
+								<TableRow key={player.id}>
+									<TableCell component="th" scope="row">
+										{player.name}
+									</TableCell>
+									<TableCell align="right">{player.color}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Container>
 		</>
 	)
 }
