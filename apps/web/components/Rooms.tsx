@@ -34,7 +34,7 @@ export const Rooms: FunctionComponent<RoomsProps> = ({
 
 	return (
 		<Container maxWidth="sm">
-			<Typography variant="h4" component="h2">
+			<Typography variant="h5" component="h2">
 				Choose a room
 			</Typography>
 			<List>

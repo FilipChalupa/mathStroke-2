@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
+import { PlayerCustomizer } from '../components/PlayerCustomizer'
 import { Rooms, RoomsProps } from '../components/Rooms'
 import { RoomsConnection, createRoomsConnection } from '../utilities/connection'
 
@@ -59,10 +60,13 @@ export default function Web() {
 	return (
 		<>
 			<Container maxWidth="sm">
-				<Typography variant="h2" component="h1" align="center" gutterBottom>
+				<Typography variant="h4" component="h1" align="center" gutterBottom>
 					mathStroke
 				</Typography>
 			</Container>
+			<PlayerCustomizer />
+			{/* @TODO: proper spacing */}
+			<br />
 			{connection && (
 				<Rooms onRequestNewRoom={handleRequestNewRoom} rooms={rooms} />
 			)}
