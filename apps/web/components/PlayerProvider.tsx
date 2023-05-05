@@ -6,7 +6,7 @@ import {
 	useMemo,
 	useState,
 } from 'react'
-import { Color, colors } from '../utilities/colors'
+import { Color, colors } from 'utilities'
 
 type Value = {
 	name: string

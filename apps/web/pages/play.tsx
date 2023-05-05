@@ -9,6 +9,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
+import { usePlayerColor, usePlayerName } from '../components/PlayerProvider'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 import { useShare } from '../utilities/useShare'
 
@@ -40,10 +41,19 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [connection, setConnection] = useState<PlayConnection | null>(null)
 	const { reload } = useRouter()
 	const [watchersCount, setWatchersCount] = useState(0)
+	const playerName = usePlayerName()
+	const playerColor = usePlayerColor()
 
 	useEffect(() => {
 		const handleOpen = () => {
 			setConnection(connection)
+
+			connection.action({
+				role: 'play',
+				type: 'setPlayerInformation',
+				name: playerName,
+				color: playerColor,
+			})
 
 			const handleMessage = (message: ServerPlay.AnyMessage) => {
 				console.log({ message })

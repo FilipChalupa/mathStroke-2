@@ -1,11 +1,14 @@
+import { Color } from 'utilities'
 import { ClientWatch } from '../watch'
+
 export namespace ClientPlay {
-	// @TODO: This is a placeholder
-	export type Placeholder = {
-		type: 'placeholder'
+	export type SetPlayerInformation = {
+		type: 'setPlayerInformation'
+		name: string
+		color: Color
 	}
 
-	type AnyPlayMessage = Placeholder
+	type AnyPlayMessage = SetPlayerInformation
 	export type AnyMessage =
 		| (AnyPlayMessage & { role: 'play' })
 		| (ClientWatch.AnyMessage & { role: 'watch' })

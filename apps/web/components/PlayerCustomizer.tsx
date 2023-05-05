@@ -10,7 +10,7 @@ import {
 	Typography,
 } from '@mui/material'
 import type { FunctionComponent } from 'react'
-import { Color, colors } from '../utilities/colors'
+import { Color, colors } from 'utilities'
 import {
 	usePlayerColor,
 	usePlayerName,
