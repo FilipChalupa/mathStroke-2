@@ -8,8 +8,8 @@ export namespace ClientPlay {
 		color: Color
 	}
 
-	type AnyPlayMessage = SetPlayerInformation
+	export type AnyPlayOnlyMessage = SetPlayerInformation
 	export type AnyMessage =
-		| (AnyPlayMessage & { role: 'play' })
+		| (AnyPlayOnlyMessage & { role: 'play' })
 		| (ClientWatch.AnyMessage & { role: 'watch' })
 }

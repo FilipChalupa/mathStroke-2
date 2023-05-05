@@ -6,7 +6,7 @@ import {
 	useMemo,
 	useState,
 } from 'react'
-import { Color, colors } from 'utilities'
+import { Color, colors, defaultColor } from 'utilities'
 
 type Value = {
 	name: string
@@ -17,7 +17,7 @@ type Value = {
 
 const context = createContext<Value>({
 	name: '',
-	color: colors[0],
+	color: defaultColor,
 	setName: () => {},
 	setColor: () => {},
 })
@@ -26,7 +26,7 @@ export const PlayerProvider: FunctionComponent<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const [name, setName] = useState('')
-	const [color, setColor] = useState<Color>(colors[0])
+	const [color, setColor] = useState<Color>(defaultColor)
 
 	const value = useMemo<Value>(
 		() => ({
