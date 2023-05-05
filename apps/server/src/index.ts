@@ -35,9 +35,9 @@ server.on('upgrade', (request, socket, head) => {
 			const room = rooms.findById(roomId)
 			if (room !== null) {
 				if (mode === 'play') {
-					room.handlePlayUpgrade(request, socket, head)
+					room.handleUpgrade.play(request, socket, head)
 				} else if (mode === 'watch') {
-					room.handleWatchUpgrade(request, socket, head)
+					room.handleUpgrade.watch(request, socket, head)
 				} else {
 					throw new Error(`Unexpected mode: ${mode}`)
 				}
