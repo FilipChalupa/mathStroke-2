@@ -184,7 +184,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 							{players.map((player) => (
 								<TableRow key={player.id}>
 									<TableCell component="th" scope="row">
-										{player.name}
+										{player.name || <i>Unnamed player</i>}
 									</TableCell>
 									<TableCell align="right">{player.color}</TableCell>
 								</TableRow>
