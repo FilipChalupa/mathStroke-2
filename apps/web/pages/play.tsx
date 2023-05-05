@@ -85,7 +85,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [reload, roomId])
+	}, [playerColor, playerName, reload, roomId])
 
 	useMirrorLoading(connection === null)
 
