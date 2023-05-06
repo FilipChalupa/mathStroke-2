@@ -105,7 +105,6 @@ export const createClients = (
 		})
 
 		broadcastWatchersCount()
-		sendAllPlayers(newClient)
 		handleNewClient(newClient)
 	})
 

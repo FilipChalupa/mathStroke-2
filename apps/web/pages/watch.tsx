@@ -6,7 +6,9 @@ import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { homeHref } from '../../server/src/utilities/href'
+import { Room } from '../components/Room'
 import { WatchConnection, createWatchConnection } from '../utilities/connection'
+import { useWatchState } from '../utilities/useWatchState'
 
 export default function Watch() {
 	const router = useRouter()
@@ -35,14 +37,15 @@ export default function Watch() {
 const WatchIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [connection, setConnection] = useState<WatchConnection | null>(null)
 	const { reload } = useRouter()
+	const { handleMessage: handleWatchMessage, state: watchState } =
+		useWatchState()
 
 	useEffect(() => {
 		const handleOpen = () => {
 			setConnection(connection)
 
 			const handleMessage = (message: ServerWatch.AnyMessage) => {
-				// @TODO
-				console.log({ message })
+				handleWatchMessage(message)
 			}
 			connection.addMessageListener(handleMessage)
 		}
@@ -60,7 +63,7 @@ const WatchIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [reload, roomId])
+	}, [handleWatchMessage, reload, roomId])
 
 	useMirrorLoading(connection === null)
 
@@ -75,6 +78,7 @@ const WatchIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			>
 				Leave
 			</Button>
+			<Room watchState={watchState} />
 		</>
 	)
 }

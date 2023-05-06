@@ -1,28 +1,19 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import {
-	Button,
-	Container,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-} from '@mui/material'
-import { RoomState, ServerPlay } from 'messages'
+import { Button } from '@mui/material'
+import { ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
-import { flushSync } from 'react-dom'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { usePlayerColor, usePlayerName } from '../components/PlayerProvider'
+import { Room } from '../components/Room'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 import { useShare } from '../utilities/useShare'
+import { useWatchState } from '../utilities/useWatchState'
 
 export default function Play() {
 	const router = useRouter()
@@ -51,69 +42,11 @@ export default function Play() {
 const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const [connection, setConnection] = useState<PlayConnection | null>(null)
 	const { reload } = useRouter()
-	const [watchersCount, setWatchersCount] = useState(0)
 	const playerName = usePlayerName()
 	const playerColor = usePlayerColor()
-	const [players, setPlayers] = useState<
-		Array<{
-			id: string
-			name: string
-			color: string
-		}>
-	>([])
-	const [roomState, setRoomState] = useState<RoomState>({
-		state: 'lobby',
-		levelNumber: 1,
-	})
 
-	const [lastMessage, setLastMessage] = useState<ServerPlay.AnyMessage | null>(
-		null,
-	)
-
-	useEffect(() => {
-		if (lastMessage === null) {
-			return
-		}
-		if (lastMessage.role === 'watch') {
-			if (lastMessage.type === 'updateWatchersCount') {
-				setWatchersCount(lastMessage.count)
-			} else if (lastMessage.type === 'addPlayer') {
-				setPlayers((players) => [
-					...players,
-					{
-						id: lastMessage.id,
-						name: lastMessage.name,
-						color: lastMessage.color,
-					},
-				])
-			} else if (lastMessage.type === 'removePlayer') {
-				setPlayers((players) =>
-					players.filter((player) => player.id !== lastMessage.id),
-				)
-			} else if (lastMessage.type === 'updatePlayerInformation') {
-				setPlayers((players) =>
-					players.map((player) =>
-						player.id === lastMessage.id
-							? {
-									...player,
-									name: lastMessage.name,
-									color: lastMessage.color,
-							  }
-							: player,
-					),
-				)
-			} else if (lastMessage.type === 'updateRoomState') {
-				console.info('@TODO')
-				setRoomState(lastMessage.state)
-			} else {
-				assertNever(lastMessage)
-			}
-		} else if (lastMessage.role === 'play') {
-			// @TODO
-		} else {
-			assertNever(lastMessage)
-		}
-	}, [lastMessage])
+	const { handleMessage: handleWatchMessage, state: watchState } =
+		useWatchState()
 
 	useEffect(() => {
 		const handleOpen = () => {
@@ -127,9 +60,13 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			})
 
 			const handleMessage = (message: ServerPlay.AnyMessage) => {
-				flushSync(() => {
-					setLastMessage(message)
-				})
+				if (message.role === 'watch') {
+					handleWatchMessage(message)
+				} else if (message.role === 'play') {
+					// @TODO
+				} else {
+					assertNever(message)
+				}
 			}
 			connection.addMessageListener(handleMessage)
 		}
@@ -147,7 +84,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [playerColor, playerName, reload, roomId])
+	}, [handleWatchMessage, playerColor, playerName, reload, roomId])
 
 	useMirrorLoading(connection === null)
 
@@ -191,36 +128,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 					</Button>
 				</>
 			)}
-			<pre>State: {JSON.stringify(roomState)}</pre>
-			<Container maxWidth="sm">
-				<TableContainer component={Paper}>
-					<Table size="small">
-						<TableHead>
-							<TableRow>
-								<TableCell>Name</TableCell>
-								<TableCell align="right">Color</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{players.map((player) => (
-								<TableRow key={player.id}>
-									<TableCell component="th" scope="row">
-										{player.name || <i>Unnamed player</i>}
-									</TableCell>
-									<TableCell align="right">{player.color}</TableCell>
-								</TableRow>
-							))}
-							{watchersCount > 0 && (
-								<TableRow>
-									<TableCell colSpan={2}>
-										<i>Spectators count: {watchersCount}</i>
-									</TableCell>
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</Container>
+			<Room watchState={watchState} />
 		</>
 	)
 }
