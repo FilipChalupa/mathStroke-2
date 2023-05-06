@@ -13,7 +13,7 @@ export const createRoom = (id: string, name: string) => {
 	const log = (message: string) => {
 		console.log(`[room][${id}] ${message}`)
 	}
-	const roomState = createRoomState(log)
+	const roomState = createRoomState(log, clients)
 
 	log('Created')
 

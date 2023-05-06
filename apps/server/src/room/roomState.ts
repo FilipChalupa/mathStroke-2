@@ -1,6 +1,6 @@
-import { listenable } from 'custom-listenable'
 import { RoomState, RoomStateSpecific } from 'messages'
 import { assertNever } from 'utilities'
+import { Client, createClients } from './clients'
 import { Level, createLevel } from './level'
 import { levels } from './levels'
 
@@ -14,7 +14,10 @@ type PrivateRoomState = { levelIndex: number } & (
 	  }
 )
 
-export const createRoomState = (log: (message: string) => void) => {
+export const createRoomState = (
+	log: (message: string) => void,
+	clients: ReturnType<typeof createClients>,
+) => {
 	let state: PrivateRoomState = {
 		levelIndex: 0,
 		state: 'lobby',
@@ -41,7 +44,14 @@ export const createRoomState = (log: (message: string) => void) => {
 		}
 	}
 
-	const roomStateListener = listenable<[state: RoomState]>()
+	const broadcastNewRoomState = () => {
+		clients.actions.updateRoomState(getState())
+	}
+
+	const handleNewClient = (client: Client) => {
+		clients.actions.updateRoomState(getState(), client)
+	}
+	clients.newClient.addListener(handleNewClient)
 
 	const transitionToLevel = () => {
 		const levelNumber = state.levelIndex + 1
@@ -51,7 +61,7 @@ export const createRoomState = (log: (message: string) => void) => {
 			level: createLevel(levelNumber),
 		}
 		log(`Transitioning to level ${levelNumber}`)
-		roomStateListener.emit(getState())
+		broadcastNewRoomState()
 	}
 	const transitionToLobby = (byWin: boolean) => {
 		const levelIndex = byWin ? state.levelIndex + 1 : 0
@@ -60,7 +70,7 @@ export const createRoomState = (log: (message: string) => void) => {
 			state: 'lobby',
 		}
 		log(`Transitioning to lobby by ${byWin ? 'win' : 'fail'}`)
-		roomStateListener.emit(getState())
+		broadcastNewRoomState()
 	}
 
 	// This is fake for now, but will be implemented later
@@ -81,7 +91,5 @@ export const createRoomState = (log: (message: string) => void) => {
 
 	return {
 		getState,
-		addRoomStateListener: roomStateListener.addListener,
-		removeRoomStateListener: roomStateListener.removeListener,
 	}
 }

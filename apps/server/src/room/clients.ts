@@ -1,11 +1,13 @@
-import { ClientPlay, ClientWatch, ServerPlay, ServerWatch } from 'messages'
+import { listenable } from 'custom-listenable'
+import {
+	ClientPlay,
+	ClientWatch,
+	RoomState,
+	ServerPlay,
+	ServerWatch,
+} from 'messages'
 import { Color, assertNever, defaultColor } from 'utilities'
 import { createServer } from '../utilities/createServer'
-import { createPlayer } from './player'
-import { createWatcher } from './watcher'
-
-type Player = ReturnType<typeof createPlayer>
-type Watcher = ReturnType<typeof createWatcher>
 
 const createPlayServer = createServer<
 	ClientPlay.AnyMessage,
@@ -29,7 +31,7 @@ type ClientWatch = {
 	>[number]
 }
 
-type Client = ClientPlay | ClientWatch
+export type Client = ClientPlay | ClientWatch
 
 export const createClients = (
 	onPlayerCountChange: (newCount: number) => void,
@@ -39,10 +41,12 @@ export const createClients = (
 	const playServer = createPlayServer('play')
 	const watchServer = createWatchServer('watch')
 
+	const newClientListener = listenable<[client: Client]>()
+
 	const handleNewClient = (client: Client) => {
 		sendWatchAction(client, createWatchersCountAction())
-		sendWatchAction(client, createRoomStateAction())
 		sendAllPlayers(client)
+		newClientListener.emit(client)
 	}
 
 	playServer.addNewClientListener((client) => {
@@ -138,15 +142,6 @@ export const createClients = (
 		})
 	}
 
-	// @TODO
-	const createRoomStateAction = (): ServerWatch.UpdateRoomState => ({
-		type: 'updateRoomState',
-		state: {
-			levelNumber: 0,
-			state: 'lobby',
-		},
-	})
-
 	const createWatchersCountAction = (): ServerWatch.UpdateWatchersCount => ({
 		type: 'updateWatchersCount',
 		count: clients.filter(({ role }) => role === 'watch').length,
@@ -183,6 +178,16 @@ export const createClients = (
 		})
 	}
 
+	const updateRoomState = (state: RoomState, client?: Client) => {
+		const recipients = client ? [client] : clients
+		recipients.forEach((other) => {
+			sendWatchAction(other, {
+				type: 'updateRoomState',
+				state,
+			})
+		})
+	}
+
 	const handlePlayMessage = (
 		client: ClientPlay,
 		message: ClientPlay.AnyPlayOnlyMessage,
@@ -212,6 +217,13 @@ export const createClients = (
 
 	return {
 		getPlayerCount,
+		actions: {
+			updateRoomState,
+		},
+		newClient: {
+			addListener: newClientListener.addListener,
+			removeListener: newClientListener.removeListener,
+		},
 		handleUpgrade: {
 			play: playServer.handleUpgrade,
 			watch: watchServer.handleUpgrade,
