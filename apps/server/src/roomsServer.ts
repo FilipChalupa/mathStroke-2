@@ -1,6 +1,6 @@
 import { ClientRooms, ServerRooms } from 'messages'
 import { assertNever } from 'utilities'
-import { Room } from './room'
+import { Room } from './room/room'
 import { Rooms } from './room/rooms'
 import { createServer } from './utilities/createServer'
 

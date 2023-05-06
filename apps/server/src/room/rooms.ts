@@ -1,6 +1,6 @@
 import { listenable } from 'custom-listenable'
 import { generateRoomId } from '../utilities/generateRoomId'
-import { Room, createRoom as createStandaloneRoom } from './'
+import { Room, createRoom as createStandaloneRoom } from './room'
 
 export type Rooms = ReturnType<typeof createRooms>
 
