@@ -12,7 +12,7 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material'
-import { ServerPlay } from 'messages'
+import { RoomState, ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
@@ -60,6 +60,10 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			color: string
 		}>
 	>([])
+	const [roomState, setRoomState] = useState<RoomState>({
+		state: 'lobby',
+		levelNumber: 1,
+	})
 
 	useEffect(() => {
 		const handleOpen = () => {
@@ -104,6 +108,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 						)
 					} else if (message.type === 'updateRoomState') {
 						console.info('@TODO')
+						setRoomState(message.state)
 					} else {
 						assertNever(message)
 					}
@@ -173,6 +178,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 					</Button>
 				</>
 			)}
+			<pre>State: {JSON.stringify(roomState)}</pre>
 			<Container maxWidth="sm">
 				<TableContainer component={Paper}>
 					<Table size="small">

@@ -141,8 +141,10 @@ export const createClients = (
 	// @TODO
 	const createRoomStateAction = (): ServerWatch.UpdateRoomState => ({
 		type: 'updateRoomState',
-		levelNumber: 0,
-		state: 'lobby',
+		state: {
+			levelNumber: 0,
+			state: 'lobby',
+		},
 	})
 
 	const createWatchersCountAction = (): ServerWatch.UpdateWatchersCount => ({

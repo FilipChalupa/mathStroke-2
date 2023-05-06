@@ -28,7 +28,8 @@ export namespace ServerWatch {
 
 	export type UpdateRoomState = {
 		type: 'updateRoomState'
-	} & RoomState
+		state: RoomState
+	}
 
 	export type AnyMessage =
 		| UpdateWatchersCount
