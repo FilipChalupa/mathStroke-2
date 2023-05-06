@@ -16,6 +16,7 @@ import { RoomState, ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
@@ -65,6 +66,55 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 		levelNumber: 1,
 	})
 
+	const [lastMessage, setLastMessage] = useState<ServerPlay.AnyMessage | null>(
+		null,
+	)
+
+	useEffect(() => {
+		if (lastMessage === null) {
+			return
+		}
+		if (lastMessage.role === 'watch') {
+			if (lastMessage.type === 'updateWatchersCount') {
+				setWatchersCount(lastMessage.count)
+			} else if (lastMessage.type === 'addPlayer') {
+				setPlayers((players) => [
+					...players,
+					{
+						id: lastMessage.id,
+						name: lastMessage.name,
+						color: lastMessage.color,
+					},
+				])
+			} else if (lastMessage.type === 'removePlayer') {
+				setPlayers((players) =>
+					players.filter((player) => player.id !== lastMessage.id),
+				)
+			} else if (lastMessage.type === 'updatePlayerInformation') {
+				setPlayers((players) =>
+					players.map((player) =>
+						player.id === lastMessage.id
+							? {
+									...player,
+									name: lastMessage.name,
+									color: lastMessage.color,
+							  }
+							: player,
+					),
+				)
+			} else if (lastMessage.type === 'updateRoomState') {
+				console.info('@TODO')
+				setRoomState(lastMessage.state)
+			} else {
+				assertNever(lastMessage)
+			}
+		} else if (lastMessage.role === 'play') {
+			// @TODO
+		} else {
+			assertNever(lastMessage)
+		}
+	}, [lastMessage])
+
 	useEffect(() => {
 		const handleOpen = () => {
 			setConnection(connection)
@@ -77,46 +127,9 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			})
 
 			const handleMessage = (message: ServerPlay.AnyMessage) => {
-				console.log({ message })
-				if (message.role === 'watch') {
-					if (message.type === 'updateWatchersCount') {
-						setWatchersCount(message.count)
-					} else if (message.type === 'addPlayer') {
-						setPlayers((players) => [
-							...players,
-							{
-								id: message.id,
-								name: message.name,
-								color: message.color,
-							},
-						])
-					} else if (message.type === 'removePlayer') {
-						setPlayers((players) =>
-							players.filter((player) => player.id !== message.id),
-						)
-					} else if (message.type === 'updatePlayerInformation') {
-						setPlayers((players) =>
-							players.map((player) =>
-								player.id === message.id
-									? {
-											...player,
-											name: message.name,
-											color: message.color,
-									  }
-									: player,
-							),
-						)
-					} else if (message.type === 'updateRoomState') {
-						console.info('@TODO')
-						setRoomState(message.state)
-					} else {
-						assertNever(message)
-					}
-				} else if (message.role === 'play') {
-					// @TODO
-				} else {
-					assertNever(message)
-				}
+				flushSync(() => {
+					setLastMessage(message)
+				})
 			}
 			connection.addMessageListener(handleMessage)
 		}
