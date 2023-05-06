@@ -4,8 +4,8 @@ import {
 	createContext,
 	useContext,
 	useMemo,
-	useState,
 } from 'react'
+import { useStorageBackedState } from 'use-storage-backed-state'
 import { Color, colors, defaultColor } from 'utilities'
 
 type Value = {
@@ -22,24 +22,30 @@ const context = createContext<Value>({
 	setColor: () => {},
 })
 
+const storage = 'sessionStorage' in globalThis ? sessionStorage : undefined
+
 export const PlayerProvider: FunctionComponent<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const [name, setName] = useState('')
-	const [color, setColor] = useState<Color>(defaultColor)
+	const [name, setName] = useStorageBackedState('', 'playerName', storage)
+	const [color, setColor] = useStorageBackedState<string>(
+		defaultColor,
+		'playerColor',
+		storage,
+	)
 
 	const value = useMemo<Value>(
 		() => ({
 			name,
-			color,
+			color: colors.includes(color as Color) ? (color as Color) : defaultColor,
 			setName: (newName) => {
 				setName(newName)
 			},
-			setColor: (newColor) => {
+			setColor: (newColor: Color) => {
 				setColor(newColor)
 			},
 		}),
-		[color, name],
+		[color, name, setColor, setName],
 	)
 
 	return <context.Provider value={value}>{children}</context.Provider>
