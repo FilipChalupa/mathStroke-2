@@ -1,4 +1,5 @@
 import { Color } from 'utilities'
+import { RoomState } from '../utilities'
 
 export namespace ServerWatch {
 	export type UpdateWatchersCount = {
@@ -24,6 +25,10 @@ export namespace ServerWatch {
 		name: string
 		color: Color
 	}
+
+	export type UpdateRoomState = {
+		type: 'updateRoomState'
+	} & RoomState
 
 	export type AnyMessage =
 		| UpdateWatchersCount

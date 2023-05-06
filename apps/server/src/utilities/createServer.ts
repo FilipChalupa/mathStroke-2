@@ -6,7 +6,7 @@ import { upgradeHandler } from './upgradeHandler'
 let lastClientId = 0
 
 const clientLog = (serverName: string, clientId: string, message: string) => {
-	console.log(`[${serverName}][${clientId}] ${message}`)
+	console.log(`[client:${serverName}][${clientId}] ${message}`)
 }
 
 const createClient = <

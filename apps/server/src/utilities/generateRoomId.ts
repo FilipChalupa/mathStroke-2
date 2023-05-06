@@ -1,7 +1,7 @@
 import prand from 'pure-rand'
 
 const allowedCharacters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-const idLength = 6
+const idLength = 4
 const seed = 314
 let randomGenerator = prand.xoroshiro128plus(seed)
 const random = () => {

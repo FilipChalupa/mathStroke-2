@@ -4,6 +4,7 @@ import { ClientWatch, ServerWatch } from './watch'
 
 export * from './play'
 export * from './rooms'
+export * from './utilities'
 export * from './watch'
 
 export type AnyClientMessage =
