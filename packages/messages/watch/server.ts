@@ -35,4 +35,5 @@ export namespace ServerWatch {
 		| AddPlayer
 		| RemovePlayer
 		| UpdatePlayerInformation
+		| UpdateRoomState
 }

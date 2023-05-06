@@ -102,6 +102,8 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 									: player,
 							),
 						)
+					} else if (message.type === 'updateRoomState') {
+						console.info('@TODO')
 					} else {
 						assertNever(message)
 					}

@@ -39,7 +39,11 @@ export const createClients = (
 	const playServer = createPlayServer('play')
 	const watchServer = createWatchServer('watch')
 
-	// @TODO: broadcast and send new player information
+	const handleNewClient = (client: Client) => {
+		sendWatchAction(client, createWatchersCountAction())
+		sendWatchAction(client, createRoomStateAction())
+		sendAllPlayers(client)
+	}
 
 	playServer.addNewClientListener((client) => {
 		const newClient = {
@@ -48,7 +52,6 @@ export const createClients = (
 			name: '',
 			color: defaultColor,
 		} as const
-		sendAllPlayers(newClient)
 		clients.push(newClient)
 		client.addMessageListener((message) => {
 			if (message.role === 'play') {
@@ -59,13 +62,17 @@ export const createClients = (
 				assertNever(message)
 			}
 		})
-		broadcastWatcherAction({
-			type: 'addPlayer',
-			id: client.getId(),
-			name: newClient.name,
-			color: newClient.color,
-		})
+		broadcastWatcherAction(
+			{
+				type: 'addPlayer',
+				id: client.getId(),
+				name: newClient.name,
+				color: newClient.color,
+			},
+			newClient,
+		)
 		onPlayerCountChange(getPlayerCount())
+		handleNewClient(newClient)
 	})
 
 	playServer.addLeftClientListener((client) => {
@@ -95,6 +102,7 @@ export const createClients = (
 
 		broadcastWatchersCount()
 		sendAllPlayers(newClient)
+		handleNewClient(newClient)
 	})
 
 	watchServer.addLeftClientListener((client) => {
@@ -109,8 +117,14 @@ export const createClients = (
 		broadcastWatchersCount()
 	})
 
-	const broadcastWatcherAction = (action: ServerWatch.AnyMessage) => {
+	const broadcastWatcherAction = (
+		action: ServerWatch.AnyMessage,
+		excludeClient?: Client,
+	) => {
 		clients.forEach(({ client, role }) => {
+			if (client.getId() === excludeClient?.client.getId()) {
+				return
+			}
 			if (role === 'watch') {
 				client.action(action)
 			} else if (role === 'play') {
@@ -124,11 +138,33 @@ export const createClients = (
 		})
 	}
 
+	// @TODO
+	const createRoomStateAction = (): ServerWatch.UpdateRoomState => ({
+		type: 'updateRoomState',
+		levelNumber: 0,
+		state: 'lobby',
+	})
+
+	const createWatchersCountAction = (): ServerWatch.UpdateWatchersCount => ({
+		type: 'updateWatchersCount',
+		count: clients.filter(({ role }) => role === 'watch').length,
+	})
+
 	const broadcastWatchersCount = () => {
-		broadcastWatcherAction({
-			type: 'updateWatchersCount',
-			count: clients.filter(({ role }) => role === 'watch').length,
-		})
+		broadcastWatcherAction(createWatchersCountAction())
+	}
+
+	const sendWatchAction = (client: Client, action: ServerWatch.AnyMessage) => {
+		if (client.role === 'watch') {
+			client.client.action(action)
+		} else if (client.role === 'play') {
+			client.client.action({
+				role: 'watch',
+				...action,
+			})
+		} else {
+			assertNever(client)
+		}
 	}
 
 	const sendAllPlayers = (client: Client) => {
