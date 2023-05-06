@@ -8,6 +8,7 @@ import {
 import { PageNavigationLoadingTracker } from '../components/PageNavigationLoadingTracker'
 import { PlayerProvider } from '../components/PlayerProvider'
 import { ThemeProvider } from '../components/ThemeProvider'
+import '../styles/global.css'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (

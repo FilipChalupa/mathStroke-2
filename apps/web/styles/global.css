@@ -1,0 +1,16 @@
+body {
+	position: relative;
+	min-height: 100vh;
+	min-height: 100svh;
+}
+
+body::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url('../images/background.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	z-index: -1;
+	opacity: 0.05;
+}
