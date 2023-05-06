@@ -2,7 +2,6 @@ import { RoomState, RoomStateSpecific } from 'messages'
 import { assertNever } from 'utilities'
 import { Client, createClients } from './clients'
 import { Level, createLevel } from './level'
-import { levels } from './levels'
 
 type PrivateRoomState = { levelIndex: number } & (
 	| {
@@ -58,7 +57,7 @@ export const createRoomState = (
 		state = {
 			levelIndex: state.levelIndex,
 			state: 'level',
-			level: createLevel(levelNumber),
+			level: createLevel(log, levelNumber, transitionToLobby),
 		}
 		log(`Transitioning to level ${levelNumber}`)
 		broadcastNewRoomState()
@@ -71,23 +70,17 @@ export const createRoomState = (
 		}
 		log(`Transitioning to lobby by ${byWin ? 'win' : 'fail'}`)
 		broadcastNewRoomState()
+
+		// @TODO: remove
+		setTimeout(() => {
+			transitionToLevel()
+		}, 3000)
 	}
 
-	// This is fake for now, but will be implemented later
-	const lifeCycleLoop = () => {
-		if (state.state === 'level') {
-			setTimeout(() => {
-				transitionToLobby(state.levelIndex < levels.length - 1 /* @TODO */)
-				lifeCycleLoop()
-			}, 10000)
-		} else if (state.state === 'lobby') {
-			setTimeout(() => {
-				transitionToLevel()
-				lifeCycleLoop()
-			}, 3000)
-		}
-	}
-	lifeCycleLoop()
+	// @TODO: remove
+	setTimeout(() => {
+		transitionToLevel()
+	}, 3000)
 
 	return {
 		getState,
