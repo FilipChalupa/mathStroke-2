@@ -1,6 +1,7 @@
 import { listenable } from 'custom-listenable'
 import { RoomState, RoomStateSpecific } from 'messages'
 import { assertNever } from 'utilities'
+import { Level, createLevel } from './level'
 import { levels } from './levels'
 
 type PrivateRoomState = { levelIndex: number } & (
@@ -9,6 +10,7 @@ type PrivateRoomState = { levelIndex: number } & (
 	  }
 	| {
 			state: 'level'
+			level: Level
 	  }
 )
 
@@ -42,11 +44,13 @@ export const createRoomState = (log: (message: string) => void) => {
 	const roomStateListener = listenable<[state: RoomState]>()
 
 	const transitionToLevel = () => {
+		const levelNumber = state.levelIndex + 1
 		state = {
 			levelIndex: state.levelIndex,
 			state: 'level',
+			level: createLevel(levelNumber),
 		}
-		log(`Transitioning to level ${state.levelIndex + 1}`)
+		log(`Transitioning to level ${levelNumber}`)
 		roomStateListener.emit(getState())
 	}
 	const transitionToLobby = (byWin: boolean) => {
