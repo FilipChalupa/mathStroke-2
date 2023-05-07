@@ -13,7 +13,8 @@ export const createLevel = (
 	levelNumber: number,
 	onFinished: (byWin: boolean) => void,
 ) => {
-	const level = levels[(levelNumber - 1) % levels.length]
+	// @TODO: use level name
+	const { timeline } = levels[(levelNumber - 1) % levels.length] // @TODO: transform into multiple events based on player count
 	const speedMultiplier = 1 + Math.floor((levelNumber - 1) / levels.length)
 	const playerCountMultiplier = 1 // @TODO
 	let shield = 3 // @TODO
@@ -39,7 +40,7 @@ export const createLevel = (
 		const newTimeMilliseconds =
 			timeMilliseconds + tickFrequencyMilliseconds * speedMultiplier
 		let timelineTime = 0
-		level.timeline.forEach((event) => {
+		timeline.forEach((event) => {
 			const isNewlyDiscovered =
 				timelineTime >= timeMilliseconds && timelineTime < newTimeMilliseconds
 			timelineTime += event.durationMilliseconds
