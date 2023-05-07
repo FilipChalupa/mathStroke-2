@@ -7,21 +7,28 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Typography,
 } from '@mui/material'
 import type { FunctionComponent } from 'react'
+import { RoomState } from '../../../packages/messages/utilities/RoomState'
 import { WatchState } from '../utilities/useWatchState'
 
 export interface LobbyProps {
 	players: WatchState['players']
 	watchersCount: WatchState['watchersCount']
+	watchState: Extract<RoomState, { state: 'lobby' }>
 }
 
 export const Lobby: FunctionComponent<LobbyProps> = ({
 	players,
 	watchersCount,
+	watchState,
 }) => {
 	return (
 		<Container maxWidth="sm">
+			<Typography variant="h5" component="h2" gutterBottom>
+				Level {watchState.levelNumber}
+			</Typography>
 			<TableContainer component={Paper}>
 				<Table size="small">
 					<TableHead>

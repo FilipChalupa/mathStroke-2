@@ -49,6 +49,16 @@ export const useWatchState = () => {
 				)
 			} else if (message.type === 'updateRoomState') {
 				setRoomState(message.state)
+			} else if (message.type === 'updateShield') {
+				setRoomState((roomState) => {
+					if (roomState.state !== 'level') {
+						return roomState
+					}
+					return {
+						...roomState,
+						shield: message.shield,
+					}
+				})
 			} else {
 				assertNever(message)
 			}

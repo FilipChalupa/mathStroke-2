@@ -1,6 +1,7 @@
 import { LevelEvent } from '../utilities/LevelTimeline'
-import { levels } from './levels'
+import { createClients } from './clients'
 import { createLevelTasks } from './levelTasks'
+import { levels } from './levels'
 
 export type Level = ReturnType<typeof createLevel>
 
@@ -8,6 +9,7 @@ const tickFrequencyMilliseconds = 100
 
 export const createLevel = (
 	log: (message: string) => void,
+	clients: ReturnType<typeof createClients>,
 	levelNumber: number,
 	onFinished: (byWin: boolean) => void,
 ) => {
@@ -20,6 +22,7 @@ export const createLevel = (
 	const tasks = createLevelTasks(log, (shieldDamage) => {
 		shield = Math.max(0, shield - shieldDamage)
 		log(`Hit by damage ${shieldDamage}. Shield is now ${shield}.`)
+		clients.actions.updateShield(shield)
 		if (shield === 0) {
 			onFinished(false)
 		}
@@ -63,6 +66,8 @@ export const createLevel = (
 		}
 	}
 
+	const getShield = () => shield
+
 	const destroy = () => {
 		clearTimeout(loopTimeout)
 		tasks.destroy()
@@ -71,5 +76,6 @@ export const createLevel = (
 
 	return {
 		destroy,
+		getShield,
 	}
 }

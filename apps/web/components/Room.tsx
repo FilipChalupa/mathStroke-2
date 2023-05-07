@@ -13,11 +13,14 @@ export const Room: FunctionComponent<RoomProps> = ({
 }) => {
 	return (
 		<>
-			<pre>State: {JSON.stringify(roomState)}</pre>
 			{roomState.state === 'level' ? (
-				<Level />
+				<Level players={players} watchState={roomState} />
 			) : roomState.state === 'lobby' ? (
-				<Lobby players={players} watchersCount={watchersCount} />
+				<Lobby
+					players={players}
+					watchersCount={watchersCount}
+					watchState={roomState}
+				/>
 			) : (
 				assertNever(roomState)
 			)}

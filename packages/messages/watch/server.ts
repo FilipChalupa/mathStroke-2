@@ -31,10 +31,16 @@ export namespace ServerWatch {
 		state: RoomState
 	}
 
+	export type UpdateShield = {
+		type: 'updateShield'
+		shield: number
+	}
+
 	export type AnyMessage =
 		| UpdateWatchersCount
 		| AddPlayer
 		| RemovePlayer
 		| UpdatePlayerInformation
 		| UpdateRoomState
+		| UpdateShield
 }

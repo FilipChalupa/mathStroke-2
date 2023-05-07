@@ -187,6 +187,15 @@ export const createClients = (
 		})
 	}
 
+	const updateShield = (shield: number) => {
+		clients.forEach((client) => {
+			sendWatchAction(client, {
+				type: 'updateShield',
+				shield,
+			})
+		})
+	}
+
 	const handlePlayMessage = (
 		client: ClientPlay,
 		message: ClientPlay.AnyPlayOnlyMessage,
@@ -218,6 +227,7 @@ export const createClients = (
 		getPlayerCount,
 		actions: {
 			updateRoomState,
+			updateShield,
 		},
 		newClient: {
 			addListener: newClientListener.addListener,

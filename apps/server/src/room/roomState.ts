@@ -31,6 +31,7 @@ export const createRoomState = (
 			} else if (state.state === 'level') {
 				return {
 					state: 'level',
+					shield: state.level.getShield(),
 				}
 			} else {
 				assertNever(state)
@@ -58,7 +59,7 @@ export const createRoomState = (
 			level.destroy()
 			transitionToLobby(byWin)
 		}
-		const level = createLevel(log, levelNumber, handleFinish)
+		const level = createLevel(log, clients, levelNumber, handleFinish)
 		state = {
 			levelIndex: state.levelIndex,
 			state: 'level',

@@ -8,4 +8,5 @@ export type RoomStateSpecific =
 	  }
 	| {
 			state: 'level'
+			shield: number
 	  }
