@@ -7,13 +7,6 @@ export namespace ServerWatch {
 		count: number
 	}
 
-	export type AddPlayer = {
-		type: 'addPlayer'
-		id: string
-		name: string
-		color: Color
-	}
-
 	export type RemovePlayer = {
 		type: 'removePlayer'
 		id: string
@@ -24,6 +17,7 @@ export namespace ServerWatch {
 		id: string
 		name: string
 		color: Color
+		ready: boolean
 	}
 
 	export type UpdateRoomState = {
@@ -38,7 +32,6 @@ export namespace ServerWatch {
 
 	export type AnyMessage =
 		| UpdateWatchersCount
-		| AddPlayer
 		| RemovePlayer
 		| UpdatePlayerInformation
 		| UpdateRoomState

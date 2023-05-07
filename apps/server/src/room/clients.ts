@@ -23,6 +23,7 @@ type ClientPlay = {
 	client: ReturnType<ReturnType<typeof createPlayServer>['listClients']>[number]
 	name: string
 	color: Color
+	ready: boolean
 }
 type ClientWatch = {
 	role: 'watch'
@@ -46,16 +47,24 @@ export const createClients = (
 	const handleNewClient = (client: Client) => {
 		sendWatchAction(client, createWatchersCountAction())
 		sendAllPlayers(client)
+		if (client.role === 'play') {
+			client.client.action({
+				role: 'play',
+				type: 'setId',
+				id: client.client.getId(),
+			})
+		}
 		newClientListener.emit(client)
 	}
 
 	playServer.addNewClientListener((client) => {
-		const newClient = {
+		const newClient: ClientPlay = {
 			client,
 			role: 'play',
 			name: '',
 			color: defaultColor,
-		} as const
+			ready: false,
+		}
 		clients.push(newClient)
 		client.addMessageListener((message) => {
 			if (message.role === 'play') {
@@ -67,12 +76,7 @@ export const createClients = (
 			}
 		})
 		broadcastWatcherAction(
-			{
-				type: 'addPlayer',
-				id: client.getId(),
-				name: newClient.name,
-				color: newClient.color,
-			},
+			createUpdatePlayerInformationAction(newClient),
 			newClient,
 		)
 		onPlayerCountChange(getPlayerCount())
@@ -146,6 +150,16 @@ export const createClients = (
 		count: clients.filter(({ role }) => role === 'watch').length,
 	})
 
+	const createUpdatePlayerInformationAction = (
+		client: ClientPlay,
+	): ServerWatch.UpdatePlayerInformation => ({
+		type: 'updatePlayerInformation',
+		id: client.client.getId(),
+		name: client.name,
+		color: client.color,
+		ready: client.ready,
+	})
+
 	const broadcastWatchersCount = () => {
 		broadcastWatcherAction(createWatchersCountAction())
 	}
@@ -168,10 +182,7 @@ export const createClients = (
 			if (other.role === 'play') {
 				client.client.action({
 					role: 'watch',
-					type: 'addPlayer',
-					id: other.client.getId(),
-					name: other.name,
-					color: other.color,
+					...createUpdatePlayerInformationAction(other),
 				})
 			}
 		})
@@ -196,6 +207,15 @@ export const createClients = (
 		})
 	}
 
+	const resetReadiness = () => {
+		clients.forEach((client) => {
+			if (client.role === 'play') {
+				client.ready = false
+				broadcastWatcherAction(createUpdatePlayerInformationAction(client))
+			}
+		})
+	}
+
 	const handlePlayMessage = (
 		client: ClientPlay,
 		message: ClientPlay.AnyPlayOnlyMessage,
@@ -203,14 +223,13 @@ export const createClients = (
 		if (message.type === 'setPlayerInformation') {
 			client.name = message.name.trim()
 			client.color = message.color
-			broadcastWatcherAction({
-				type: 'updatePlayerInformation',
-				id: client.client.getId(),
-				name: client.name,
-				color: client.color,
-			})
+			broadcastWatcherAction(createUpdatePlayerInformationAction(client))
+		} else if (message.type === 'setReady') {
+			client.ready = message.ready
+			// @TODO: update lobby countdown
+			broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 		} else {
-			assertNever(message.type)
+			assertNever(message)
 		}
 	}
 	const handleWatchMessage = (
@@ -228,6 +247,7 @@ export const createClients = (
 		actions: {
 			updateRoomState,
 			updateShield,
+			resetReadiness,
 		},
 		newClient: {
 			addListener: newClientListener.addListener,

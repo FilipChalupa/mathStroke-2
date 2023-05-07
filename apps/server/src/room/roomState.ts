@@ -69,6 +69,7 @@ export const createRoomState = (
 		broadcastNewRoomState()
 	}
 	const transitionToLobby = (byWin: boolean) => {
+		clients.actions.resetReadiness()
 		const levelIndex = byWin ? state.levelIndex + 1 : 0
 		state = {
 			levelIndex,
@@ -78,15 +79,15 @@ export const createRoomState = (
 		broadcastNewRoomState()
 
 		// @TODO: remove
-		setTimeout(() => {
-			transitionToLevel()
-		}, 3000)
+		// setTimeout(() => {
+		// 	transitionToLevel()
+		// }, 3000)
 	}
 
 	// @TODO: remove
-	setTimeout(() => {
-		transitionToLevel()
-	}, 3000)
+	// setTimeout(() => {
+	// 	transitionToLevel()
+	// }, 3000)
 
 	return {
 		getState,

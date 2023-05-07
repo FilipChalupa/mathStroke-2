@@ -4,15 +4,16 @@ import { assertNever } from 'utilities'
 
 export type WatchState = ReturnType<typeof useWatchState>['state']
 
+type Player = {
+	id: string
+	name: string
+	color: string
+	ready: boolean
+}
+
 export const useWatchState = () => {
 	const [watchersCount, setWatchersCount] = useState(0)
-	const [players, setPlayers] = useState<
-		Array<{
-			id: string
-			name: string
-			color: string
-		}>
-	>([])
+	const [players, setPlayers] = useState<Player[]>([])
 	const [roomState, setRoomState] = useState<RoomState>({
 		state: 'lobby',
 		levelNumber: 1,
@@ -22,31 +23,32 @@ export const useWatchState = () => {
 		(message: ServerWatch.AnyMessage) => {
 			if (message.type === 'updateWatchersCount') {
 				setWatchersCount(message.count)
-			} else if (message.type === 'addPlayer') {
-				setPlayers((players) => [
-					...players,
-					{
-						id: message.id,
-						name: message.name,
-						color: message.color,
-					},
-				])
 			} else if (message.type === 'removePlayer') {
 				setPlayers((players) =>
 					players.filter((player) => player.id !== message.id),
 				)
 			} else if (message.type === 'updatePlayerInformation') {
-				setPlayers((players) =>
-					players.map((player) =>
-						player.id === message.id
-							? {
-									...player,
-									name: message.name,
-									color: message.color,
-							  }
-							: player,
-					),
-				)
+				const player: Player = {
+					id: message.id,
+					name: message.name,
+					color: message.color,
+					ready: message.ready,
+				}
+				setPlayers((players) => {
+					const isNew = players.every((other) => other.id !== player.id)
+					return isNew
+						? [...players, player]
+						: players.map((player) =>
+								player.id === message.id
+									? {
+											...player,
+											name: message.name,
+											color: message.color,
+											ready: message.ready,
+									  }
+									: player,
+						  )
+				})
 			} else if (message.type === 'updateRoomState') {
 				setRoomState(message.state)
 			} else if (message.type === 'updateShield') {

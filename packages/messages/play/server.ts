@@ -1,11 +1,11 @@
 import { ServerWatch } from '../watch'
 export namespace ServerPlay {
-	// @TODO: This is a placeholder
-	export type Placeholder = {
-		type: 'placeholder'
+	export type SetId = {
+		type: 'setId'
+		id: string
 	}
 
-	type AnyPlayMessage = Placeholder
+	export type AnyPlayMessage = SetId
 	export type AnyMessage =
 		| (AnyPlayMessage & { role: 'play' })
 		| (ServerWatch.AnyMessage & { role: 'watch' })

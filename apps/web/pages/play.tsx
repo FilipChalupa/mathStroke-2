@@ -2,16 +2,23 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import { Button } from '@mui/material'
-import { ServerPlay } from 'messages'
+import { ClientPlay, ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FunctionComponent, useEffect, useMemo, useState } from 'react'
+import {
+	FunctionComponent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { usePlayerColor, usePlayerName } from '../components/PlayerProvider'
 import { Room } from '../components/Room'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
+import { usePlay } from '../utilities/usePlayState'
 import { useShare } from '../utilities/useShare'
 import { useWatchState } from '../utilities/useWatchState'
 
@@ -48,6 +55,20 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 	const { handleMessage: handleWatchMessage, state: watchState } =
 		useWatchState()
 
+	const playAction = useCallback(
+		(message: ClientPlay.AnyPlayOnlyMessage) => {
+			if (connection === null) {
+				throw new Error('Trying to send action on unvailabele connection')
+			}
+			return connection.action({
+				role: 'play',
+				...message,
+			})
+		},
+		[connection],
+	)
+	const { handleMessage: handlePlayMessage, player } = usePlay(playAction)
+
 	useEffect(() => {
 		const handleOpen = () => {
 			setConnection(connection)
@@ -63,7 +84,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 				if (message.role === 'watch') {
 					handleWatchMessage(message)
 				} else if (message.role === 'play') {
-					// @TODO
+					handlePlayMessage(message)
 				} else {
 					assertNever(message)
 				}
@@ -84,7 +105,14 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			connection.close()
 			setConnection(null)
 		}
-	}, [handleWatchMessage, playerColor, playerName, reload, roomId])
+	}, [
+		handlePlayMessage,
+		handleWatchMessage,
+		playerColor,
+		playerName,
+		reload,
+		roomId,
+	])
 
 	useMirrorLoading(connection === null)
 
@@ -128,7 +156,7 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 					</Button>
 				</>
 			)}
-			<Room watchState={watchState} />
+			<Room watchState={watchState} player={player} />
 		</>
 	)
 }
