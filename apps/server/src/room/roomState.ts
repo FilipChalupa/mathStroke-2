@@ -53,6 +53,20 @@ export const createRoomState = (
 	}
 	clients.newClient.addListener(handleNewClient)
 
+	const handleReadinessChange: (value: {
+		ready: number
+		total: number
+	}) => void = ({ ready, total }) => {
+		if (state.state !== 'lobby') {
+			return
+		}
+		// @TODO: use smater countdown - all ready start, some ready start later
+		if (ready === total) {
+			transitionToLevel()
+		}
+	}
+	clients.readiness.addListener(handleReadinessChange)
+
 	const transitionToLevel = () => {
 		const levelNumber = state.levelIndex + 1
 		const handleFinish = (byWin: boolean) => {
@@ -77,17 +91,7 @@ export const createRoomState = (
 		}
 		log(`Transitioning to lobby by ${byWin ? 'win' : 'fail'}`)
 		broadcastNewRoomState()
-
-		// @TODO: remove
-		// setTimeout(() => {
-		// 	transitionToLevel()
-		// }, 3000)
 	}
-
-	// @TODO: remove
-	// setTimeout(() => {
-	// 	transitionToLevel()
-	// }, 3000)
 
 	return {
 		getState,

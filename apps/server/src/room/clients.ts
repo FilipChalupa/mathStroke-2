@@ -214,7 +214,29 @@ export const createClients = (
 				broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 			}
 		})
+		handleReadinessChange()
 	}
+
+	const handleReadinessChange = () => {
+		const players = clients.filter(
+			(client): client is ClientPlay => client.role === 'play',
+		)
+		const ready = players.filter((client) => client.ready).length
+		const total = players.length
+		readinessChangeListener.emit({
+			ready,
+			total,
+		})
+	}
+
+	const readinessChangeListener = listenable<
+		[
+			{
+				ready: number
+				total: number
+			},
+		]
+	>()
 
 	const handlePlayMessage = (
 		client: ClientPlay,
@@ -226,8 +248,8 @@ export const createClients = (
 			broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 		} else if (message.type === 'setReady') {
 			client.ready = message.ready
-			// @TODO: update lobby countdown
 			broadcastWatcherAction(createUpdatePlayerInformationAction(client))
+			handleReadinessChange()
 		} else {
 			assertNever(message)
 		}
@@ -248,6 +270,10 @@ export const createClients = (
 			updateRoomState,
 			updateShield,
 			resetReadiness,
+		},
+		readiness: {
+			addListener: readinessChangeListener.addListener,
+			removeListener: readinessChangeListener.removeListener,
 		},
 		newClient: {
 			addListener: newClientListener.addListener,
