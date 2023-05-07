@@ -19,12 +19,9 @@ type Nothing = {
 	type: 'nothing'
 }
 
-export type LevelEvent = (
-	| BasicTasks
-	| CrumbleTask
-	| ResistantTask
-	| Nothing
-) & {
+export type TaskLevelEvent = BasicTasks | CrumbleTask | ResistantTask
+
+export type LevelEvent = (TaskLevelEvent | Nothing) & {
 	durationMilliseconds: number
 }
 

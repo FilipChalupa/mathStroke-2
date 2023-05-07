@@ -1,5 +1,6 @@
 import { LevelEvent } from '../utilities/LevelTimeline'
 import { levels } from './levels'
+import { createLevelTasks } from './levelTasks'
 
 export type Level = ReturnType<typeof createLevel>
 
@@ -12,11 +13,23 @@ export const createLevel = (
 ) => {
 	const level = levels[(levelNumber - 1) % levels.length]
 	const speedMultiplier = 1 + Math.floor((levelNumber - 1) / levels.length)
+	const playerCountMultiplier = 1 // @TODO
+	let shield = 3 // @TODO
 	let loopTimeout: NodeJS.Timeout
 	let timeMilliseconds = 0
+	const tasks = createLevelTasks(log, (shieldDamage) => {
+		shield = Math.max(0, shield - shieldDamage)
+		log(`Hit by damage ${shieldDamage}. Shield is now ${shield}.`)
+		if (shield === 0) {
+			onFinished(false)
+		}
+	})
 
-	const runEvent = (event: LevelEvent) => {
-		log(`Starting event ${event.type}`)
+	const startTimelineEvent = (event: LevelEvent) => {
+		if (event.type === 'nothing') {
+			return
+		}
+		tasks.startEvent(event, speedMultiplier, playerCountMultiplier)
 	}
 
 	const loop = () => {
@@ -28,7 +41,7 @@ export const createLevel = (
 				timelineTime >= timeMilliseconds && timelineTime < newTimeMilliseconds
 			timelineTime += event.durationMilliseconds
 			if (isNewlyDiscovered) {
-				runEvent(event)
+				startTimelineEvent(event)
 			}
 		})
 		timeMilliseconds = newTimeMilliseconds
@@ -37,17 +50,23 @@ export const createLevel = (
 			loopTimeout = setTimeout(loop, tickFrequencyMilliseconds)
 		} else {
 			log('All events started')
-
-			// @TODO: detect all solved
-			onFinished(Math.random() > 0.1)
+			tasks.taskCountListener.addListener(checkAllTasksSolved)
+			checkAllTasksSolved()
 		}
 	}
 	loop()
 
-	// @TODO: detect all solved
+	const checkAllTasksSolved = () => {
+		if (tasks.getRemainingTaskCount() === 0) {
+			log('All tasks solved')
+			onFinished(true)
+		}
+	}
 
 	const destroy = () => {
 		clearTimeout(loopTimeout)
+		tasks.destroy()
+		tasks.taskCountListener.removeListener(checkAllTasksSolved)
 	}
 
 	return {
