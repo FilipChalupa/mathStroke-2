@@ -44,7 +44,7 @@ const createConnection = <
 		}
 	}
 
-	const messagesListener = listenable<[message: ServerMessage]>()
+	const messagesListener = listenable<ServerMessage>()
 
 	webSocket.addEventListener('message', (event) => {
 		const data: ServerMessage = JSON.parse(event.data)

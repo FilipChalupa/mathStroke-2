@@ -14,7 +14,7 @@ export const createRooms = () => {
 		newRoomListener.emit(room)
 	}
 
-	const newRoomListener = listenable<[room: Room]>()
+	const newRoomListener = listenable<Room>()
 
 	const findById = (id: string) =>
 		rooms.find((room) => room.getId() === id) ?? null

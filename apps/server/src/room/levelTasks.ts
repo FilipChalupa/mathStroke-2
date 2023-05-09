@@ -51,7 +51,7 @@ export const createLevelTasks = (
 
 	const getRemainingTaskCount = () => tasks.length
 
-	const taskCountListener = listenable<[count: number]>()
+	const taskCountListener = listenable<number>()
 
 	return {
 		destroy,

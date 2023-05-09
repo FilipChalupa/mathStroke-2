@@ -7,7 +7,7 @@ export type Room = ReturnType<typeof createRoom>
 export const createRoom = (id: string, name: string) => {
 	const getId = () => id
 	const getName = () => name
-	const playerCountListener = listenable<[playerCount: number]>()
+	const playerCountListener = listenable<number>()
 	const clients = createClients(playerCountListener.emit)
 	const getPlayerCount = () => clients.getPlayerCount()
 	const log = (message: string) => {

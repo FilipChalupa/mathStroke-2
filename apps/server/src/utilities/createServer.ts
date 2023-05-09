@@ -20,7 +20,7 @@ const createClient = <
 	const getId = () => id
 	const log = (message: string) => clientLog(serverName, id, message)
 
-	const messagesListener = listenable<[message: ClientMessage]>()
+	const messagesListener = listenable<ClientMessage>()
 
 	wsClient.addEventListener('message', (event) => {
 		const data: ClientMessage = JSON.parse(event.data.toString())
@@ -48,8 +48,8 @@ export const createServer = <
 ) => {
 	const ws = new WebSocket.Server({ noServer: true })
 
-	const newClientListener = listenable<[client: Client]>()
-	const leftClientListener = listenable<[client: Client]>()
+	const newClientListener = listenable<Client>()
+	const leftClientListener = listenable<Client>()
 
 	type Client = ReturnType<typeof createClient<ClientMessage, ServerMessage>>
 	let clients: Client[] = []

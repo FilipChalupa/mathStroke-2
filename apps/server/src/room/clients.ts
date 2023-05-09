@@ -42,7 +42,7 @@ export const createClients = (
 	const playServer = createPlayServer('play')
 	const watchServer = createWatchServer('watch')
 
-	const newClientListener = listenable<[client: Client]>()
+	const newClientListener = listenable<Client>()
 
 	const handleNewClient = (client: Client) => {
 		sendWatchAction(client, createWatchersCountAction())
@@ -229,14 +229,10 @@ export const createClients = (
 		})
 	}
 
-	const readinessChangeListener = listenable<
-		[
-			{
-				ready: number
-				total: number
-			},
-		]
-	>()
+	const readinessChangeListener = listenable<{
+		ready: number
+		total: number
+	}>()
 
 	const handlePlayMessage = (
 		client: ClientPlay,
