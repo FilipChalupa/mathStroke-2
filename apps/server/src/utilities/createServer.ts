@@ -25,7 +25,6 @@ const createClient = <
 	wsClient.addEventListener('message', (event) => {
 		const data: ClientMessage = JSON.parse(event.data.toString())
 		messagesListener.emit(data)
-		log(`Message received: ${event.data}`)
 	})
 
 	const action = (message: ServerMessage) => {
