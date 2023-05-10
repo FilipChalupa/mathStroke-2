@@ -13,8 +13,12 @@ export const useShare = () => {
 		if (!canShare) {
 			return null
 		}
-		return (data: ShareData) => {
-			navigator.share(data)
+		return async (data: ShareData) => {
+			try {
+				await navigator.share(data)
+			} catch (error) {
+				console.warn(error)
+			}
 		}
 	}, [canShare])
 }
