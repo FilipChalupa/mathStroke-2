@@ -19,7 +19,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 					<Head>
 						<title>mathStroke</title>
 						{/* @TODO: fix white flash in dark theme */}
-						<meta name="color-scheme" content="light dark" />{' '}
+						<meta name="color-scheme" content="light dark" />
+						<link rel="icon" href="/app-icon.svg" type="image/svg+xml" />
+						<link rel="manifest" href="/app.webmanifest" />
 					</Head>
 					<PageNavigationLoadingTracker />
 					<SharedProgressLoadingIndicator />
