@@ -59,18 +59,26 @@ const WatchIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 
 	return (
 		<>
-			Watch {connection !== null && 'connected'}
-			<Button
-				variant="contained"
-				LinkComponent={Link}
-				href={homeHref()}
-				endIcon={<ExitToAppIcon />}
-			>
-				Leave
-			</Button>
 			<Room watchState={watchState} />
+			{watchState.roomState.state === 'lobby' && (
+				<Container maxWidth="sm">
+					<JoinBadge roomId={roomId} />
+				</Container>
+			)}
 			<Container maxWidth="sm">
-				<JoinBadge roomId={roomId} />
+				<br />
+				<br />
+				<br />
+				<br />
+				<Button
+					variant="contained"
+					LinkComponent={Link}
+					href={homeHref()}
+					endIcon={<ExitToAppIcon />}
+				>
+					Leave
+				</Button>{' '}
+				Watch {connection !== null && 'connected'}
 			</Container>
 		</>
 	)
