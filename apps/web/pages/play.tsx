@@ -5,13 +5,7 @@ import { Button } from '@mui/material'
 import { ClientPlay, ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {
-	FunctionComponent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react'
+import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { assertNever } from 'utilities'
 import { homeHref, watchHref } from '../../server/src/utilities/href'
@@ -19,23 +13,12 @@ import { usePlayerColor, usePlayerName } from '../components/PlayerProvider'
 import { Room } from '../components/Room'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
 import { usePlay } from '../utilities/usePlayState'
+import { useRoomIdFromUrlHash } from '../utilities/useRoomIdFromUrlHash'
 import { useShare } from '../utilities/useShare'
 import { useWatchState } from '../utilities/useWatchState'
 
 export default function Play() {
-	const router = useRouter()
-	const roomId = useMemo(() => {
-		if (typeof router.query.id === 'string') {
-			return router.query.id
-		}
-		return null
-	}, [router.query.id])
-
-	useEffect(() => {
-		if (roomId === null && router.isReady) {
-			router.push(homeHref())
-		}
-	}, [roomId, router])
+	const roomId = useRoomIdFromUrlHash([homeHref()])
 
 	useMirrorLoading(roomId === null)
 

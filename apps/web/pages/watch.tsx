@@ -3,27 +3,16 @@ import { Button } from '@mui/material'
 import { ServerWatch } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FunctionComponent, useEffect, useMemo, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { homeHref } from '../../server/src/utilities/href'
 import { Room } from '../components/Room'
 import { WatchConnection, createWatchConnection } from '../utilities/connection'
+import { useRoomIdFromUrlHash } from '../utilities/useRoomIdFromUrlHash'
 import { useWatchState } from '../utilities/useWatchState'
 
 export default function Watch() {
-	const router = useRouter()
-	const roomId = useMemo(() => {
-		if (typeof router.query.id === 'string') {
-			return router.query.id
-		}
-		return null
-	}, [router.query.id])
-
-	useEffect(() => {
-		if (roomId === null && router.isReady) {
-			router.push(homeHref())
-		}
-	}, [roomId, router])
+	const roomId = useRoomIdFromUrlHash([homeHref()])
 
 	useMirrorLoading(roomId === null)
 
