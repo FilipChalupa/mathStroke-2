@@ -19,7 +19,7 @@ export const JoinBadge: FunctionComponent<JoinBadgeProps> = ({ roomId }) => {
 		const fullUrl = `${baseUrl}${playHref(roomId)}`
 		const shortUrl = fullUrl.substring(fullUrl.indexOf('://') + 3)
 		return {
-			shortUrl,
+			shortUrl: shortUrl.startsWith('www.') ? shortUrl.substring(4) : shortUrl,
 			fullUrl,
 		}
 	}, [baseUrl, roomId])
