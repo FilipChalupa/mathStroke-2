@@ -12,7 +12,7 @@ export const themeColor = primaryColor[500]
 export const ThemeProvider: React.FunctionComponent<{
 	children: ReactNode
 }> = ({ children }) => {
-	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', )
+	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 	const theme = useMemo(
 		() =>
 			createTheme({

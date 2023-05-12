@@ -1,0 +1,30 @@
+.wrapper {
+	text-align: center;
+	display: grid;
+	row-gap: 1em;
+	container-type: inline-size;
+}
+
+.qr {
+	display: grid;
+	padding: 5%;
+	background-color: #ffffff;
+}
+
+.qr_in {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	height: auto;
+}
+
+.link {
+	color: inherit;
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
+@container (min-width: 30rem) {
+	.link {
+		font-size: 2.2em;
+	}
+}

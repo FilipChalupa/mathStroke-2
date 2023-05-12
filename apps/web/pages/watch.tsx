@@ -1,11 +1,12 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import { Button } from '@mui/material'
+import { Button, Container } from '@mui/material'
 import { ServerWatch } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { useMirrorLoading } from 'shared-loading-indicator'
 import { homeHref } from '../../server/src/utilities/href'
+import { JoinBadge } from '../components/JoinBadge'
 import { Room } from '../components/Room'
 import { WatchConnection, createWatchConnection } from '../utilities/connection'
 import { useRoomIdFromUrlHash } from '../utilities/useRoomIdFromUrlHash'
@@ -68,6 +69,9 @@ const WatchIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 				Leave
 			</Button>
 			<Room watchState={watchState} />
+			<Container maxWidth="sm">
+				<JoinBadge roomId={roomId} />
+			</Container>
 		</>
 	)
 }
