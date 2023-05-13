@@ -1,10 +1,8 @@
-import { Difficulty } from '../room/difficulties'
 import { Tag } from '../room/tags'
 
 type BasicTask = {
 	type: 'basic'
 	tags: Tag[]
-	difficulty: Difficulty
 }
 
 type CrumbleTask = {

@@ -1,5 +1,6 @@
 import { TaskLevelEvent } from '../utilities/LevelTimeline'
 import { ClientPlay, createClients } from './clients'
+import { listTasks } from './tasks'
 
 export type LevelTask = ReturnType<typeof createLevelTask>
 
@@ -13,17 +14,30 @@ export const createLevelTask = (
 	playerCountMultiplier: number,
 	onDamageHit: (shieldDamage: number) => void,
 	onFinished: () => void,
+	isUniqueSolution: (solution: string) => boolean,
 ) => {
 	// @TODO: respect event.type and don't pretend all is basic
 	const id = `${++lastTaskId}`
 
 	const position = Math.random()
-	const timeToImpactMilliseconds = 5000
-	const solvedBy = '42'
+	const timeToImpactMilliseconds = Math.round(5000 / speedMultiplier)
+
+	const { task } = (() => {
+		const [firstTask, ...relevantTasks] = listTasks([
+			'addition' /* @TODO: respect event tags */,
+		]).sort(() => 0.5 - Math.random())
+
+		for (const relevantTask of relevantTasks) {
+			if (isUniqueSolution(relevantTask.task.solution)) {
+				return relevantTask
+			}
+		}
+		return firstTask
+	})()
 
 	clients.actions.createBasicTask(
 		id,
-		'The solution is 42',
+		task.label,
 		position,
 		timeToImpactMilliseconds,
 	)
@@ -41,7 +55,7 @@ export const createLevelTask = (
 	}
 
 	const canBeSolvedBy = (solution: string) => {
-		return solution === solvedBy
+		return solution === task.solution
 	}
 
 	const destroy = () => {

@@ -22,7 +22,6 @@ export const Level: FunctionComponent<LevelProps> = ({
 			{tasks.map((task) => (
 				<Task key={task.id} task={task} />
 			))}
-			<pre>{JSON.stringify(tasks, null, 2)}</pre>
 			{player && <PlayerControls onSolution={player.action.sendSolution} />}
 		</>
 	)

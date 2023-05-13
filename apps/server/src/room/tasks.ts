@@ -1,4 +1,3 @@
-import { Difficulty } from './difficulties'
 import { Tag } from './tags'
 
 export type Task = {
@@ -9,7 +8,10 @@ export type Task = {
 export type TaggedTask = {
 	task: Task
 	tags: Tag[]
-	difficulty: Difficulty
+}
+
+type TaggetTaskWithoutSolution = Omit<TaggedTask, 'task'> & {
+	task: Omit<Task, 'solution'>
 }
 
 const additionSymbol = '+'
@@ -23,340 +25,340 @@ export const tasks: TaggedTask[] = (
 			task: {
 				label: `1 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 4`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 5`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 6`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 7`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 8`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 4`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 5`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 6`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 7`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 4`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 5`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 6`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 4`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 5`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `5 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `5 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `5 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `5 ${additionSymbol} 4`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `6 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `6 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `6 ${additionSymbol} 3`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `7 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `7 ${additionSymbol} 2`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `8 ${additionSymbol} 1`,
 			},
-			difficulty: 'easy',
+			tags: ['easy'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 1`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 2`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 3`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 4`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 5`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 6`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 7`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 8`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `0 ${additionSymbol} 9`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 
 		{
 			task: {
 				label: `0 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `1 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `2 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `3 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `4 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `5 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `6 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `7 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `8 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
 		{
 			task: {
 				label: `9 ${additionSymbol} 0`,
 			},
-			difficulty: 'simple',
+			tags: ['simple'],
 		},
-	] as const
+	] satisfies TaggetTaskWithoutSolution[]
 ).map((item) => {
 	const tags: Tag[] = []
 	if (item.task.label.includes(additionSymbol)) {
@@ -386,3 +388,6 @@ export const tasks: TaggedTask[] = (
 		tags,
 	}
 })
+
+export const listTasks = (tags: Tag[]) =>
+	tasks.filter((task) => tags.every((tag) => task.tags.includes(tag)))

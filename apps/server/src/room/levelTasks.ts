@@ -10,6 +10,9 @@ export const createLevelTasks = (
 ) => {
 	const tasks: LevelTask[] = []
 
+	const isUniqueSolution = (solution: string) =>
+		tasks.every((task) => !task.canBeSolvedBy(solution))
+
 	const startEvent = (
 		event: TaskLevelEvent,
 		speedMultiplier: number,
@@ -31,6 +34,7 @@ export const createLevelTasks = (
 				log(`Event ${event.type} finished`)
 				removeTask(task)
 			},
+			isUniqueSolution,
 		)
 		addTask(task)
 	}

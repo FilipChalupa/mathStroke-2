@@ -10,26 +10,22 @@ export const levels: Level[] = [
 		timeline: [
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 10000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 10000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 10000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'simple',
+				tags: ['simple', 'addition'],
 				durationMilliseconds: 10000,
 			},
 		],
@@ -39,26 +35,22 @@ export const levels: Level[] = [
 		timeline: [
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 5000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'simple',
+				tags: ['simple', 'addition'],
 				durationMilliseconds: 7000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 3000,
 			},
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'simple',
+				tags: ['simple', 'addition'],
 				durationMilliseconds: 10000,
 			},
 		],
@@ -68,8 +60,7 @@ export const levels: Level[] = [
 		timeline: [
 			{
 				type: 'basic',
-				tags: ['addition'],
-				difficulty: 'easy',
+				tags: ['easy', 'addition'],
 				durationMilliseconds: 1000,
 			},
 		],
