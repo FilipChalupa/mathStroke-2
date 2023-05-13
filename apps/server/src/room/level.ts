@@ -52,7 +52,9 @@ export const createLevel = (
 		)
 	}
 
-	timelineProceed()
+	setTimeout(() => {
+		timelineProceed()
+	})
 
 	const checkAllTasksSolved = () => {
 		if (tasks.getRemainingTaskCount() !== 0) {

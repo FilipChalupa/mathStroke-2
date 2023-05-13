@@ -42,7 +42,9 @@ export const useWatchState = () => {
 
 	useEffect(() => {
 		if (baseRoomState.state === 'level') {
-			setTasks([])
+			return () => {
+				setTasks([])
+			}
 		}
 		setTasks([])
 	}, [baseRoomState.state])
@@ -126,13 +128,13 @@ export const useWatchState = () => {
 	)
 
 	const roomState = useMemo<RoomState>(() => {
-		if (baseRoomState.state !== 'level') {
-			return baseRoomState
+		if (baseRoomState.state === 'level') {
+			return {
+				...baseRoomState,
+				tasks,
+			}
 		}
-		return {
-			...baseRoomState,
-			tasks,
-		}
+		return baseRoomState
 	}, [baseRoomState, tasks])
 
 	return useMemo(
