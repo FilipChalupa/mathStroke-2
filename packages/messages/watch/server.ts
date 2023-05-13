@@ -18,6 +18,8 @@ export namespace ServerWatch {
 		name: string
 		color: Color
 		ready: boolean
+		hitCount: number
+		jammedCount: number
 	}
 
 	export type UpdateRoomState = {

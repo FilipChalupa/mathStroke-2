@@ -77,16 +77,19 @@ export const createLevel = (
 		if (solvedTasks.length === 0) {
 			client.client.log(`Miss. No task can be solved by ${solution}.`)
 			// @TODO: penalize
+			client.jammedCount++
 		} else {
 			solvedTasks.forEach((task) => {
 				client.client.log('Hit')
 				task.hit(client)
+				client.hitCount++
 			})
 			client.client.action({
 				role: 'play',
 				type: 'confirmHit',
 			})
 		}
+		clients.actions.sendPlayerToAll(client) // Broadcasts new jammedCount and hitCount
 	}
 
 	clients.solution.addListener(handleSolution)

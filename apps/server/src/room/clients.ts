@@ -24,6 +24,8 @@ export type ClientPlay = {
 	name: string
 	color: Color
 	ready: boolean
+	hitCount: number
+	jammedCount: number
 }
 export type ClientWatch = {
 	role: 'watch'
@@ -64,6 +66,8 @@ export const createClients = (
 			name: '',
 			color: defaultColor,
 			ready: false,
+			hitCount: 0,
+			jammedCount: 0,
 		}
 		clients.push(newClient)
 		client.addMessageListener((message) => {
@@ -158,6 +162,8 @@ export const createClients = (
 		name: client.name,
 		color: client.color,
 		ready: client.ready,
+		hitCount: client.hitCount,
+		jammedCount: client.jammedCount,
 	})
 
 	const broadcastWatchersCount = () => {
@@ -186,6 +192,10 @@ export const createClients = (
 				})
 			}
 		})
+	}
+
+	const sendPlayerToAll = (client: ClientPlay) => {
+		broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 	}
 
 	const createBasicTask = (
@@ -304,6 +314,7 @@ export const createClients = (
 			resetReadiness,
 			createBasicTask,
 			destroyBasicTask,
+			sendPlayerToAll,
 		},
 		solution: {
 			addListener: solutionListener.addListener,

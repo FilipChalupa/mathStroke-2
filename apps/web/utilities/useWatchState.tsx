@@ -10,6 +10,8 @@ type Player = {
 	name: string
 	color: string
 	ready: boolean
+	hitCount: number
+	jammedCount: number
 }
 
 export type Task = {
@@ -63,6 +65,8 @@ export const useWatchState = () => {
 					name: message.name,
 					color: message.color,
 					ready: message.ready,
+					hitCount: message.hitCount,
+					jammedCount: message.jammedCount,
 				}
 				setPlayers((players) => {
 					const isNew = players.every((other) => other.id !== player.id)
@@ -75,6 +79,8 @@ export const useWatchState = () => {
 											name: message.name,
 											color: message.color,
 											ready: message.ready,
+											hitCount: message.hitCount,
+											jammedCount: message.jammedCount,
 									  }
 									: player,
 						  )

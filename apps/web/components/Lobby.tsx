@@ -1,3 +1,5 @@
+import CloseIcon from '@mui/icons-material/Close'
+import DoneIcon from '@mui/icons-material/Done'
 import {
 	Checkbox,
 	Container,
@@ -40,6 +42,16 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 						<TableRow>
 							<TableCell>Name</TableCell>
 							<TableCell align="right">Color</TableCell>
+							<TableCell align="center">
+								<Tooltip title="Hits">
+									<DoneIcon />
+								</Tooltip>
+							</TableCell>
+							<TableCell align="center">
+								<Tooltip title="Jammed">
+									<CloseIcon />
+								</Tooltip>
+							</TableCell>
 							<TableCell align="right">Ready</TableCell>
 						</TableRow>
 					</TableHead>
@@ -50,13 +62,15 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 									{otherPlayer.name || <i>Unnamed player</i>}
 								</TableCell>
 								<TableCell align="right">{otherPlayer.color}</TableCell>
-								<TableCell align="right">
+								<TableCell align="center">{otherPlayer.hitCount}</TableCell>
+								<TableCell align="center">{otherPlayer.jammedCount}</TableCell>
+								<TableCell align="center" padding="checkbox">
 									{player?.state.id === otherPlayer.id ? (
 										<Tooltip
 											title={
 												otherPlayer.ready
-													? 'You are ready'
-													: 'You are not ready'
+													? 'Set you are not ready'
+													: 'Set you are ready'
 											}
 										>
 											<Checkbox
@@ -74,7 +88,7 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 						))}
 						{watchersCount > 0 && (
 							<TableRow>
-								<TableCell colSpan={3}>
+								<TableCell colSpan={5}>
 									<i>Spectators count: {watchersCount}</i>
 								</TableCell>
 							</TableRow>
