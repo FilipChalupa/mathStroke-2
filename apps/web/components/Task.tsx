@@ -10,12 +10,11 @@ export const Task: FunctionComponent<TaskProps> = ({ task }) => {
 	return (
 		<div>
 			{task.type} [{task.id}]: {task.label}
-			{!task.destroyed && (
-				<Progress
-					startAt={task.createdAt}
-					duration={task.timeToImpactMilliseconds}
-				/>
-			)}
+			<Progress
+				startAt={task.createdAt}
+				stoppedAt={task.destroyed?.time}
+				duration={task.timeToImpactMilliseconds}
+			/>
 			{task.destroyed && (
 				<div>
 					Destroyed{' '}

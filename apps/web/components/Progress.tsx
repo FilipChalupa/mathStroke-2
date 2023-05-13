@@ -4,21 +4,36 @@ import styles from './Progress.module.css'
 
 export interface ProgressProps {
 	startAt: number
+	stoppedAt?: number
 	duration: number
+}
+
+const calculateProgress = (
+	start: number,
+	current: number,
+	duration: number,
+) => {
+	const elapsed = current - start
+	const progress = Math.min(1, elapsed / duration)
+	return progress
 }
 
 export const Progress: FunctionComponent<ProgressProps> = ({
 	startAt,
+	stoppedAt,
 	duration,
 }) => {
 	const [progress, setProgress] = useState(0)
 
 	useEffect(() => {
+		if (stoppedAt) {
+			setProgress(calculateProgress(startAt, stoppedAt, duration))
+			return
+		}
 		let timer: ReturnType<typeof requestAnimationFrame>
 		const loop = () => {
 			const now = getTime()
-			const elapsed = now - startAt
-			const progress = Math.min(1, elapsed / duration)
+			const progress = calculateProgress(startAt, now, duration)
 			setProgress(progress)
 			if (progress < 1) {
 				timer = requestAnimationFrame(loop)
@@ -29,7 +44,7 @@ export const Progress: FunctionComponent<ProgressProps> = ({
 		return () => {
 			cancelAnimationFrame(timer)
 		}
-	})
+	}, [duration, startAt, stoppedAt])
 
 	return (
 		<div
