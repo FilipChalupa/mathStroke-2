@@ -1,0 +1,15 @@
+.wrapper {
+	min-height: 100vh;
+	min-height: 100svh;
+	display: grid;
+	grid-template-rows: 1fr auto;
+}
+
+.field {
+}
+
+.controls {
+	position: sticky;
+	bottom: 0;
+	padding: 1em;
+}
