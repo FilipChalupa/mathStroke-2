@@ -238,7 +238,6 @@ export const createClients = (
 		clients.forEach((client) => {
 			if (client.role === 'play') {
 				client.ready = false
-				broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 			}
 		})
 		handleReadinessChange()

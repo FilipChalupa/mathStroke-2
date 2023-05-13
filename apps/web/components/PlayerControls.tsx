@@ -3,13 +3,14 @@ import { FunctionComponent, useState } from 'react'
 
 export interface PlayerControlsProps {
 	onSolution: (solution: string) => void
+	waitingForHitConfirmation: boolean
 }
 
 export const PlayerControls: FunctionComponent<PlayerControlsProps> = ({
 	onSolution,
+	waitingForHitConfirmation,
 }) => {
 	const [input, setInput] = useState('')
-	const isLoading = false // @TODO
 
 	return (
 		<Container maxWidth="xs">
@@ -28,7 +29,6 @@ export const PlayerControls: FunctionComponent<PlayerControlsProps> = ({
 							variant="outlined"
 							value={input}
 							fullWidth
-							disabled={isLoading}
 							onChange={(event) => {
 								setInput(event.target.value)
 							}}
@@ -40,7 +40,11 @@ export const PlayerControls: FunctionComponent<PlayerControlsProps> = ({
 						/>
 					</Grid>
 					<Grid item>
-						<Button variant="contained" type="submit" disabled={isLoading}>
+						<Button
+							variant="contained"
+							type="submit"
+							disabled={waitingForHitConfirmation}
+						>
 							Fire
 						</Button>
 					</Grid>

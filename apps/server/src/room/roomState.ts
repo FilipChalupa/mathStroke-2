@@ -94,11 +94,11 @@ export const createRoomState = (
 	}
 
 	// @TODO: remove this
-	setInterval(() => {
-		if (state.state === 'lobby') {
-			transitionToLevel()
-		}
-	}, 300)
+	// setInterval(() => {
+	// 	if (state.state === 'lobby') {
+	// 		transitionToLevel()
+	// 	}
+	// }, 300)
 
 	return {
 		getState,

@@ -30,7 +30,10 @@ export const Level: FunctionComponent<LevelProps> = ({
 			</div>
 			{player && (
 				<div className={styles.controls}>
-					<PlayerControls onSolution={player.action.sendSolution} />
+					<PlayerControls
+						onSolution={player.action.sendSolution}
+						waitingForHitConfirmation={player.state.waitingForHitConfirmation}
+					/>
 				</div>
 			)}
 		</div>

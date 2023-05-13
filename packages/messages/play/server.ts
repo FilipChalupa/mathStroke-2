@@ -5,7 +5,11 @@ export namespace ServerPlay {
 		id: string
 	}
 
-	export type AnyPlayMessage = SetId
+	export type ConfirmHit = {
+		type: 'confirmHit'
+	}
+
+	export type AnyPlayMessage = SetId | ConfirmHit
 	export type AnyMessage =
 		| (AnyPlayMessage & { role: 'play' })
 		| (ServerWatch.AnyMessage & { role: 'watch' })

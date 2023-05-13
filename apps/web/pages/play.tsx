@@ -12,7 +12,7 @@ import { homeHref, watchHref } from '../../server/src/utilities/href'
 import { usePlayerColor, usePlayerName } from '../components/PlayerProvider'
 import { Room } from '../components/Room'
 import { PlayConnection, createPlayConnection } from '../utilities/connection'
-import { usePlay } from '../utilities/usePlayState'
+import { usePlayState } from '../utilities/usePlayState'
 import { useRoomIdFromUrlHash } from '../utilities/useRoomIdFromUrlHash'
 import { useShare } from '../utilities/useShare'
 import { useWatchState } from '../utilities/useWatchState'
@@ -50,7 +50,11 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 		},
 		[connection],
 	)
-	const { handleMessage: handlePlayMessage, player } = usePlay(playAction)
+
+	const { handleMessage: handlePlayMessage, player } = usePlayState(
+		playAction,
+		watchState.roomState.state,
+	)
 
 	useEffect(() => {
 		const handleOpen = () => {

@@ -82,6 +82,10 @@ export const createLevel = (
 				client.client.log('Hit')
 				task.hit(client)
 			})
+			client.client.action({
+				role: 'play',
+				type: 'confirmHit',
+			})
 		}
 	}
 

@@ -127,6 +127,16 @@ export const useWatchState = () => {
 		],
 	)
 
+	useEffect(() => {
+		if (baseRoomState.state === 'lobby') {
+			return () => {
+				setPlayers((players) =>
+					players.map((player) => ({ ...player, ready: false })),
+				)
+			}
+		}
+	}, [baseRoomState.state])
+
 	const roomState = useMemo<RoomState>(() => {
 		if (baseRoomState.state === 'level') {
 			return {
