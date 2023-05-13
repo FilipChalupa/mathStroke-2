@@ -18,14 +18,14 @@ const createWatchServer = createServer<
 	ServerWatch.AnyMessage
 >
 
-type ClientPlay = {
+export type ClientPlay = {
 	role: 'play'
 	client: ReturnType<ReturnType<typeof createPlayServer>['listClients']>[number]
 	name: string
 	color: Color
 	ready: boolean
 }
-type ClientWatch = {
+export type ClientWatch = {
 	role: 'watch'
 	client: ReturnType<
 		ReturnType<typeof createWatchServer>['listClients']
@@ -234,6 +234,11 @@ export const createClients = (
 		total: number
 	}>()
 
+	const solutionListener = listenable<{
+		client: ClientPlay
+		solution: string
+	}>()
+
 	const handlePlayMessage = (
 		client: ClientPlay,
 		message: ClientPlay.AnyPlayOnlyMessage,
@@ -246,6 +251,11 @@ export const createClients = (
 			client.ready = message.ready
 			broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 			handleReadinessChange()
+		} else if (message.type === 'sendSolution') {
+			solutionListener.emit({
+				client,
+				solution: message.solution,
+			})
 		} else {
 			assertNever(message)
 		}
@@ -266,6 +276,10 @@ export const createClients = (
 			updateRoomState,
 			updateShield,
 			resetReadiness,
+		},
+		solution: {
+			addListener: solutionListener.addListener,
+			removeListener: solutionListener.removeListener,
 		},
 		readiness: {
 			addListener: readinessChangeListener.addListener,

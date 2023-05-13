@@ -67,12 +67,31 @@ export const createLevel = (
 		}
 	}
 
+	const handleSolution: Parameters<typeof clients.solution.addListener>[0] = ({
+		client,
+		solution,
+	}) => {
+		const solvedTasks = tasks.listTasksBySolution(solution)
+		if (solvedTasks.length === 0) {
+			client.client.log(`Miss. No task can be solved by ${solution}.`)
+			// @TODO: penalize
+		} else {
+			solvedTasks.forEach((task) => {
+				client.client.log('Hit')
+				task.hit(client)
+			})
+		}
+	}
+
+	clients.solution.addListener(handleSolution)
+
 	const getShield = () => shield
 
 	const destroy = () => {
 		clearTimeout(loopTimeout)
 		tasks.destroy()
 		tasks.taskCountListener.removeListener(checkAllTasksSolved)
+		clients.solution.removeListener(handleSolution)
 	}
 
 	return {

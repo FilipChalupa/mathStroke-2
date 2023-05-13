@@ -93,6 +93,13 @@ export const createRoomState = (
 		broadcastNewRoomState()
 	}
 
+	// @TODO: remove this
+	setInterval(() => {
+		if (state.state === 'lobby') {
+			transitionToLevel()
+		}
+	}, 300)
+
 	return {
 		getState,
 	}

@@ -43,6 +43,10 @@ export const createLevelTasks = (
 		taskCountListener.emit(getRemainingTaskCount())
 	}
 
+	const listTasksBySolution = (solution: string) => {
+		return tasks.filter((task) => task.canBeSolvedBy(solution))
+	}
+
 	const destroy = () => {
 		tasks.forEach((task) => {
 			task.destroy()
@@ -58,5 +62,6 @@ export const createLevelTasks = (
 		getRemainingTaskCount,
 		taskCountListener,
 		startEvent,
+		listTasksBySolution,
 	}
 }

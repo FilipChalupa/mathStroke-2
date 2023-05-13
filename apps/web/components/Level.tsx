@@ -2,6 +2,7 @@ import type { FunctionComponent } from 'react'
 import { RoomState } from '../../../packages/messages/utilities/RoomState'
 import { Player } from '../utilities/usePlayState'
 import { WatchState } from '../utilities/useWatchState'
+import { PlayerControls } from './PlayerControls'
 
 export interface LevelProps {
 	players: WatchState['players']
@@ -18,6 +19,7 @@ export const Level: FunctionComponent<LevelProps> = ({
 		<>
 			<div>Level {watchState.levelNumber}</div>
 			<div>Shield {watchState.shield}</div>
+			{player && <PlayerControls onSolution={player.action.sendSolution} />}
 		</>
 	)
 }

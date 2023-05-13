@@ -23,9 +23,15 @@ export const usePlay = (
 		],
 	)
 
-	const sendSolution = useCallback((solution: string) => {
-		console.log('@TODO: send solution', solution)
-	}, [])
+	const sendSolution = useCallback(
+		(solution: string) => {
+			sendAction({
+				type: 'sendSolution',
+				solution,
+			})
+		},
+		[sendAction],
+	)
 	const changeReady = useCallback(
 		(ready: boolean) => {
 			sendAction({

@@ -1,3 +1,5 @@
+import { ClientPlay } from './clients'
+
 export type LevelTask = ReturnType<typeof createLevelTask>
 
 export const createLevelTask = (
@@ -8,20 +10,28 @@ export const createLevelTask = (
 ) => {
 	// @TODO: change to something more meaningful
 	const timer = setTimeout(() => {
-		onFinished()
-	}, 1000)
-	const timer2 = setTimeout(() => {
 		if (Math.random() < 0.5) {
 			onDamageHit(Math.random() < 0.5 ? 1 : 2)
 		}
 	}, 500)
 
+	const hit = (byClient: ClientPlay) => {
+		// @TODO
+		onFinished()
+	}
+
+	const canBeSolvedBy = (solution: string) => {
+		// @TODO
+		return solution === '42'
+	}
+
 	const destroy = () => {
 		clearTimeout(timer)
-		clearTimeout(timer2)
 	}
 
 	return {
 		destroy,
+		canBeSolvedBy,
+		hit,
 	}
 }

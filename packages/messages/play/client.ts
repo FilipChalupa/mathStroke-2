@@ -13,7 +13,15 @@ export namespace ClientPlay {
 		ready: boolean
 	}
 
-	export type AnyPlayOnlyMessage = SetPlayerInformation | SetReady
+	export type SendSolution = {
+		type: 'sendSolution'
+		solution: string
+	}
+
+	export type AnyPlayOnlyMessage =
+		| SetPlayerInformation
+		| SetReady
+		| SendSolution
 	export type AnyMessage =
 		| (AnyPlayOnlyMessage & { role: 'play' })
 		| (ClientWatch.AnyMessage & { role: 'watch' })
