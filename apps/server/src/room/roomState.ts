@@ -69,6 +69,7 @@ export const createRoomState = (
 
 	const transitionToLevel = () => {
 		const levelNumber = state.levelIndex + 1
+		log(`Transitioning to level ${levelNumber}`)
 		const handleFinish = (byWin: boolean) => {
 			level.destroy()
 			transitionToLobby(byWin)
@@ -79,7 +80,6 @@ export const createRoomState = (
 			state: 'level',
 			level,
 		}
-		log(`Transitioning to level ${levelNumber}`)
 		broadcastNewRoomState()
 	}
 	const transitionToLobby = (byWin: boolean) => {

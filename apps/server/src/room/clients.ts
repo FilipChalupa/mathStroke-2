@@ -188,6 +188,33 @@ export const createClients = (
 		})
 	}
 
+	const createBasicTask = (
+		taskId: string,
+		label: string,
+		position: number,
+		timeToImpactMilliseconds: number,
+	) => {
+		clients.forEach((client) => {
+			sendWatchAction(client, {
+				type: 'addBasicTask',
+				taskId,
+				label,
+				position,
+				timeToImpactMilliseconds,
+			})
+		})
+	}
+
+	const destroyBasicTask = (taskId: string, byPlayerId: string | null) => {
+		clients.forEach((client) => {
+			sendWatchAction(client, {
+				type: 'destroyBasicTask',
+				taskId,
+				byPlayerId,
+			})
+		})
+	}
+
 	const updateRoomState = (state: RoomState, client?: Client) => {
 		const recipients = client ? [client] : clients
 		recipients.forEach((other) => {
@@ -276,6 +303,8 @@ export const createClients = (
 			updateRoomState,
 			updateShield,
 			resetReadiness,
+			createBasicTask,
+			destroyBasicTask,
 		},
 		solution: {
 			addListener: solutionListener.addListener,

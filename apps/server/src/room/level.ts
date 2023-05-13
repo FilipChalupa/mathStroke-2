@@ -19,7 +19,7 @@ export const createLevel = (
 	const playerCountMultiplier = 1 // @TODO
 	let shield = 3 // @TODO
 	let timelineProceedTimeout: NodeJS.Timeout
-	const tasks = createLevelTasks(log, (shieldDamage) => {
+	const tasks = createLevelTasks(log, clients, (shieldDamage) => {
 		shield = Math.max(0, shield - shieldDamage)
 		log(`Hit by damage ${shieldDamage}. Shield is now ${shield}.`)
 		clients.actions.updateShield(shield)

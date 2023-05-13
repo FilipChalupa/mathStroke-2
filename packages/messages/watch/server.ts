@@ -30,10 +30,26 @@ export namespace ServerWatch {
 		shield: number
 	}
 
+	export type AddBasicTask = {
+		type: 'addBasicTask'
+		taskId: string
+		label: string
+		position: number
+		timeToImpactMilliseconds: number
+	}
+
+	export type DestroyBasicTask = {
+		type: 'destroyBasicTask'
+		taskId: string
+		byPlayerId: string | null
+	}
+
 	export type AnyMessage =
 		| UpdateWatchersCount
 		| RemovePlayer
 		| UpdatePlayerInformation
 		| UpdateRoomState
 		| UpdateShield
+		| AddBasicTask
+		| DestroyBasicTask
 }

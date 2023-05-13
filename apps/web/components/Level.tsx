@@ -1,8 +1,8 @@
 import type { FunctionComponent } from 'react'
-import { RoomState } from '../../../packages/messages/utilities/RoomState'
 import { Player } from '../utilities/usePlayState'
-import { WatchState } from '../utilities/useWatchState'
+import { RoomState, WatchState } from '../utilities/useWatchState'
 import { PlayerControls } from './PlayerControls'
+import { Task } from './Task'
 
 export interface LevelProps {
 	players: WatchState['players']
@@ -12,13 +12,17 @@ export interface LevelProps {
 
 export const Level: FunctionComponent<LevelProps> = ({
 	players,
-	watchState,
+	watchState: { tasks, levelNumber, shield },
 	player,
 }) => {
 	return (
 		<>
-			<div>Level {watchState.levelNumber}</div>
-			<div>Shield {watchState.shield}</div>
+			<div>Level {levelNumber}</div>
+			<div>Shield {shield}</div>
+			{tasks.map((task) => (
+				<Task key={task.id} task={task} />
+			))}
+			<pre>{JSON.stringify(tasks, null, 2)}</pre>
 			{player && <PlayerControls onSolution={player.action.sendSolution} />}
 		</>
 	)

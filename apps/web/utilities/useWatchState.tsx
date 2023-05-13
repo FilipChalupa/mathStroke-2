@@ -1,6 +1,7 @@
-import { RoomState, ServerWatch } from 'messages'
-import { useCallback, useMemo, useState } from 'react'
+import { RoomState as RoomStateMessage, ServerWatch } from 'messages'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { assertNever } from 'utilities'
+import { getTime } from './getTime'
 
 export type WatchState = ReturnType<typeof useWatchState>['state']
 
@@ -11,13 +12,40 @@ type Player = {
 	ready: boolean
 }
 
+export type Task = {
+	type: 'basic'
+	id: string
+	position: number
+	label: string
+	createdAt: number
+	timeToImpactMilliseconds: number
+	destroyed: null | {
+		byPlayerId: string | null
+		time: number
+	}
+}
+
+export type RoomState =
+	| Exclude<RoomStateMessage, { state: 'level' }>
+	| (Extract<RoomStateMessage, { state: 'level' }> & {
+			tasks: Task[]
+	  })
+
 export const useWatchState = () => {
 	const [watchersCount, setWatchersCount] = useState(0)
 	const [players, setPlayers] = useState<Player[]>([])
-	const [roomState, setRoomState] = useState<RoomState>({
+	const [baseRoomState, setBaseRoomState] = useState<RoomStateMessage>({
 		state: 'lobby',
 		levelNumber: 1,
 	})
+	const [tasks, setTasks] = useState<Task[]>([])
+
+	useEffect(() => {
+		if (baseRoomState.state === 'level') {
+			setTasks([])
+		}
+		setTasks([])
+	}, [baseRoomState.state])
 
 	const handleMessage = useCallback(
 		(message: ServerWatch.AnyMessage) => {
@@ -50,17 +78,44 @@ export const useWatchState = () => {
 						  )
 				})
 			} else if (message.type === 'updateRoomState') {
-				setRoomState(message.state)
+				setBaseRoomState(message.state)
 			} else if (message.type === 'updateShield') {
-				setRoomState((roomState) => {
-					if (roomState.state !== 'level') {
-						return roomState
+				setBaseRoomState((baseRoomState) => {
+					if (baseRoomState.state !== 'level') {
+						return baseRoomState
 					}
 					return {
-						...roomState,
+						...baseRoomState,
 						shield: message.shield,
 					}
 				})
+			} else if (message.type === 'addBasicTask') {
+				setTasks((tasks) => [
+					...tasks,
+					{
+						type: 'basic',
+						createdAt: getTime(),
+						id: message.taskId,
+						destroyed: null,
+						label: message.label,
+						position: message.position,
+						timeToImpactMilliseconds: message.timeToImpactMilliseconds,
+					},
+				])
+			} else if (message.type === 'destroyBasicTask') {
+				setTasks((tasks) =>
+					tasks.map((task) =>
+						task.id === message.taskId
+							? {
+									...task,
+									destroyed: {
+										time: getTime(),
+										byPlayerId: message.byPlayerId,
+									},
+							  }
+							: task,
+					),
+				)
 			} else {
 				assertNever(message)
 			}
@@ -70,8 +125,21 @@ export const useWatchState = () => {
 		],
 	)
 
+	const roomState = useMemo<RoomState>(() => {
+		if (baseRoomState.state !== 'level') {
+			return baseRoomState
+		}
+		return {
+			...baseRoomState,
+			tasks,
+		}
+	}, [baseRoomState, tasks])
+
 	return useMemo(
-		() => ({ handleMessage, state: { watchersCount, players, roomState } }),
+		() => ({
+			handleMessage,
+			state: { watchersCount, players, roomState },
+		}),
 		[handleMessage, players, roomState, watchersCount],
 	)
 }

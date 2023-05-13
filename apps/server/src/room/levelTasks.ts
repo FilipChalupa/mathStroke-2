@@ -1,9 +1,11 @@
 import { listenable } from 'custom-listenable'
 import { TaskLevelEvent } from '../utilities/LevelTimeline'
+import { createClients } from './clients'
 import { LevelTask, createLevelTask } from './levelTask'
 
 export const createLevelTasks = (
 	log: (message: string) => void,
+	clients: ReturnType<typeof createClients>,
 	onDemageHit: (shieldDamage: number) => void,
 ) => {
 	const tasks: LevelTask[] = []
@@ -17,6 +19,8 @@ export const createLevelTasks = (
 			`Starting event ${event.type} with speed multiplier ${speedMultiplier} and player count multiplier ${playerCountMultiplier}`,
 		)
 		const task = createLevelTask(
+			log,
+			clients,
 			event,
 			speedMultiplier,
 			playerCountMultiplier,
