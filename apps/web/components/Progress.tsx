@@ -1,4 +1,5 @@
-import { CSSProperties, FunctionComponent, useEffect, useState } from 'react'
+import { LinearProgress } from '@mui/material'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getTime } from '../utilities/getTime'
 import styles from './Progress.module.css'
 
@@ -47,13 +48,13 @@ export const Progress: FunctionComponent<ProgressProps> = ({
 	}, [duration, startAt, stoppedAt])
 
 	return (
-		<div
-			className={styles.wrapper}
-			style={
-				{
-					'--progress': progress,
-				} as CSSProperties
-			}
+		<LinearProgress
+			color={progress < 0.5 ? 'primary' : progress < 0.8 ? 'warning' : 'error'}
+			variant="determinate"
+			value={progress * 100}
+			classes={{
+				bar: styles.bar,
+			}}
 		/>
 	)
 }

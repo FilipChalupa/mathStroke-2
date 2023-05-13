@@ -1,3 +1,4 @@
+import { Container } from '@mui/material'
 import type { FunctionComponent } from 'react'
 import { Player } from '../utilities/usePlayState'
 import { RoomState, WatchState } from '../utilities/useWatchState'
@@ -17,11 +18,17 @@ export const Level: FunctionComponent<LevelProps> = ({
 }) => {
 	return (
 		<>
-			<div>Level {levelNumber}</div>
-			<div>Shield {shield}</div>
-			{tasks.map((task) => (
-				<Task key={task.id} task={task} />
-			))}
+			<Container maxWidth="sm">
+				<div>Level {levelNumber}</div>
+				<div>Shield {shield}</div>
+				{tasks.map((task) => (
+					<Task key={task.id} task={task} players={players} />
+				))}
+			</Container>
+			<br />
+			<br />
+			<br />
+			<br />
 			{player && <PlayerControls onSolution={player.action.sendSolution} />}
 		</>
 	)
