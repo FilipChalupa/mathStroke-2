@@ -32,6 +32,11 @@ export const PlayerControls: FunctionComponent<PlayerControlsProps> = ({
 							onChange={(event) => {
 								setInput(event.target.value)
 							}}
+							autoComplete="off"
+							autoFocus
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</Grid>
 					<Grid item>
