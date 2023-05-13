@@ -1,0 +1,13 @@
+.wrapper {
+	position: relative;
+	height: 1em;
+}
+
+.wrapper::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-color: currentColor;
+	transform-origin: 0 0;
+	transform: scaleX(var(--progress));
+}
