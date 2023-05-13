@@ -1,8 +1,10 @@
+import { TaskLevelEvent } from '../utilities/LevelTimeline'
 import { ClientPlay } from './clients'
 
 export type LevelTask = ReturnType<typeof createLevelTask>
 
 export const createLevelTask = (
+	event: TaskLevelEvent,
 	speedMultiplier: number,
 	playerCountMultiplier: number,
 	onDamageHit: (shieldDamage: number) => void,

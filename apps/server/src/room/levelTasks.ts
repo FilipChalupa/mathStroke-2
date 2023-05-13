@@ -17,6 +17,7 @@ export const createLevelTasks = (
 			`Starting event ${event.type} with speed multiplier ${speedMultiplier} and player count multiplier ${playerCountMultiplier}`,
 		)
 		const task = createLevelTask(
+			event,
 			speedMultiplier,
 			playerCountMultiplier,
 			(shieldDamage) => {
