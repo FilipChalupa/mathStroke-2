@@ -46,6 +46,22 @@ export namespace ServerWatch {
 		byPlayerId: string | null
 	}
 
+	export type AddResistantTask = {
+		type: 'addResistantTask'
+		taskId: string
+		label: string
+		position: number
+		timeToImpactMilliseconds: number
+		strength: number
+	}
+
+	export type HitResistantTask = {
+		type: 'hitResistantTask'
+		taskId: string
+		newLabel: string
+		byPlayerId: string | null
+	}
+
 	export type AnyMessage =
 		| UpdateWatchersCount
 		| RemovePlayer
@@ -54,4 +70,6 @@ export namespace ServerWatch {
 		| UpdateShield
 		| AddBasicTask
 		| DestroyBasicTask
+		| AddResistantTask
+		| HitResistantTask
 }

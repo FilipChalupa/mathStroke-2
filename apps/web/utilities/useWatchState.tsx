@@ -15,17 +15,32 @@ type Player = {
 }
 
 export type Task = {
-	type: 'basic'
 	id: string
-	position: number
-	label: string
-	createdAt: number
-	timeToImpactMilliseconds: number
-	destroyed: null | {
-		byPlayerId: string | null
-		time: number
-	}
-}
+} & (
+	| {
+			type: 'basic'
+			position: number
+			label: string
+			createdAt: number
+			timeToImpactMilliseconds: number
+			destroyed: null | {
+				byPlayerId: string | null
+				time: number
+			}
+	  }
+	| {
+			type: 'resistant'
+			position: number
+			label: string
+			createdAt: number
+			strength: number
+			timeToImpactMilliseconds: number
+			hitBy: Array<{
+				byPlayerId: string | null
+				time: number
+			}>
+	  }
+)
 
 export type RoomState =
 	| Exclude<RoomStateMessage, { state: 'level' }>
@@ -110,10 +125,42 @@ export const useWatchState = () => {
 						timeToImpactMilliseconds: message.timeToImpactMilliseconds,
 					},
 				])
+			} else if (message.type === 'addResistantTask') {
+				setTasks((tasks) => [
+					...tasks,
+					{
+						type: 'resistant',
+						createdAt: getTime(),
+						id: message.taskId,
+						hitBy: [],
+						label: message.label,
+						position: message.position,
+						strength: message.strength,
+						timeToImpactMilliseconds: message.timeToImpactMilliseconds,
+					},
+				])
+			} else if (message.type === 'hitResistantTask') {
+				setTasks((tasks) =>
+					tasks.map((task) =>
+						task.id === message.taskId && task.type === 'resistant'
+							? {
+									...task,
+									label: message.newLabel,
+									hitBy: [
+										...task.hitBy,
+										{
+											time: getTime(),
+											byPlayerId: message.byPlayerId,
+										},
+									],
+							  }
+							: task,
+					),
+				)
 			} else if (message.type === 'destroyBasicTask') {
 				setTasks((tasks) =>
 					tasks.map((task) =>
-						task.id === message.taskId
+						task.id === message.taskId && task.type === 'basic'
 							? {
 									...task,
 									destroyed: {

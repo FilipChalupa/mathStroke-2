@@ -1,16 +1,20 @@
+import { assertNever } from 'utilities'
 import { TaskLevelEvent } from '../utilities/LevelTimeline'
 import { createBasicLevelTask } from './basicLevelTask'
 import { ClientPlay, createClients } from './clients'
+import { createCrumbleLevelTask } from './crumbleLevelTask'
+import { createResistantLevelTask } from './resistantLevelTask'
 import { Tag } from './tags'
 import { Task, listTasks } from './tasks'
 
 export type LevelTask = ReturnType<typeof createLevelTask>
 
-export type SpecificLevelTask<Event extends TaskLevelEvent> = (options: {
+export type SpecificLevelTask<Event extends TaskLevelEvent> = (
+	event: Event,
+) => (options: {
 	log: (message: string) => void
 	id: string
 	clients: ReturnType<typeof createClients>
-	event: Event
 	speedMultiplier: number
 	playerCountMultiplier: number
 	onDamageHit: (shieldDamage: number) => void
@@ -53,24 +57,19 @@ export const createLevelTask = (
 		return task
 	}
 
-	// @TODO: remove
-	if (event.type !== 'basic') {
-		throw new Error(`Unknown event type: ${event.type}`)
-	}
-
 	const createSpecificTask =
-		event.type === 'basic' ? createBasicLevelTask : null
-
-	// @TODO: remove
-	if (!createSpecificTask) {
-		throw new Error(`Unknown event type: ${event.type}`)
-	}
+		event.type === 'basic'
+			? createBasicLevelTask(event)
+			: event.type === 'resistant'
+			? createResistantLevelTask(event)
+			: event.type === 'crumble'
+			? createCrumbleLevelTask(event)
+			: assertNever(event)
 
 	const { destroy, canBeSolvedBy, hit } = createSpecificTask({
 		id,
 		log,
 		clients,
-		event,
 		speedMultiplier,
 		playerCountMultiplier,
 		onDamageHit,

@@ -200,6 +200,40 @@ export const createClients = (
 		broadcastWatcherAction(createUpdatePlayerInformationAction(client))
 	}
 
+	const createResistantTask = (
+		taskId: string,
+		label: string,
+		position: number,
+		timeToImpactMilliseconds: number,
+		strength: number,
+	) => {
+		clients.forEach((client) => {
+			sendWatchAction(client, {
+				type: 'addResistantTask',
+				taskId,
+				label,
+				position,
+				timeToImpactMilliseconds,
+				strength,
+			})
+		})
+	}
+
+	const hitResistantTask = (
+		taskId: string,
+		newLabel: string,
+		byPlayerId: string | null,
+	) => {
+		clients.forEach((client) => {
+			sendWatchAction(client, {
+				type: 'hitResistantTask',
+				taskId,
+				newLabel,
+				byPlayerId,
+			})
+		})
+	}
+
 	const createBasicTask = (
 		taskId: string,
 		label: string,
@@ -317,6 +351,8 @@ export const createClients = (
 			createBasicTask,
 			destroyBasicTask,
 			sendPlayerToAll,
+			createResistantTask,
+			hitResistantTask,
 		},
 		solution: {
 			addListener: solutionListener.addListener,

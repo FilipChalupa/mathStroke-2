@@ -7,10 +7,13 @@ export type BasicTask = {
 
 export type CrumbleTask = {
 	type: 'crumble'
+	tags: Tag[]
 }
 
 export type ResistantTask = {
 	type: 'resistant'
+	strength: number
+	tags: Tag[]
 }
 
 export type Nothing = {
