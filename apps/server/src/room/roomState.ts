@@ -61,7 +61,7 @@ export const createRoomState = (
 			return
 		}
 		// @TODO: use smater countdown - all ready start, some ready start later
-		if (ready === total) {
+		if (ready === total && total > 0) {
 			transitionToLevel()
 		}
 	}
