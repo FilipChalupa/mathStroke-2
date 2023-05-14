@@ -13,8 +13,8 @@ export const createLevel = (
 ) => {
 	let handleFinishTimeout: NodeJS.Timeout
 	const handleFinish = (byWin: boolean) => {
+		clients.solution.removeListener(handleSolution) // Ignore solutions when level is over
 		setTimeout(() => {
-			clients.solution.removeListener(handleSolution) // Ignore solutions when level is over
 			onFinished(byWin)
 		}, 2000)
 	}
