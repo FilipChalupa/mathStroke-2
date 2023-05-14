@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import type { FunctionComponent } from 'react'
 import { Player } from '../utilities/usePlayState'
 import { RoomState, WatchState } from '../utilities/useWatchState'
+import { HitConfirmation } from './HitConfirmation'
 import styles from './Level.module.css'
 import { PlayerControls } from './PlayerControls'
 import { Task } from './Task'
@@ -19,6 +20,12 @@ export const Level: FunctionComponent<LevelProps> = ({
 }) => {
 	return (
 		<div className={styles.wrapper}>
+			{player && (
+				<HitConfirmation
+					lastHitConfirmationTime={player.state.lastHitConfirmationTime}
+					jammed={player.state.jammed}
+				/>
+			)}
 			<div className={styles.field}>
 				<Container maxWidth="sm">
 					<div>Level {levelNumber}</div>

@@ -1,0 +1,32 @@
+.wrapper {
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+}
+
+.hit,
+.jammed {
+	position: absolute;
+	inset: 0;
+	box-shadow: inset 0 0 0.2rem 0.5rem var(--color);
+	opacity: 0;
+}
+
+@keyframes hit {
+	20% {
+		opacity: 1;
+	}
+}
+
+.hit {
+	animation: hit 0.5s;
+}
+
+.jammed {
+	transition-property: opacity;
+	transition-duration: 0.3s;
+}
+
+.jammed.is_jammed {
+	opacity: 1;
+}
