@@ -79,6 +79,12 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 												onChange={(event) => {
 													player.action.changeReady(event.target.checked)
 												}}
+												onKeyDown={(event) => {
+													if (event.code === 'Enter') {
+														event.preventDefault()
+														player.action.changeReady(!otherPlayer.ready)
+													}
+												}}
 											/>
 										</Tooltip>
 									) : (
