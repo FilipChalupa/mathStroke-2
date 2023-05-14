@@ -94,7 +94,9 @@ export const createLevel = (
 		}
 		if (timeline.length === 0 && singlePlayerTimeline.length === 0) {
 			log('All tasks solved')
-			handleFinish(true)
+			if (shield > 0) {
+				handleFinish(true)
+			}
 		} else {
 			timelineProceed()
 		}
