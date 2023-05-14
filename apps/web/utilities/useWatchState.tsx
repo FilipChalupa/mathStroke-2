@@ -134,7 +134,7 @@ export const useWatchState = () => {
 	)
 
 	useEffect(() => {
-		if (baseRoomState.state === 'lobby') {
+		if (baseRoomState.state === 'level') {
 			return () => {
 				setPlayers((players) =>
 					players.map((player) => ({ ...player, ready: false })),
