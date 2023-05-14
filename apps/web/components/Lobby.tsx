@@ -75,6 +75,7 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 										>
 											<Checkbox
 												checked={otherPlayer.ready}
+												autoFocus
 												onChange={(event) => {
 													player.action.changeReady(event.target.checked)
 												}}
