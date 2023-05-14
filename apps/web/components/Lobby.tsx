@@ -13,7 +13,8 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material'
-import type { FunctionComponent } from 'react'
+import { green } from '@mui/material/colors'
+import { FunctionComponent, useMemo } from 'react'
 import { RoomState } from '../../../packages/messages/utilities/RoomState'
 import { Player } from '../utilities/usePlayState'
 import { WatchState } from '../utilities/useWatchState'
@@ -32,6 +33,15 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 	watchState,
 	player,
 }) => {
+	const highestHitCount = useMemo(
+		() =>
+			players.reduce(
+				(maximum, otherPlayer) => Math.max(maximum, otherPlayer.hitCount),
+				0,
+			),
+		[players],
+	)
+
 	return (
 		<Container maxWidth="sm">
 			{/* @TODO: remove <br /> */}
@@ -67,7 +77,18 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 										color={otherPlayer.color}
 									/>
 								</TableCell>
-								<TableCell align="center">{otherPlayer.hitCount}</TableCell>
+								<TableCell align="center" color="success">
+									<Typography
+										color={
+											highestHitCount !== 0 &&
+											otherPlayer.hitCount === highestHitCount
+												? green[500]
+												: undefined
+										}
+									>
+										{otherPlayer.hitCount}
+									</Typography>
+								</TableCell>
 								<TableCell align="center">{otherPlayer.jammedCount}</TableCell>
 								<TableCell align="center" padding="checkbox">
 									{player?.state.id === otherPlayer.id ? (
