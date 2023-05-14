@@ -1,7 +1,7 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import { Button, Container } from '@mui/material'
+import { Button, Container, Typography } from '@mui/material'
 import { ClientPlay, ServerPlay } from 'messages'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -110,46 +110,45 @@ const PlayIn: FunctionComponent<{ roomId: string }> = ({ roomId }) => {
 			<Room watchState={watchState} player={player} />
 			{watchState.roomState.state === 'lobby' && (
 				<Container maxWidth="sm">
-					<br />
-					<br />
-					<br />
-					<br />
-					<Button
-						variant="contained"
-						LinkComponent={Link}
-						href={watchHref(roomId)}
-						endIcon={<VisibilityIcon />}
-					>
-						Spectate
-					</Button>{' '}
-					<Button
-						variant="contained"
-						LinkComponent={Link}
-						href={homeHref()}
-						endIcon={<ExitToAppIcon />}
-					>
-						Leave
-					</Button>
-					{share !== null && (
-						<>
-							{' '}
-							<Button
-								variant="contained"
-								type="button"
-								onClick={() => {
-									share({
-										title: 'mathStroke invite',
-										text: 'Join the game',
-										url: window.location.href,
-									})
-								}}
-								endIcon={<ShareIcon />}
-							>
-								Invite
-							</Button>
-						</>
-					)}{' '}
-					Play {connection !== null && 'connected'}
+					<Typography align="right">
+						<br />
+						<br />
+						<br />
+						{share !== null && (
+							<>
+								<Button
+									variant="contained"
+									type="button"
+									onClick={() => {
+										share({
+											title: 'mathStroke invite',
+											text: 'Join the game',
+											url: window.location.href,
+										})
+									}}
+									endIcon={<ShareIcon />}
+								>
+									Invite
+								</Button>{' '}
+							</>
+						)}
+						<Button
+							variant="contained"
+							LinkComponent={Link}
+							href={watchHref(roomId)}
+							endIcon={<VisibilityIcon />}
+						>
+							Spectate
+						</Button>{' '}
+						<Button
+							variant="contained"
+							LinkComponent={Link}
+							href={homeHref()}
+							endIcon={<ExitToAppIcon />}
+						>
+							Leave
+						</Button>
+					</Typography>
 				</Container>
 			)}
 		</>
