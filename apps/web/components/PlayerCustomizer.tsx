@@ -10,7 +10,7 @@ import {
 	Typography,
 } from '@mui/material'
 import type { FunctionComponent } from 'react'
-import { Color, colors } from 'utilities'
+import { Color, colorToHex, colors } from 'utilities'
 import {
 	usePlayerColor,
 	usePlayerName,
@@ -54,7 +54,16 @@ export const PlayerCustomizer: FunctionComponent = () => {
 								<FormControlLabel
 									key={color}
 									value={color}
-									control={<Radio />}
+									control={
+										<Radio
+											sx={{
+												color: colorToHex(color),
+												'&.Mui-checked': {
+													color: colorToHex(color),
+												},
+											}}
+										/>
+									}
 									label={color}
 								/>
 							))}

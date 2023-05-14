@@ -1,0 +1,7 @@
+.wrapper {
+	padding-right: 8px; /* Badge compensation */
+}
+
+.badge {
+	background-color: var(--color) !important;
+}

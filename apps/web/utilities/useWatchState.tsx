@@ -1,6 +1,6 @@
 import { RoomState as RoomStateMessage, ServerWatch } from 'messages'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { assertNever } from 'utilities'
+import { Color, assertNever } from 'utilities'
 import { getTime } from './getTime'
 
 export type WatchState = ReturnType<typeof useWatchState>['state']
@@ -8,7 +8,7 @@ export type WatchState = ReturnType<typeof useWatchState>['state']
 type Player = {
 	id: string
 	name: string
-	color: string
+	color: Color
 	ready: boolean
 	hitCount: number
 	jammedCount: number

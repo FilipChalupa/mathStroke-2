@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { PlayerName } from '../components/PlayerName'
 import { WatchState } from './useWatchState'
 
 export const playerName = (
@@ -8,5 +9,9 @@ export const playerName = (
 	if (!playerId) {
 		return null
 	}
-	return players.find(({ id }) => id === playerId)?.name ?? <i>Somebody</i>
+	const player = players.find(({ id }) => id === playerId)
+	if (player === undefined) {
+		return <i>Somebody</i>
+	}
+	return <PlayerName name={player.name} color={player.color} />
 }

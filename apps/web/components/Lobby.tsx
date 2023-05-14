@@ -17,6 +17,7 @@ import type { FunctionComponent } from 'react'
 import { RoomState } from '../../../packages/messages/utilities/RoomState'
 import { Player } from '../utilities/usePlayState'
 import { WatchState } from '../utilities/useWatchState'
+import { PlayerName } from './PlayerName'
 
 export interface LobbyProps {
 	players: WatchState['players']
@@ -41,7 +42,6 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 					<TableHead>
 						<TableRow>
 							<TableCell>Name</TableCell>
-							<TableCell align="right">Color</TableCell>
 							<TableCell align="center">
 								<Tooltip title="Hits">
 									<DoneIcon />
@@ -59,9 +59,11 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 						{players.map((otherPlayer) => (
 							<TableRow key={otherPlayer.id}>
 								<TableCell component="th" scope="row">
-									{otherPlayer.name || <i>Unnamed player</i>}
+									<PlayerName
+										name={otherPlayer.name}
+										color={otherPlayer.color}
+									/>
 								</TableCell>
-								<TableCell align="right">{otherPlayer.color}</TableCell>
 								<TableCell align="center">{otherPlayer.hitCount}</TableCell>
 								<TableCell align="center">{otherPlayer.jammedCount}</TableCell>
 								<TableCell align="center" padding="checkbox">
