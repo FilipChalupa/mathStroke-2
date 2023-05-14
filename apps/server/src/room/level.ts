@@ -20,11 +20,11 @@ export const createLevel = (
 	}
 
 	// @TODO: use level name
-	const timeline = levels[(levelNumber - 1) % levels.length].timeline.map(
-		(event) => event, // @TODO: transform into multiple events based on player count
+	const singlePlayerTimeline = structuredClone(
+		levels[(levelNumber - 1) % levels.length].timeline,
 	)
+	const timeline: LevelEvent[] = []
 	const speedMultiplier = 1 + Math.floor((levelNumber - 1) / levels.length)
-	const playerCountMultiplier = 1 // @TODO
 	let shield = 3 // @TODO
 	let timelineProceedTimeout: NodeJS.Timeout
 	const tasks = createLevelTasks(log, clients, (shieldDamage) => {
@@ -36,15 +36,34 @@ export const createLevel = (
 		}
 	})
 
+	const getPlayerCountMultiplier = () => clients.getPlayerCount()
+
 	const startTimelineEvent = (event: LevelEvent) => {
 		if (event.type === 'nothing') {
 			return
 		}
-		tasks.startEvent(event, speedMultiplier, playerCountMultiplier)
+		tasks.startEvent(event, speedMultiplier, getPlayerCountMultiplier())
 	}
 
 	const timelineProceed = () => {
 		clearTimeout(timelineProceedTimeout)
+		if (timeline.length === 0) {
+			const nextSinglePlayerEvent = singlePlayerTimeline.shift()
+			if (nextSinglePlayerEvent !== undefined) {
+				if (nextSinglePlayerEvent.type === 'nothing') {
+					timeline.push(nextSinglePlayerEvent)
+				} else {
+					// Multiply number of events by player count
+					const multiplier = getPlayerCountMultiplier()
+					nextSinglePlayerEvent.durationMilliseconds = Math.round(
+						nextSinglePlayerEvent.durationMilliseconds / multiplier,
+					)
+					for (let i = 0; i < multiplier; i++) {
+						timeline.push(nextSinglePlayerEvent)
+					}
+				}
+			}
+		}
 		const event = timeline.shift()
 		if (event === undefined) {
 			log('All events started')
@@ -68,7 +87,7 @@ export const createLevel = (
 		if (tasks.getRemainingTaskCount() !== 0) {
 			return
 		}
-		if (timeline.length === 0) {
+		if (timeline.length === 0 && singlePlayerTimeline.length === 0) {
 			log('All tasks solved')
 			handleFinish(true)
 		} else {
