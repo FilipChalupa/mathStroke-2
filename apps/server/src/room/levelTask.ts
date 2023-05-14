@@ -1,8 +1,26 @@
 import { TaskLevelEvent } from '../utilities/LevelTimeline'
+import { createBasicLevelTask } from './basicLevelTask'
 import { ClientPlay, createClients } from './clients'
-import { listTasks } from './tasks'
+import { Tag } from './tags'
+import { Task, listTasks } from './tasks'
 
 export type LevelTask = ReturnType<typeof createLevelTask>
+
+export type SpecificLevelTask<Event extends TaskLevelEvent> = (options: {
+	log: (message: string) => void
+	id: string
+	clients: ReturnType<typeof createClients>
+	event: Event
+	speedMultiplier: number
+	playerCountMultiplier: number
+	onDamageHit: (shieldDamage: number) => void
+	onFinished: () => void
+	getRelevantTask: (tags: Tag[]) => Task
+}) => {
+	destroy: () => void
+	canBeSolvedBy: (solution: string) => boolean
+	hit: (byClient: ClientPlay) => void
+}
 
 let lastTaskId = 0
 
@@ -19,48 +37,46 @@ export const createLevelTask = (
 	// @TODO: respect event.type and don't pretend all is basic
 	const id = `${++lastTaskId}`
 
-	const position = Math.random()
-	const timeToImpactMilliseconds = Math.round(5000 / speedMultiplier)
+	const getRelevantTask = (tags: Tag[]) => {
+		const { task } = (() => {
+			const [firstTask, ...relevantTasks] = listTasks(tags).sort(
+				() => 0.5 - Math.random(),
+			)
 
-	const { task } = (() => {
-		const [firstTask, ...relevantTasks] = listTasks([
-			'addition' /* @TODO: respect event tags */,
-		]).sort(() => 0.5 - Math.random())
-
-		for (const relevantTask of relevantTasks) {
-			if (isUniqueSolution(relevantTask.task.solution)) {
-				return relevantTask
+			for (const relevantTask of relevantTasks) {
+				if (isUniqueSolution(relevantTask.task.solution)) {
+					return relevantTask
+				}
 			}
-		}
-		return firstTask
-	})()
+			return firstTask
+		})()
+		return task
+	}
 
-	clients.actions.createBasicTask(
+	// @TODO: remove
+	if (event.type !== 'basic') {
+		throw new Error(`Unknown event type: ${event.type}`)
+	}
+
+	const createSpecificTask =
+		event.type === 'basic' ? createBasicLevelTask : null
+
+	// @TODO: remove
+	if (!createSpecificTask) {
+		throw new Error(`Unknown event type: ${event.type}`)
+	}
+
+	const { destroy, canBeSolvedBy, hit } = createSpecificTask({
 		id,
-		task.label,
-		position,
-		timeToImpactMilliseconds,
-	)
-
-	const impactTimer = setTimeout(() => {
-		onDamageHit(1)
-		clients.actions.destroyBasicTask(id, null)
-		onFinished()
-	}, timeToImpactMilliseconds)
-
-	const hit = (byClient: ClientPlay) => {
-		clearTimeout(impactTimer)
-		clients.actions.destroyBasicTask(id, byClient.client.getId())
-		onFinished()
-	}
-
-	const canBeSolvedBy = (solution: string) => {
-		return solution === task.solution
-	}
-
-	const destroy = () => {
-		clearTimeout(impactTimer)
-	}
+		log,
+		clients,
+		event,
+		speedMultiplier,
+		playerCountMultiplier,
+		onDamageHit,
+		onFinished,
+		getRelevantTask,
+	})
 
 	return {
 		destroy,

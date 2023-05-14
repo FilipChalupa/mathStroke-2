@@ -1,19 +1,19 @@
 import { Tag } from '../room/tags'
 
-type BasicTask = {
+export type BasicTask = {
 	type: 'basic'
 	tags: Tag[]
 }
 
-type CrumbleTask = {
+export type CrumbleTask = {
 	type: 'crumble'
 }
 
-type ResistantTask = {
+export type ResistantTask = {
 	type: 'resistant'
 }
 
-type Nothing = {
+export type Nothing = {
 	type: 'nothing'
 }
 
