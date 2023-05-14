@@ -11,6 +11,14 @@ export const createLevel = (
 	levelNumber: number,
 	onFinished: (byWin: boolean) => void,
 ) => {
+	let handleFinishTimeout: NodeJS.Timeout
+	const handleFinish = (byWin: boolean) => {
+		setTimeout(() => {
+			clients.solution.removeListener(handleSolution) // Ignore solutions when level is over
+			onFinished(byWin)
+		}, 2000)
+	}
+
 	// @TODO: use level name
 	const timeline = levels[(levelNumber - 1) % levels.length].timeline.map(
 		(event) => event, // @TODO: transform into multiple events based on player count
@@ -24,7 +32,7 @@ export const createLevel = (
 		log(`Hit by damage ${shieldDamage}. Shield is now ${shield}.`)
 		clients.actions.updateShield(shield)
 		if (shield === 0) {
-			onFinished(false)
+			handleFinish(false)
 		}
 	})
 
@@ -62,7 +70,7 @@ export const createLevel = (
 		}
 		if (timeline.length === 0) {
 			log('All tasks solved')
-			onFinished(true)
+			handleFinish(true)
 		} else {
 			timelineProceed()
 		}
@@ -98,6 +106,7 @@ export const createLevel = (
 
 	const destroy = () => {
 		clearTimeout(timelineProceedTimeout)
+		clearTimeout(handleFinishTimeout)
 		tasks.destroy()
 		tasks.taskCountListener.removeListener(checkAllTasksSolved)
 		clients.solution.removeListener(handleSolution)
