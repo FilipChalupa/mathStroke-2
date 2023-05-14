@@ -84,7 +84,11 @@ export const createLevel = (
 		const solvedTasks = tasks.listTasksBySolution(solution)
 		if (solvedTasks.length === 0) {
 			client.client.log(`Miss. No task can be solved by ${solution}.`)
-			// @TODO: penalize
+			// @TODO: don't confirm hit but penalize
+			client.client.action({
+				role: 'play',
+				type: 'confirmHit',
+			})
 			client.jammedCount++
 		} else {
 			solvedTasks.forEach((task) => {
