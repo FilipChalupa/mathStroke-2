@@ -11,28 +11,13 @@ export const levels: Level[] = [
 			{
 				type: 'basic',
 				tags: ['easy', 'addition'],
-				durationMilliseconds: 10000,
+				durationMilliseconds: 2000,
 			},
 			{
 				type: 'basic',
 				tags: ['easy', 'addition'],
-				durationMilliseconds: 10000,
+				durationMilliseconds: 1000,
 			},
-			{
-				type: 'basic',
-				tags: ['easy', 'addition'],
-				durationMilliseconds: 10000,
-			},
-			{
-				type: 'basic',
-				tags: ['simple', 'addition'],
-				durationMilliseconds: 10000,
-			},
-		],
-	},
-	{
-		name: 'Level 2',
-		timeline: [
 			{
 				type: 'basic',
 				tags: ['easy', 'addition'],
@@ -41,17 +26,24 @@ export const levels: Level[] = [
 			{
 				type: 'basic',
 				tags: ['simple', 'addition'],
-				durationMilliseconds: 7000,
+				durationMilliseconds: 500,
 			},
 			{
-				type: 'basic',
+				type: 'resistant',
+				strength: 5,
 				tags: ['easy', 'addition'],
-				durationMilliseconds: 3000,
+				durationMilliseconds: 5000,
 			},
+		],
+	},
+	{
+		name: 'Level 2',
+		timeline: [
 			{
-				type: 'basic',
-				tags: ['simple', 'addition'],
-				durationMilliseconds: 10000,
+				type: 'resistant',
+				strength: 10,
+				tags: ['easy', 'addition'],
+				durationMilliseconds: 5000,
 			},
 		],
 	},
@@ -59,9 +51,9 @@ export const levels: Level[] = [
 		name: 'Level 3',
 		timeline: [
 			{
-				type: 'basic',
+				type: 'crumble',
 				tags: ['easy', 'addition'],
-				durationMilliseconds: 1000,
+				durationMilliseconds: 5000,
 			},
 		],
 	},
