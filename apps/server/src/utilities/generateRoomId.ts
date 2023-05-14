@@ -1,22 +1,13 @@
-import prand from 'pure-rand'
+import { createRandomGenerator } from './createRandomGenerator'
 
 const allowedCharacters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 const idLength = 4
 const seed = 314
-let randomGenerator = prand.xoroshiro128plus(seed)
-const random = () => {
-	const [result, newRandomGenerator] = prand.uniformIntDistribution(
-		0,
-		allowedCharacters.length - 1,
-		randomGenerator,
-	)
-	randomGenerator = newRandomGenerator
-	return result
-}
+const random = createRandomGenerator(seed)
 
 export const generateRoomId = () => {
 	return new Array(idLength)
 		.fill(null)
-		.map(() => allowedCharacters[random()])
+		.map(() => allowedCharacters[random(0, allowedCharacters.length - 1)])
 		.join('')
 }

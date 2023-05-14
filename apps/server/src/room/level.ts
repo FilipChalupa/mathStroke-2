@@ -1,4 +1,5 @@
 import { LevelEvent } from '../utilities/LevelTimeline'
+import { createRandomGenerator } from '../utilities/createRandomGenerator'
 import { createClients } from './clients'
 import { createLevelTasks } from './levelTasks'
 import { levels } from './levels'
@@ -36,7 +37,7 @@ export const createLevel = (
 		}
 	})
 
-	const getPlayerCountMultiplier = () => clients.getPlayerCount()
+	const getPlayerCountMultiplier = () => Math.max(1, clients.getPlayerCount())
 
 	const startTimelineEvent = (event: LevelEvent) => {
 		if (event.type === 'nothing') {
@@ -45,39 +46,43 @@ export const createLevel = (
 		tasks.startEvent(event, speedMultiplier, getPlayerCountMultiplier())
 	}
 
-	const timelineProceed = () => {
-		clearTimeout(timelineProceedTimeout)
-		if (timeline.length === 0) {
-			const nextSinglePlayerEvent = singlePlayerTimeline.shift()
-			if (nextSinglePlayerEvent !== undefined) {
-				if (nextSinglePlayerEvent.type === 'nothing') {
-					timeline.push(nextSinglePlayerEvent)
-				} else {
-					// Multiply number of events by player count
-					const multiplier = getPlayerCountMultiplier()
-					nextSinglePlayerEvent.durationMilliseconds = Math.round(
-						nextSinglePlayerEvent.durationMilliseconds / multiplier,
-					)
-					for (let i = 0; i < multiplier; i++) {
+	const timelineProceed = (() => {
+		const random = createRandomGenerator(levelNumber)
+		return () => {
+			clearTimeout(timelineProceedTimeout)
+			if (timeline.length === 0) {
+				const nextSinglePlayerEvent = singlePlayerTimeline.shift()
+				if (nextSinglePlayerEvent !== undefined) {
+					if (nextSinglePlayerEvent.type === 'nothing') {
 						timeline.push(nextSinglePlayerEvent)
+					} else {
+						// Multiply number of events by player count
+						const multiplier = getPlayerCountMultiplier()
+						const timesToMultiply = random(1, multiplier)
+						nextSinglePlayerEvent.durationMilliseconds = Math.round(
+							nextSinglePlayerEvent.durationMilliseconds / timesToMultiply,
+						)
+						for (let i = 0; i < timesToMultiply; i++) {
+							timeline.push(nextSinglePlayerEvent)
+						}
 					}
 				}
 			}
-		}
-		const event = timeline.shift()
-		if (event === undefined) {
-			log('All events started')
-			checkAllTasksSolved()
-			return
-		}
+			const event = timeline.shift()
+			if (event === undefined) {
+				log('All events started')
+				checkAllTasksSolved()
+				return
+			}
 
-		startTimelineEvent(event)
+			startTimelineEvent(event)
 
-		timelineProceedTimeout = setTimeout(
-			timelineProceed,
-			Math.round(event.durationMilliseconds / speedMultiplier),
-		)
-	}
+			timelineProceedTimeout = setTimeout(
+				timelineProceed,
+				Math.round(event.durationMilliseconds / speedMultiplier),
+			)
+		}
+	})()
 
 	setTimeout(() => {
 		timelineProceed()
