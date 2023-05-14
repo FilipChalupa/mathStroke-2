@@ -85,6 +85,7 @@ export const createClients = (
 		)
 		onPlayerCountChange(getPlayerCount())
 		handleNewClient(newClient)
+		handleReadinessChange()
 	})
 
 	playServer.addLeftClientListener((client) => {
@@ -100,6 +101,7 @@ export const createClients = (
 			id: client.getId(),
 		})
 		onPlayerCountChange(getPlayerCount())
+		handleReadinessChange()
 	})
 
 	watchServer.addNewClientListener((client) => {
