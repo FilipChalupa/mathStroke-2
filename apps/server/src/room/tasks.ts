@@ -360,7 +360,7 @@ export const tasks: TaggedTask[] = (
 		},
 	] satisfies TaggetTaskWithoutSolution[]
 ).map((item) => {
-	const tags: Tag[] = []
+	const tags: Tag[] = item.tags
 	if (item.task.label.includes(additionSymbol)) {
 		tags.push('addition')
 	}
