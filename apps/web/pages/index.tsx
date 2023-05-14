@@ -71,6 +71,9 @@ export default function Web() {
 
 	return (
 		<>
+			{/* @TODO: remove <br /> */}
+			<br />
+			<br />
 			<Container maxWidth="sm">
 				<Typography variant="h4" component="h1" align="center" gutterBottom>
 					mathStroke
@@ -82,6 +85,9 @@ export default function Web() {
 			{connection && (
 				<Rooms onRequestNewRoom={handleRequestNewRoom} rooms={rooms} />
 			)}
+			{/* @TODO: remove <br /> */}
+			<br />
+			<br />
 		</>
 	)
 }

@@ -34,6 +34,9 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 }) => {
 	return (
 		<Container maxWidth="sm">
+			{/* @TODO: remove <br /> */}
+			<br />
+			<br />
 			<Typography variant="h5" component="h2" gutterBottom>
 				Level {watchState.levelNumber}
 			</Typography>
@@ -105,6 +108,9 @@ export const Lobby: FunctionComponent<LobbyProps> = ({
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{/* @TODO: remove <br /> */}
+			<br />
+			<br />
 		</Container>
 	)
 }
