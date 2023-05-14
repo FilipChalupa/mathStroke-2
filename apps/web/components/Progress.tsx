@@ -5,7 +5,7 @@ import styles from './Progress.module.css'
 
 export interface ProgressProps {
 	startAt: number
-	stoppedAt?: number
+	stoppedAt: number | null
 	duration: number
 }
 

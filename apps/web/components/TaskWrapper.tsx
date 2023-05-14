@@ -3,16 +3,16 @@ import type { FunctionComponent, ReactNode } from 'react'
 import styles from './TaskWrapper.module.css'
 
 export interface TaskWrapperProps {
-	isDestroyed: boolean
+	isStopped: boolean
 	children: ReactNode
 }
 
 export const TaskWrapper: FunctionComponent<TaskWrapperProps> = ({
-	isDestroyed,
+	isStopped,
 	children,
 }) => {
 	return (
-		<div className={clsx(styles.wrapper, isDestroyed && styles.is_destroyed)}>
+		<div className={clsx(styles.wrapper, isStopped && styles.is_stopped)}>
 			<div className={styles.content}>{children}</div>
 		</div>
 	)
