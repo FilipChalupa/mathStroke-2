@@ -34,6 +34,7 @@ export const PlayerControls: FunctionComponent<PlayerControlsProps> = ({
 							}}
 							autoComplete="off"
 							autoFocus
+							type="number"
 							InputLabelProps={{
 								shrink: true,
 							}}
