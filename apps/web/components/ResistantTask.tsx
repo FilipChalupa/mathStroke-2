@@ -39,7 +39,7 @@ export const ResistantTask: FunctionComponent<ResistantTaskProps> = ({
 					size={30}
 					thickness={10}
 					variant="determinate"
-					value={progress * 100}
+					value={Math.round((1 - progress) * 100)}
 				/>
 			}
 			createdAt={task.createdAt}
