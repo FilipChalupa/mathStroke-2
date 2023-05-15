@@ -19,11 +19,18 @@
 	opacity: 0.4;
 }
 
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	.wrapper {
 		transition-property: grid-template-rows, opacity, visibility;
 		transition-duration: 1s, 0.6s, 0.6s;
 		transition-delay: 3s, 2s, 2s;
+		animation: fadeIn 0.3s;
 	}
 
 	.content {
