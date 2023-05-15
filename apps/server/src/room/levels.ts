@@ -50,10 +50,15 @@ export const levels: Level[] = [
 	{
 		name: 'Level 3',
 		timeline: [
+			// {
+			// 	type: 'crumble',
+			// 	tags: ['easy', 'addition'],
+			// 	durationMilliseconds: 5000,
+			// },
 			{
-				type: 'crumble',
+				type: 'basic',
 				tags: ['easy', 'addition'],
-				durationMilliseconds: 5000,
+				durationMilliseconds: 2000,
 			},
 		],
 	},
