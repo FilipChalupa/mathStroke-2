@@ -1,12 +1,10 @@
 import { CssBaseline } from '@mui/material'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import {
-	SharedLoadingIndicatorContextProvider,
-	SharedProgressLoadingIndicator,
-} from 'shared-loading-indicator'
+import { SharedLoadingIndicatorContextProvider } from 'shared-loading-indicator'
 import { PageNavigationLoadingTracker } from '../components/PageNavigationLoadingTracker'
 import { PlayerProvider } from '../components/PlayerProvider'
+import { SharedProgressLoadingIndicator } from '../components/SharedProgressLoadingIndicator'
 import { ThemeProvider } from '../components/ThemeProvider'
 import '../styles/global.css'
 

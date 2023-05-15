@@ -1,0 +1,18 @@
+.wrapper {
+	position: fixed;
+	z-index: 10;
+	inset: 0 0 auto;
+	pointer-events: none;
+	transform: translateY(-100%);
+}
+
+.wrapper.is_loading {
+	transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wrapper {
+		transition-property: opacity, visibility, transform;
+		transition-duration: 0.3s;
+	}
+}
