@@ -25,7 +25,9 @@ export const TaskBase: FunctionComponent<TaskBaseProps> = ({
 			<div className={styles.wrapper}>
 				<div className={styles.header}>
 					{other && <div className={styles.other}>{other}</div>}
-					<div className={styles.label}>{label}</div>
+					<div className={styles.label} key={label}>
+						{label}
+					</div>
 					{destroyedBy && <div className={styles.destroyer}>{destroyedBy}</div>}
 				</div>
 				<Progress
