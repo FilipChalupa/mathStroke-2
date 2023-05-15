@@ -31,7 +31,7 @@ export const JoinBadge: FunctionComponent<JoinBadgeProps> = ({ roomId }) => {
 					className={styles.qr_in}
 					size={256}
 					value={fullUrl}
-					viewBox={`0 0 256 256`}
+					viewBox="0 0 256 256"
 				/>
 			</div>
 			<div className={styles.link}>
