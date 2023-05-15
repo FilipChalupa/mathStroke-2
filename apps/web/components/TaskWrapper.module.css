@@ -4,14 +4,6 @@
 	overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-	.wrapper {
-		transition-property: grid-template-rows, opacity, visibility;
-		transition-duration: 1s, 0.6s, 0.6s;
-		transition-delay: 3s, 2s, 2s;
-	}
-}
-
 .wrapper.is_stopped {
 	grid-template-rows: 0fr;
 	opacity: 0;
@@ -21,4 +13,21 @@
 .content {
 	overflow: hidden;
 	padding-block: 0.5em;
+}
+
+.wrapper.is_stopped .content {
+	opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wrapper {
+		transition-property: grid-template-rows, opacity, visibility;
+		transition-duration: 1s, 0.6s, 0.6s;
+		transition-delay: 3s, 2s, 2s;
+	}
+
+	.content {
+		transition-property: opacity;
+		transition-duration: 0.2s;
+	}
 }
