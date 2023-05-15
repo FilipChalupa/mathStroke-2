@@ -12,4 +12,5 @@
 	position: sticky;
 	bottom: 0;
 	padding: 1em;
+	backdrop-filter: blur(0.8rem);
 }
